@@ -1,7 +1,9 @@
-package com.example.idlikadai.hosteloha;
+package com.hosteloha.app;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.hosteloha.R;
 
 public class MainActivity extends AppCompatActivity {
 
