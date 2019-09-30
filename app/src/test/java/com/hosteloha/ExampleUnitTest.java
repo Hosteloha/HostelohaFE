@@ -1,4 +1,4 @@
-package com.example.idlikadai.hosteloha;
+package com.hosteloha;
 
 import org.junit.Test;
 
