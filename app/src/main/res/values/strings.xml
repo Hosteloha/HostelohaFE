@@ -5,4 +5,12 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="app_welcome">Welcome to Hosteloha</string>
     <string name="action_settings">Settings</string>
+
+    <!-- Navigation Menu -->
+    <string name="menu_seller">Seller</string>
+    <string name="menu_buyer">Buyer</string>
+    <string name="menu_user_account">Account</string>
+    <string name="menu_payment_info">Payment</string>
+    <string name="menu_app_settings">Setting</string>
+    <string name="menu_app_info">About</string>
 </resources>
