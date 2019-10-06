@@ -5,33 +5,38 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_buyer"
-            android:icon="@drawable/ic_menu_shopping_cart"
-            android:title="Buyer" />
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_menu_home"
+            android:title="@string/menu_home" />
+
         <item
             android:id="@+id/nav_seller"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Seller" />
+            android:icon="@drawable/ic_menu_monetization_on"
+            android:title="@string/menu_seller" />
         <item
-            android:id="@+id/nav_account"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Account" />
+            android:id="@+id/nav_buyer"
+            android:icon="@drawable/ic_menu_shopping_cart"
+            android:title="@string/menu_buyer" />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_menu_build"
+            android:title="@string/menu_app_settings" />
         <item
             android:id="@+id/nav_payments"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Payments" />
+            android:icon="@drawable/ic_menu_payment"
+            android:title="@string/menu_payment_info" />
     </group>
 
-    <item android:title="More">
+    <item android:title="@string/menu_more">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Settings" />
+                android:id="@+id/nav_account"
+                android:icon="@drawable/ic_menu_account_circle"
+                android:title="@string/menu_user_account" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="About" />
+                android:id="@+id/nav_about"
+                android:icon="@drawable/ic_menu_info"
+                android:title="@string/menu_app_info" />
         </menu>
     </item>
 

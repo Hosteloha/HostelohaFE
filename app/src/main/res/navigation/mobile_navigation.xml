@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.hosteloha.app.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_seller"
+        android:name="com.hosteloha.app.ui.seller.SellerFragment"
+        android:label="@string/menu_seller"
+        tools:layout="@layout/fragment_seller" />
+
+    <fragment
+        android:id="@+id/nav_buyer"
+        android:name="com.hosteloha.app.ui.buyer.BuyerFragment"
+        android:label="@string/menu_buyer"
+        tools:layout="@layout/fragment_buyer" />
+
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.hosteloha.app.ui.settings.SettingsFragment"
+        android:label="@string/menu_app_settings"
+        tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/nav_payments"
+        android:name="com.hosteloha.app.ui.payments.PaymentsFragment"
+        android:label="@string/menu_payment_info"
+        tools:layout="@layout/fragment_payments" />
+
+    <fragment
+        android:id="@+id/nav_account"
+        android:name="com.hosteloha.app.ui.account.AccountFragment"
+        android:label="@string/menu_user_account"
+        tools:layout="@layout/fragment_account" />
+
+    <fragment
+        android:id="@+id/nav_about"
+        android:name="com.hosteloha.app.ui.about.AboutFragment"
+        android:label="@string/menu_app_info"
+        tools:layout="@layout/fragment_about" />
+</navigation>
