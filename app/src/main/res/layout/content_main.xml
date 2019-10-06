@@ -9,6 +9,7 @@
     tools:showIn="@layout/app_bar_main">
 
     <TextView
+        android:id="@+id/main_information_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_welcome"
@@ -17,4 +18,11 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <include
+        android:id="@+id/sellerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/seller_main"
+        android:visibility="gone"
+        />
 </android.support.constraint.ConstraintLayout>

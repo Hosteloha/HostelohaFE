@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,11 +15,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.hosteloha.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    ViewPager mViewPager;
+    private CustomPageAdapter pageadapter;
+    private TextView mMainInformationTextView;
+    private View mSellerView;
 
     private boolean doubleBackToExitPressedOnce = false;
 
@@ -46,6 +53,15 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        mSellerView = (View) findViewById(R.id.sellerView);
+        mMainInformationTextView = (TextView) findViewById(R.id.main_information_text);
+        mViewPager = findViewById(R.id.seller_viewpager);
+        pageadapter = new CustomPageAdapter(getApplicationContext()) ;
+        pageadapter.insertViewId(R.layout.seller_page1);
+        pageadapter.insertViewId(R.layout.seller_page2);
+        pageadapter.insertViewId(R.layout.seller_page3);
+        mViewPager.setAdapter(pageadapter);
     }
 
     @Override
@@ -106,19 +122,26 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        if(mSellerView != null)
+            mSellerView.setVisibility((id == R.id.nav_seller)? View.VISIBLE: View.GONE);
 
+        if(mMainInformationTextView != null)
+            mMainInformationTextView.setVisibility((id == R.id.nav_seller)? View.GONE: View.VISIBLE);
         if (id == R.id.nav_buyer) {
-            // Handle the camera action
+            if(mMainInformationTextView != null)
+                mMainInformationTextView.setText("Buyer portal is coming soon ..!");
         } else if (id == R.id.nav_seller) {
 
         } else if (id == R.id.nav_about) {
 
         } else if (id == R.id.nav_account) {
-
+            if(mMainInformationTextView != null)
+                mMainInformationTextView.setText("You can see your profile in few days :)");
         } else if (id == R.id.nav_settings) {
 
         } else if (id == R.id.nav_payments) {
-
+            if(mMainInformationTextView != null)
+                mMainInformationTextView.setText("You are very eager to do payments. You will be notified after the updating the payments section");
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
