@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/page1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/page1_tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title *" />
+
+    <EditText
+        android:id="@+id/page1_et_title"
+        android:layout_width="match_parent"
+        android:layout_height="100dip"
+        android:layout_marginTop="10dip"
+        android:layout_below="@id/page1_tv_title"
+        android:nextFocusDown="@id/page1_et_subtitle"
+        android:hint="Enter yor product title here" />
+
+    <TextView
+        android:id="@+id/page1_tv_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dip"
+        android:layout_below="@id/page1_et_title"
+        android:text="Sub Title" />
+
+    <EditText
+        android:id="@+id/page1_et_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="100dip"
+        android:layout_marginTop="10dip"
+        android:layout_below="@id/page1_tv_subtitle"
+        android:hint="Enter yor product title here" />
+
+    <TextView
+        android:id="@+id/page1_tv_photoes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dip"
+        android:layout_below="@id/page1_et_subtitle"
+        android:text="Photoes *" />
+
+
+    <TextView
+        android:id="@+id/page1_tv_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dip"
+        android:layout_below="@id/page1_tv_photoes"
+        android:text="Category *" />
+
+</RelativeLayout>

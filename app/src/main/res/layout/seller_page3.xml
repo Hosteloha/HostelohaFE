@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/page3"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/page3_tv_selling_formate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Selling Formate *" />
+
+    <RadioGroup
+        android:id="@+id/page3_rg_selling_formate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/page3_tv_selling_formate"
+        android:layout_marginTop="10dip">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fixed Price (Buy it now)" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Auction" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Auction + Fixed Price" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/page3_tv_shipping_options"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/page3_rg_selling_formate"
+        android:layout_marginTop="20dip"
+        android:text="Shipping options *" />
+
+    <RadioGroup
+        android:id="@+id/page3_rg_shipping_options"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/page3_tv_shipping_options"
+        android:layout_marginTop="10dip">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Product delivered by seller" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Product pick by buyer from the seller" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Common pickup point for buyer and seller" />
+
+    </RadioGroup>
+
+
+    <TextView
+        android:id="@+id/page3_et_payment_options"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/page3_rg_shipping_options"
+        android:layout_marginTop="20dip"
+        android:text="Product Description *" />
+
+    <CheckBox
+        android:id="@+id/page3_ctv_payment_options_paytm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/page3_et_payment_options"
+        android:layout_marginTop="10dip"
+        android:text="Paytm" />
+
+    <CheckBox
+        android:id="@+id/page3_ctv_payment_options_paypal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/page3_ctv_payment_options_paytm"
+        android:layout_marginTop="10dip"
+        android:text="PayPal" />
+
+    <CheckBox
+        android:id="@+id/page3_ctv_payment_options_pickup_pay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/page3_ctv_payment_options_paypal"
+        android:layout_marginTop="10dip"
+        android:text="Pay at Pickup" />
+
+    <CheckBox
+        android:id="@+id/page1_checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Save as Default options" />
+</RelativeLayout>
