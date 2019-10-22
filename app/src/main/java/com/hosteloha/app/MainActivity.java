@@ -5,11 +5,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.hosteloha.R;
+import com.hosteloha.app.utils.HostelohaUtils;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -31,14 +33,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -48,9 +43,22 @@ public class MainActivity extends AppCompatActivity {
                 R.id.nav_payments, R.id.nav_account, R.id.nav_about)
                 .setDrawerLayout(drawer)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(),"Adding date to server :" + HostelohaUtils.getCurrentDateTime(),
+                        Toast.LENGTH_SHORT).show();
+
+                //navController.navigate(R.id.nav_payments);
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+            }
+        });
     }
 
     @Override
@@ -79,11 +87,15 @@ public class MainActivity extends AppCompatActivity {
             }
             this.doubleBackToExitPressedOnce = true;
             View parentLayout = findViewById(android.R.id.content);
-            Snackbar.make(parentLayout, "Hosteloha misses you", Snackbar.LENGTH_LONG)
-                    .setAction("EXIT", new View.OnClickListener() {
+            String snackBarExitButtonText = getResources().getString(R.string.snackbar_exit_button);
+            String snackBarExitText = getResources().getString(R.string.snackbar_exit_message);
+            Snackbar.make(parentLayout, snackBarExitText, Snackbar.LENGTH_LONG)
+                    .setAction(snackBarExitButtonText, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            MainActivity.super.onBackPressed();
+                            finish();
+                            System.exit(0);
+                            //MainActivity.super.onBackPressed();
                         }
                     })
                     .setActionTextColor(Color.YELLOW)

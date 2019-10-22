@@ -23,4 +23,8 @@
     <string name="menu_app_settings">Setting</string>
     <string name="menu_app_info">About</string>
     <string name="menu_more">More</string>
+
+    <!-- Snack Bar -->
+    <string name="snackbar_exit_message">Hosteloha misses you</string>
+    <string name="snackbar_exit_button">EXIT</string>
 </resources>
