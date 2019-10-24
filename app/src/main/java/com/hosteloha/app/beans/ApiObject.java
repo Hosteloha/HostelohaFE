@@ -4,10 +4,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class ApiObject {
 
-    @SerializedName("title")
+    @SerializedName("ID")
     private String title;
 
-    @SerializedName("description")
+    @SerializedName("NAME")
     private String description;
 
     public ApiObject(String title, String description) {
