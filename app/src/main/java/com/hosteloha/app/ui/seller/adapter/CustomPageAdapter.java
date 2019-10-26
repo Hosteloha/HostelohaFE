@@ -23,19 +23,18 @@ public class CustomPageAdapter extends PagerAdapter {
         mLayoutInflater = layoutInflater;
 //        mLayoutInflater = (LayoutInflater) mContext.getSystemService(mContext.LAYOUT_INFLATER_SERVICE);
     }
-    private List<Integer> pageIds = new ArrayList<>();
+    private List<View> pageViews = new ArrayList<>();
 
-    public void insertViewId( int pageId) {
-        pageIds.add(pageId);
+    public void insertView( View view) {
+        pageViews.add(view);
     }
 
     @NonNull
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        Log.d("vinay","instantiateItem  ===> position  "+position+"  id "+pageIds.get(position));
 
-        View view = mLayoutInflater.inflate(pageIds.get(position),null);
-        ((ViewPager) container).addView(view);
-        return view;
+        if(pageViews.get(position) != null);
+            ((ViewPager) container).addView(pageViews.get(position));
+        return pageViews.get(position);
     }
 
     @Override
@@ -45,7 +44,7 @@ public class CustomPageAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return pageIds.size();
+        return pageViews.size();
     }
 
     @Override

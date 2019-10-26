@@ -37,6 +37,9 @@ public class SellerFragment extends Fragment {
     Button mNextBtn;
     Button mPrevBtn;
     ViewPager mViewPager;
+    View mView_Page1;
+    View mView_Page2;
+    View mView_Page3;
     private CustomPageAdapter pageadapter;
     private ProgressDialog mProgress;
     private String mLOG_TAG = SellerFragment.class.getSimpleName();
@@ -55,20 +58,25 @@ public class SellerFragment extends Fragment {
             }
         });
 
-        mProductTitleText = (EditText) root.findViewById(R.id.page2_et_description);
         mNextBtn = (Button) root.findViewById(R.id.seller_next_btn);
         mPrevBtn = (Button) root.findViewById(R.id.seller_prev_btn);
         mViewPager = root.findViewById(R.id.seller_viewpager);
         pageadapter = new CustomPageAdapter(inflater);
 
-        pageadapter.insertViewId(R.layout.seller_page1);
-        pageadapter.insertViewId(R.layout.seller_page2);
-        pageadapter.insertViewId(R.layout.seller_page3);
+        mView_Page1 = inflater.inflate(R.layout.seller_page1,null);
+        mView_Page2 = inflater.inflate(R.layout.seller_page2,null);
+        mView_Page3 = inflater.inflate(R.layout.seller_page3,null);
+        pageadapter.insertView(mView_Page1);
+        pageadapter.insertView(mView_Page2);
+        pageadapter.insertView(mView_Page3);
+
         mViewPager.setAdapter(pageadapter);
         mViewPager.setOnPageChangeListener(mOnPageChangeListener);
         //issue - #10 added below changes to remain 3 pages of view pager to be alive
         mViewPager.setOffscreenPageLimit(2);
 
+        mProductTitleText = (EditText) mView_Page2.findViewById(R.id.page2_et_description);
+        mProductTitleText.setText("Poli is good");
         mPrevBtn.setOnClickListener(mOnClickListener);
         mNextBtn.setOnClickListener(mOnClickListener);
 
