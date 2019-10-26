@@ -49,8 +49,8 @@ public class BuyerFragment extends Fragment {
                     for (ApiObject item : postList
                     ) {
                         CharSequence previousText = textView.getText();
-                        textView.setText(previousText + "\n Title :: " + item.getTitle() +
-                                "\n Des : " + item.getDescription() + "\n");
+                        textView.setText(previousText + "\n ID :: " + item.getTitle() +
+                                "Title : " + item.getDescription() + "\n");
                     }
 //                    NewAdapter adapter = new NewAdapter(getApplicationContext(), postList);
 //                    recyclerView.setAdapter(adapter);
