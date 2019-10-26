@@ -66,6 +66,8 @@ public class SellerFragment extends Fragment {
         pageadapter.insertViewId(R.layout.seller_page3);
         mViewPager.setAdapter(pageadapter);
         mViewPager.setOnPageChangeListener(mOnPageChangeListener);
+        //issue - #10 added below changes to remain 3 pages of view pager to be alive
+        mViewPager.setOffscreenPageLimit(2);
 
         mPrevBtn.setOnClickListener(mOnClickListener);
         mNextBtn.setOnClickListener(mOnClickListener);
