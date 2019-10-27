@@ -66,6 +66,7 @@ public class SellerFragment extends Fragment {
         mView_Page1 = inflater.inflate(R.layout.seller_page1,null);
         mView_Page2 = inflater.inflate(R.layout.seller_page2,null);
         mView_Page3 = inflater.inflate(R.layout.seller_page3,null);
+
         pageadapter.insertView(mView_Page1);
         pageadapter.insertView(mView_Page2);
         pageadapter.insertView(mView_Page3);
