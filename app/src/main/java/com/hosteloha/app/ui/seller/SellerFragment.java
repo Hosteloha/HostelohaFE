@@ -76,12 +76,11 @@ public class SellerFragment extends Fragment {
         //issue - #10 added below changes to remain 3 pages of view pager to be alive
         mViewPager.setOffscreenPageLimit(2);
 
-        mProductTitleText = (EditText) mView_Page2.findViewById(R.id.page2_et_description);
-        mProductTitleText.setText("Poli is good");
+        mProductTitleText = (EditText) mView_Page1.findViewById(R.id.page1_et_title);
         mPrevBtn.setOnClickListener(mOnClickListener);
         mNextBtn.setOnClickListener(mOnClickListener);
 
-        //Progress
+        //Progress dialog
         mProgress = new ProgressDialog(getContext());
         mProgress.setTitle("Processing...");
         mProgress.setMessage("Please wait...");
