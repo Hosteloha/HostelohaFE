@@ -108,12 +108,13 @@ public class SellerFragment extends Fragment {
 
         mLL_uploadPhotoes = (LinearLayout) mView_Page1.findViewById(R.id.page1_ll_upload_photoes);
         mUploadPhotoesBtn = (ImageButton) mView_Page1.findViewById(R.id.page1_ib_upload_photoes);
-        mProductTitleText = (EditText) mView_Page2.findViewById(R.id.page2_et_description);
+        mProductTitleText = (EditText) mView_Page1.findViewById(R.id.page1_et_title);
+
         mPrevBtn.setOnClickListener(mOnClickListener);
         mNextBtn.setOnClickListener(mOnClickListener);
         mUploadPhotoesBtn.setOnClickListener(mOnClickListener);
 
-        //Progress
+        //Progress dialog
         mProgress = new ProgressDialog(getContext());
         mProgress.setTitle("Processing...");
         mProgress.setMessage("Please wait...");
