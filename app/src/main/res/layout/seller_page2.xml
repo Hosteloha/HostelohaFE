@@ -12,8 +12,9 @@
     <EditText
         android:id="@+id/page2_et_condition"
         android:layout_width="match_parent"
-        android:layout_height="100dip"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
+        android:maxHeight="100dp"
         android:layout_below="@id/page2_tv_condition"
         android:hint="Enter yor product condition" />
 
@@ -21,15 +22,16 @@
         android:id="@+id/page2_tv_product_specifics"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dip"
+        android:layout_marginTop="40dip"
         android:layout_below="@id/page2_et_condition"
         android:text="Product Specifics *" />
 
     <EditText
         android:id="@+id/page2_et_product_specifics"
         android:layout_width="match_parent"
-        android:layout_height="100dip"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
+        android:maxHeight="100dp"
         android:layout_below="@id/page2_tv_product_specifics"
         android:hint="Enter the features specific to this Product" />
 
@@ -37,15 +39,16 @@
         android:id="@+id/page2_tv_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dip"
+        android:layout_marginTop="40dip"
         android:layout_below="@id/page2_et_product_specifics"
         android:text="Product Description *" />
 
     <EditText
         android:id="@+id/page2_et_description"
         android:layout_width="match_parent"
-        android:layout_height="100dip"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
+        android:maxHeight="100dp"
         android:layout_below="@id/page2_tv_description"
         android:hint="Enter the Description for the product" />
 </RelativeLayout>
