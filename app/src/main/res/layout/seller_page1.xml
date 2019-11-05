@@ -13,8 +13,9 @@
     <EditText
         android:id="@+id/page1_et_title"
         android:layout_width="match_parent"
-        android:layout_height="100dip"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
+        android:maxHeight="100dp"
         android:layout_below="@id/page1_tv_title"
         android:nextFocusDown="@id/page1_et_subtitle"
         android:hint="Enter yor product title here" />
@@ -23,15 +24,16 @@
         android:id="@+id/page1_tv_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dip"
+        android:layout_marginTop="10dip"
         android:layout_below="@id/page1_et_title"
         android:text="Sub Title" />
 
     <EditText
         android:id="@+id/page1_et_subtitle"
         android:layout_width="match_parent"
-        android:layout_height="100dip"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
+        android:maxHeight="100dp"
         android:layout_below="@id/page1_tv_subtitle"
         android:hint="Enter yor product title here" />
 
@@ -39,17 +41,31 @@
         android:id="@+id/page1_tv_photoes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dip"
+        android:layout_marginTop="10dip"
         android:layout_below="@id/page1_et_subtitle"
         android:text="Photoes *" />
 
+    <LinearLayout
+        android:id="@+id/page1_ll_upload_photoes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:layout_below="@id/page1_tv_photoes"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/page1_ib_upload_photoes"
+            android:layout_width="100dip"
+            android:layout_height="100dip"
+            android:background="@drawable/ic_upload_photoes"/>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/page1_tv_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dip"
-        android:layout_below="@id/page1_tv_photoes"
+        android:layout_marginTop="10dip"
+        android:layout_below="@id/page1_ll_upload_photoes"
         android:text="Category *" />
 
 </RelativeLayout>
