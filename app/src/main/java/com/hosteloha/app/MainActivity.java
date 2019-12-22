@@ -5,19 +5,19 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.hosteloha.R;
-import com.hosteloha.app.utils.HostelohaUtils;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -26,37 +26,52 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private boolean doubleBackToExitPressedOnce = false;
+    private String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        final DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        //To disable the side bar.
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+        final Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        //To disable the above toolbar.
+        toolbar.setVisibility(View.GONE);
+
+        final NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home,
+        mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_seller, R.id.nav_buyer, R.id.nav_settings,
                 R.id.nav_payments, R.id.nav_account, R.id.nav_about)
                 .setDrawerLayout(drawer)
                 .build();
+
         final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override
-            public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"Adding date to server :" + HostelohaUtils.getCurrentDateTime(),
-                        Toast.LENGTH_SHORT).show();
-
-                //navController.navigate(R.id.nav_payments);
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
+            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+                if (destination.getId() == R.id.nav_seller) {
+                    drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                    toolbar.setVisibility(View.VISIBLE);
+                    // To remove the items from the side bar navigation view
+                    navigationView.getMenu().findItem(R.id.nav_home).setVisible(false);
+                    navigationView.getMenu().findItem(R.id.nav_buyer).setVisible(false);
+                    mAppBarConfiguration.getDrawerLayout().removeView(findViewById(R.id.nav_seller));
+                } else if (destination.getId() == R.id.nav_buyer) {
+                    drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                    toolbar.setVisibility(View.VISIBLE);
+                    // To remove the items from the side bar navigation view
+                    navigationView.getMenu().findItem(R.id.nav_home).setVisible(false);
+                    navigationView.getMenu().findItem(R.id.nav_seller).setVisible(false);
+                }
             }
         });
     }
@@ -109,4 +124,5 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
 }
