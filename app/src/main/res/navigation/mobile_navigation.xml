@@ -12,7 +12,13 @@
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_nav_login_to_nav_home"
-            app:destination="@id/nav_home" />
+            app:destination="@id/nav_home"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/nav_login"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -22,11 +28,19 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_nav_home_to_nav_seller"
-            app:destination="@id/nav_seller" />
+            app:destination="@id/nav_seller"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
 
         <action
             android:id="@+id/action_nav_home_to_nav_buyer"
-            app:destination="@id/nav_buyer" />
+            app:destination="@id/nav_buyer"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -39,7 +53,15 @@
         android:id="@+id/nav_buyer"
         android:name="com.hosteloha.app.ui.buyer.BuyerFragment"
         android:label="@string/menu_buyer"
-        tools:layout="@layout/fragment_buyer" />
+        tools:layout="@layout/fragment_buyer">
+        <action
+            android:id="@+id/action_nav_buyer_to_buyerProductFragment"
+            app:destination="@id/buyerProductFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_settings"
@@ -64,5 +86,10 @@
         android:name="com.hosteloha.app.ui.about.AboutFragment"
         android:label="@string/menu_app_info"
         tools:layout="@layout/fragment_about" />
+    <fragment
+        android:id="@+id/buyerProductFragment"
+        android:name="com.hosteloha.app.ui.buyer.BuyerProductFragment"
+        android:label="fragment_buyer_product"
+        tools:layout="@layout/fragment_buyer_product" />
 
 </navigation>
