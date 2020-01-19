@@ -1,11 +1,13 @@
 package com.hosteloha.app.ui.buyer;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hosteloha.R;
 import com.hosteloha.app.beans.ApiObject;
@@ -31,10 +33,10 @@ import retrofit2.Response;
 public class BuyerFragment extends Fragment {
 
     private static final String TAG = BuyerFragment.class.getSimpleName();
-    private BuyerViewModel buyerViewModel;
     RecyclerView mRecyclerView;
     RecyclerAdapter mRecyclerAdapter;
     NavController mNavController = null;
+    private BuyerViewModel buyerViewModel;
     private ArrayList<String> mArrayList = new ArrayList<String>();
     private RecyclerAdapter.OnItemClickListener mOnItemClickListener = new RecyclerAdapter.OnItemClickListener() {
         @Override
@@ -68,6 +70,10 @@ public class BuyerFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
         mRecyclerView.setLayoutManager(layoutManager);
 
+
+        // To dismiss the dialog
+
+
         ApiUtil.getServiceClass().getAllPost().enqueue(new Callback<List<ApiObject>>() {
             @Override
             public void onResponse(Call<List<ApiObject>> call, Response<List<ApiObject>> response) {
@@ -89,6 +95,7 @@ public class BuyerFragment extends Fragment {
             @Override
             public void onFailure(Call<List<ApiObject>> call, Throwable t) {
                 //showErrorMessage();
+                Toast.makeText(getContext(), "Could not fetch data from server", Toast.LENGTH_LONG).show();
                 Log.d(TAG, "error loading from API");
             }
 

@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
@@ -71,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
                     // To remove the items from the side bar navigation view
                     navigationView.getMenu().findItem(R.id.nav_home).setVisible(false);
                     navigationView.getMenu().findItem(R.id.nav_seller).setVisible(false);
+                } else if (destination.getId() == R.id.nav_home) {
+                    //Hiding the action when reaching the home screen since it cannot go back.
+                    getSupportActionBar().hide();
                 }
             }
         });
@@ -101,27 +105,31 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             this.doubleBackToExitPressedOnce = true;
-            View parentLayout = findViewById(android.R.id.content);
-            String snackBarExitButtonText = getResources().getString(R.string.snackbar_exit_button);
-            String snackBarExitText = getResources().getString(R.string.snackbar_exit_message);
-            Snackbar.make(parentLayout, snackBarExitText, Snackbar.LENGTH_LONG)
-                    .setAction(snackBarExitButtonText, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            finish();
-                            System.exit(0);
-                            //MainActivity.super.onBackPressed();
-                        }
-                    })
-                    .setActionTextColor(Color.YELLOW)
-                    .show();
+            final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+
+            //Added Snack Bar only for the home screen and the application is going to exit
+            if (navController.getCurrentDestination().getId() == R.id.nav_home) {
+                View parentLayout = findViewById(android.R.id.content);
+                String snackBarExitButtonText = getResources().getString(R.string.snackbar_exit_button);
+                String snackBarExitText = getResources().getString(R.string.snackbar_exit_message);
+                Snackbar.make(parentLayout, snackBarExitText, Snackbar.LENGTH_LONG)
+                        .setAction(snackBarExitButtonText, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                finish();
+                                System.exit(0);
+                            }
+                        })
+                        .setActionTextColor(Color.YELLOW)
+                        .show();
+
+            }
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     doubleBackToExitPressedOnce = false;
                 }
             }, 2000);
-
         }
     }
 
