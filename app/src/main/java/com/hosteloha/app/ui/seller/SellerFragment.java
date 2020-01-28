@@ -11,9 +11,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -22,11 +26,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.hosteloha.R;
 import com.hosteloha.app.beans.QueryResponse;
 import com.hosteloha.app.retroapi.ApiUtil;
 import com.hosteloha.app.ui.seller.adapter.CustomPageAdapter;
 import com.hosteloha.app.utils.HostelohaUtils;
+
+import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,11 +53,13 @@ public class SellerFragment extends Fragment {
 
     private SellerViewModel sellerViewModel;
 
-    EditText mProductTitleText;
+    EditText mProductTitleText, mProductSpecificTags;
     Button mNextBtn;
     Button mPrevBtn;
     ImageButton mUploadPhotoesBtn;
     LinearLayout mLL_uploadPhotoes;
+    AutoCompleteTextView mProductCategoriesDropDown, mProductConditionDropDown;
+    ChipGroup mProductTagsChipGroup;
 
     ViewPager mViewPager;
     View mView_Page1;
@@ -85,9 +95,9 @@ public class SellerFragment extends Fragment {
         mViewPager = root.findViewById(R.id.seller_viewpager);
         pageadapter = new CustomPageAdapter(inflater);
 
-        mView_Page1 = inflater.inflate(R.layout.seller_page1,null);
-        mView_Page2 = inflater.inflate(R.layout.seller_page2,null);
-        mView_Page3 = inflater.inflate(R.layout.seller_page3,null);
+        mView_Page1 = inflater.inflate(R.layout.seller_page1, null);
+        mView_Page2 = inflater.inflate(R.layout.seller_page2, null);
+        mView_Page3 = inflater.inflate(R.layout.seller_page3, null);
         pageadapter.insertView(mView_Page1);
         pageadapter.insertView(mView_Page2);
         pageadapter.insertView(mView_Page3);
@@ -100,10 +110,44 @@ public class SellerFragment extends Fragment {
         mLL_uploadPhotoes = (LinearLayout) mView_Page1.findViewById(R.id.page1_ll_upload_photoes);
         mUploadPhotoesBtn = (ImageButton) mView_Page1.findViewById(R.id.page1_ib_upload_photoes);
         mProductTitleText = (EditText) mView_Page1.findViewById(R.id.page1_et_title);
+        mProductCategoriesDropDown = mView_Page1.findViewById(R.id.page1_dropdown_product_categories);
+        mProductConditionDropDown = mView_Page2.findViewById(R.id.page2_dropdown_product_condition);
+        mProductSpecificTags = mView_Page1.findViewById(R.id.page1_et_product_tags);
+        mProductTagsChipGroup = mView_Page1.findViewById(R.id.chipGroup2);
+        mProductSpecificTags.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH
+                        || actionId == EditorInfo.IME_ACTION_DONE
+                        || keyEvent.getAction() == KeyEvent.ACTION_DOWN
+                        && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                    if ((textView != null) && (textView.getText().length() > 0)) {
+                        addChipToGroup(textView.getText(), mProductTagsChipGroup);
+                    }
+                    textView.setText(null);
+                }
+                return false;
+            }
+        });
+        // TODO :: Adding default chip for testing purpose, later remove it
+        addChipToGroup("#handmade", mProductTagsChipGroup);
+
 
         mPrevBtn.setOnClickListener(mOnClickListener);
         mNextBtn.setOnClickListener(mOnClickListener);
         mUploadPhotoesBtn.setOnClickListener(mOnClickListener);
+
+        String[] PRODUCT_CATEGORIES = getContext().getResources().getStringArray(R.array.product_categories);
+        addDropDownData(mProductCategoriesDropDown, PRODUCT_CATEGORIES);
+        //To dismiss the dropdown after user selects
+        mProductCategoriesDropDown.post(new Runnable() {
+            @Override
+            public void run() {
+                mProductCategoriesDropDown.dismissDropDown();
+            }
+        });
+        String[] PRODUCT_CONDITION = getContext().getResources().getStringArray(R.array.product_condition);
+        addDropDownData(mProductConditionDropDown, PRODUCT_CONDITION);
 
         //Progress dialog
         mProgress = new ProgressDialog(getContext());
@@ -115,6 +159,24 @@ public class SellerFragment extends Fragment {
         mProgress.setCancelable(true);
 
         return root;
+    }
+
+    private void addChipToGroup(CharSequence text, final ChipGroup chipGroup) {
+        final Chip chip = new Chip(getContext());
+        chip.setText(text);
+        chip.setCloseIconEnabled(true);
+        chip.setChipIconTintResource(R.color.greyish);
+
+        // necessary to get single selection working
+        chip.setClickable(false);
+        chip.setCheckable(false);
+        chipGroup.addView(chip);
+        chip.setOnCloseIconClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                chipGroup.removeView(chip);
+            }
+        });
     }
 
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -133,7 +195,8 @@ public class SellerFragment extends Fragment {
                                     public void onClick(DialogInterface dialog, int whichButton) {
                                         mProgress.show();
                                         sendPost(mProductTitle);
-                                    }})
+                                    }
+                                })
                                 .setNegativeButton(android.R.string.no, null).show();
                     }
 
@@ -152,33 +215,45 @@ public class SellerFragment extends Fragment {
         }
     };
 
-    private void showUploadPhotoesAlertDilogue(){
+    /**
+     * To add the dropdown data, we pass the particular dropdown and the data to be filled.
+     *
+     * @param editTextFilledExposedDropdown
+     * @param dropDownData
+     */
+    private void addDropDownData(AutoCompleteTextView editTextFilledExposedDropdown, String[] dropDownData) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.dropdown_menu_popup_item, dropDownData);
+        editTextFilledExposedDropdown.setAdapter(adapter);
 
-        CharSequence[] items = {"Camera","Gallery"};
+    }
+
+    private void showUploadPhotoesAlertDilogue() {
+
+        CharSequence[] items = {"Camera", "Gallery"};
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Choose from ..");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int position) {
                 dialogInterface.dismiss();
-                switch (position){
+                switch (position) {
                     case 0:
-                        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
                             if (PermissionChecker.checkSelfPermission(getContext(),
                                     (Manifest.permission.CAMERA)) == PermissionChecker.PERMISSION_DENIED) {
                                 String[] permissions = {Manifest.permission.CAMERA};
                                 requestPermissions(permissions, REQUEST_CODE_CAMERA_PERMISSION);
                             } else {
                                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                startActivityForResult(intent,REQUEST_CODE_ACTION_IMAGE_CAPTURE);
+                                startActivityForResult(intent, REQUEST_CODE_ACTION_IMAGE_CAPTURE);
                             }
-                        }else{
+                        } else {
                             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            startActivityForResult(intent,REQUEST_CODE_ACTION_IMAGE_CAPTURE);
+                            startActivityForResult(intent, REQUEST_CODE_ACTION_IMAGE_CAPTURE);
                         }
                         break;
                     case 1:
-                        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
                             if (PermissionChecker.checkSelfPermission(getContext(),
                                     Manifest.permission.READ_EXTERNAL_STORAGE) == PermissionChecker.PERMISSION_DENIED) {
                                 String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
@@ -186,7 +261,7 @@ public class SellerFragment extends Fragment {
                             } else {
                                 pickImageFromGallery();
                             }
-                        }else{
+                        } else {
                             pickImageFromGallery();
                         }
                         break;
@@ -198,18 +273,18 @@ public class SellerFragment extends Fragment {
 
     }
 
-    private void pickImageFromGallery(){
+    private void pickImageFromGallery() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
-        startActivityForResult(intent,REQUEST_CODE_ACTION_GET_CONTENT);
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        startActivityForResult(intent, REQUEST_CODE_ACTION_GET_CONTENT);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, requestCode, data);
-        if(resultCode == RESULT_OK && requestCode == REQUEST_CODE_ACTION_GET_CONTENT){
-            if(data.getData() != null){
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_ACTION_GET_CONTENT) {
+            if (data.getData() != null) {
                 ImageView imgView = new ImageView(getContext());
                 imgView.setLayoutParams(mUploadPhotoesBtn.getLayoutParams());
                 imgView.setImageURI(data.getData());
@@ -217,7 +292,7 @@ public class SellerFragment extends Fragment {
                 mLL_uploadPhotoes.addView(imgView);
             } else {
                 ClipData clipData = data.getClipData();
-                for(int i=0; i < clipData.getItemCount();i++){
+                for (int i = 0; i < clipData.getItemCount(); i++) {
                     ImageView imgView = new ImageView(getContext());
                     imgView.setLayoutParams(mUploadPhotoesBtn.getLayoutParams());
                     imgView.setImageURI(clipData.getItemAt(i).getUri());
@@ -225,7 +300,7 @@ public class SellerFragment extends Fragment {
                     mLL_uploadPhotoes.addView(imgView);
                 }
             }
-        }else if(resultCode == RESULT_OK && requestCode == REQUEST_CODE_ACTION_IMAGE_CAPTURE){
+        } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_ACTION_IMAGE_CAPTURE) {
             Bundle bundle = data.getExtras();
             Bitmap bitmap = (Bitmap) bundle.get("data");
             ImageView imgView = new ImageView(getContext());
