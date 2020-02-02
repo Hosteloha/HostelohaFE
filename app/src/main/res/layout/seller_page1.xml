@@ -8,103 +8,281 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:focusableInTouchMode="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/sellerPage1_productdetails"
-            style="@style/centreLocatorCardDesign"
-            android:layout_marginTop="10dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="false"
+            android:orientation="vertical"
+            android:padding="20dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:focusableInTouchMode="false"
-                android:orientation="vertical"
-                android:padding="20dp">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <EditText
-                        android:id="@+id/page1_et_title"
-                        style="@style/modifiedEditText"
-                        android:hint="Product Title"
-                        android:nextFocusDown="@id/page1_et_subtitle"
-                        android:singleLine="true" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <EditText
-                        android:id="@+id/page1_et_subtitle"
-                        style="@style/modifiedEditText"
-                        android:hint="Product Caption"
-                        android:nextFocusDown="@id/page1_dropdown_product_categories"
-                        android:singleLine="true" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Add Photos" />
+            <androidx.cardview.widget.CardView
+                android:id="@+id/sellerPage1_productdetails"
+                style="@style/scrollViewBasedCardDesign"
+                android:layout_marginTop="10dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="10dp">
 
                 <LinearLayout
-                    android:id="@+id/page1_ll_upload_photoes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dip"
-                    android:orientation="horizontal">
+                    android:layout_gravity="center"
+                    android:focusableInTouchMode="false"
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
-                    <ImageButton
-                        android:id="@+id/page1_ib_upload_photoes"
-                        android:layout_width="100dip"
-                        android:layout_height="100dip"
-                        android:background="@drawable/ic_upload_photoes" />
-                </LinearLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/page1_et_title"
+                            style="@style/modifiedEditText"
+                            android:hint="Product Title"
+                            android:nextFocusDown="@id/page1_et_subtitle"
+                            android:singleLine="true" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/page1_et_subtitle"
+                            style="@style/modifiedEditText"
+                            android:hint="Product Caption"
+                            android:nextFocusDown="@id/page1_dropdown_product_categories"
+                            android:singleLine="true" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Product category">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add Photos" />
 
-                    <AutoCompleteTextView
-                        android:id="@+id/page1_dropdown_product_categories"
-                        style="@style/modifiedEditText"
+                    <LinearLayout
+                        android:id="@+id/page1_ll_upload_photoes"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:imeOptions="actionNext"
-                        android:nextFocusDown="@id/page1_et_product_tags"
-                        android:singleLine="true" />
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <ImageButton
+                            android:id="@+id/page1_ib_upload_photoes"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:background="@drawable/ic_upload_photoes" />
+                    </LinearLayout>
 
-                <include layout="@layout/product_tags_chiplayout" />
 
-                <com.google.android.material.textfield.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Product category">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/page1_dropdown_product_categories"
+                            style="@style/modifiedEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:imeOptions="actionNext"
+                            android:nextFocusDown="@id/page1_et_product_tags"
+                            android:singleLine="true" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <include layout="@layout/product_tags_chiplayout" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/page1_et_product_tags"
+                            style="@style/modifiedEditText"
+                            android:hint="Add tags"
+                            android:imeOptions="actionDone"
+                            android:singleLine="true" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/sellerPage2_productdetails"
+                style="@style/scrollViewBasedCardDesign"
+                android:layout_marginTop="10dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="10dp">
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:focusableInTouchMode="false"
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
-                    <EditText
-                        android:id="@+id/page1_et_product_tags"
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Product condition">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/page2_dropdown_product_condition"
+                            style="@style/modifiedEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:nextFocusDown="@id/page2_et_description" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="100">
+
+                        <EditText
+                            android:id="@+id/page2_et_description"
+                            style="@style/modifiedEditText"
+                            android:layout_height="150dp"
+                            android:gravity="top"
+                            android:hint="Product Description"
+                            android:inputType="textMultiLine"
+                            android:nextFocusDown="@id/page1_et_subtitle"
+                            android:overScrollMode="always"
+                            android:padding="15dp"
+                            android:scrollbarStyle="insideInset"
+                            android:scrollbars="vertical"
+                            android:singleLine="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/page3_tv_selling_formate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Choose below the selling format" />
+
+                    <RadioGroup
+                        android:id="@+id/page3_rg_selling_formate"
                         style="@style/modifiedEditText"
-                        android:hint="Add tags"
-                        android:imeOptions="actionDone"
-                        android:singleLine="true" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/page3_tv_selling_formate"
+                        android:layout_marginTop="10dp">
 
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+                        <RadioButton
+                            style="@style/modifiedEditText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Fixed Price (Buy it now)" />
+
+                        <RadioButton
+                            style="@style/modifiedEditText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Auction" />
+
+                        <RadioButton
+                            style="@style/modifiedEditText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Auction + Fixed Price" />
+                    </RadioGroup>
+
+                    <TextView
+                        android:id="@+id/page3_tv_shipping_options"
+                        style="@style/modifiedEditText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/page3_rg_selling_formate"
+                        android:layout_marginTop="20dp"
+                        android:text="Choose below the Shipping options" />
+
+                    <RadioGroup
+                        android:id="@+id/page3_rg_shipping_options"
+                        style="@style/modifiedEditText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/page3_tv_shipping_options"
+                        android:layout_marginTop="10dp">
+
+                        <RadioButton
+                            style="@style/modifiedEditText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Product delivered by seller" />
+
+                        <RadioButton
+                            style="@style/modifiedEditText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Product pick by buyer from the seller" />
+
+                        <RadioButton
+                            style="@style/modifiedEditText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Common pickup point for buyer and seller" />
+
+                    </RadioGroup>
+
+                    <TextView
+                        android:id="@+id/page3_et_payment_options"
+                        style="@style/modifiedEditText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="Available Payment Options" />
+
+                    <CheckBox
+                        android:id="@+id/page3_ctv_payment_options_paytm"
+                        style="@style/modifiedEditText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Paytm" />
+
+                    <CheckBox
+                        android:id="@+id/page3_ctv_payment_options_paypal"
+                        style="@style/modifiedEditText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="PayPal" />
+
+                    <CheckBox
+                        android:id="@+id/page3_ctv_payment_options_pickup_pay"
+                        style="@style/modifiedEditText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Pay at Pickup" />
+
+                    <CheckBox
+                        android:id="@+id/page1_checkBox"
+                        style="@style/modifiedEditText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:text="Save these as default options" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
 
 </RelativeLayout>

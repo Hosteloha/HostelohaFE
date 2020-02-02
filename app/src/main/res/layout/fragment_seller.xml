@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/mine_shaft">
 
     <TextView
         android:id="@+id/text_seller"
@@ -47,8 +48,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/centre_button"
+                android:enabled="false"
                 android:padding="8dp"
-                android:text="Previous" />
+                android:text="Previous"
+                android:textColor="@color/whiteTextColor"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/seller_next_btn"
@@ -57,7 +61,8 @@
                 android:layout_weight="1"
                 android:background="@drawable/centre_button"
                 android:padding="8dp"
-                android:text="Next" />
+                android:text="Submit"
+                android:textColor="@color/whiteTextColor"/>
         </LinearLayout>
     </LinearLayout>
 

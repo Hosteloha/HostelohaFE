@@ -15,25 +15,27 @@ import androidx.viewpager.widget.ViewPager;
 
 public class CustomPageAdapter extends PagerAdapter {
 
-    private  Context mContext;
+    private Context mContext;
     LayoutInflater mLayoutInflater;
 
-    public CustomPageAdapter(LayoutInflater layoutInflater){
+    public CustomPageAdapter(LayoutInflater layoutInflater) {
 //        mContext = context;
         mLayoutInflater = layoutInflater;
 //        mLayoutInflater = (LayoutInflater) mContext.getSystemService(mContext.LAYOUT_INFLATER_SERVICE);
     }
+
     private List<View> pageViews = new ArrayList<>();
 
-    public void insertView( View view) {
+    public void insertView(View view) {
         pageViews.add(view);
     }
 
     @NonNull
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
 
-        if(pageViews.get(position) != null);
-            ((ViewPager) container).addView(pageViews.get(position));
+        if (pageViews.get(position) != null) {
+            container.addView(pageViews.get(position));
+        }
         return pageViews.get(position);
     }
 
@@ -49,7 +51,7 @@ public class CustomPageAdapter extends PagerAdapter {
 
     @Override
     public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-        Log.d("vinay","isViewFromObject  ===> bool  "+(view == object));
+        Log.d("vinay", "isViewFromObject  ===> bool  " + (view == object));
         return view == object;
     }
 

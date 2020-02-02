@@ -90,14 +90,16 @@ public class SellerFragment extends Fragment {
         });
 
         mNextBtn = (Button) root.findViewById(R.id.seller_next_btn);
+        mNextBtn.setAlpha(.1f);
         mPrevBtn = (Button) root.findViewById(R.id.seller_prev_btn);
 
         mViewPager = root.findViewById(R.id.seller_viewpager);
         pageadapter = new CustomPageAdapter(inflater);
 
         mView_Page1 = inflater.inflate(R.layout.seller_page1, null);
+/*      Commented to avoid swipe left and right functionality when view switching
         mView_Page2 = inflater.inflate(R.layout.seller_page2, null);
-        mView_Page3 = inflater.inflate(R.layout.seller_page3, null);
+        mView_Page3 = inflater.inflate(R.layout.seller_page3, null);*/
         pageadapter.insertView(mView_Page1);
         pageadapter.insertView(mView_Page2);
         pageadapter.insertView(mView_Page3);
@@ -111,7 +113,7 @@ public class SellerFragment extends Fragment {
         mUploadPhotoesBtn = (ImageButton) mView_Page1.findViewById(R.id.page1_ib_upload_photoes);
         mProductTitleText = (EditText) mView_Page1.findViewById(R.id.page1_et_title);
         mProductCategoriesDropDown = mView_Page1.findViewById(R.id.page1_dropdown_product_categories);
-        mProductConditionDropDown = mView_Page2.findViewById(R.id.page2_dropdown_product_condition);
+        mProductConditionDropDown = mView_Page1.findViewById(R.id.page2_dropdown_product_condition);
         mProductSpecificTags = mView_Page1.findViewById(R.id.page1_et_product_tags);
         mProductTagsChipGroup = mView_Page1.findViewById(R.id.chipGroup2);
         mProductSpecificTags.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -200,8 +202,11 @@ public class SellerFragment extends Fragment {
                                 .setNegativeButton(android.R.string.no, null).show();
                     }
 
+/*
+                    To add the functionality to previous and next button
                     if (mViewPager != null)
                         mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
+*/
 
                     break;
                 case R.id.seller_prev_btn:
