@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.ArrayMap;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -29,12 +30,16 @@ import android.widget.Toast;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.hosteloha.R;
+import com.hosteloha.app.beans.ProductObject;
 import com.hosteloha.app.beans.QueryResponse;
 import com.hosteloha.app.retroapi.ApiUtil;
 import com.hosteloha.app.ui.seller.adapter.CustomPageAdapter;
 import com.hosteloha.app.utils.HostelohaUtils;
 
-import java.util.ArrayList;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,11 +48,18 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import okio.Buffer;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
+import static com.hosteloha.app.utils.Define.REQUEST_CODE_ACTION_GET_CONTENT;
+import static com.hosteloha.app.utils.Define.REQUEST_CODE_ACTION_IMAGE_CAPTURE;
+import static com.hosteloha.app.utils.Define.REQUEST_CODE_CAMERA_PERMISSION;
+import static com.hosteloha.app.utils.Define.REQUEST_CODE_READ_STORAGE_PERMISSION;
 
 public class SellerFragment extends Fragment {
 
@@ -62,18 +74,11 @@ public class SellerFragment extends Fragment {
     ChipGroup mProductTagsChipGroup;
 
     ViewPager mViewPager;
-    View mView_Page1;
-    View mView_Page2;
-    View mView_Page3;
+    View mView_Page1, mView_Page2, mView_Page3;
     private CustomPageAdapter pageadapter;
     private ProgressDialog mProgress;
     private String mLOG_TAG = SellerFragment.class.getSimpleName();
 
-    private final int REQUEST_CODE_CAMERA_PERMISSION = 100;
-    private final int REQUEST_CODE_READ_STORAGE_PERMISSION = REQUEST_CODE_CAMERA_PERMISSION + 1;
-
-    private final int REQUEST_CODE_ACTION_IMAGE_CAPTURE = 1001;
-    private final int REQUEST_CODE_ACTION_GET_CONTENT = REQUEST_CODE_ACTION_IMAGE_CAPTURE + 1;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -97,21 +102,22 @@ public class SellerFragment extends Fragment {
         pageadapter = new CustomPageAdapter(inflater);
 
         mView_Page1 = inflater.inflate(R.layout.seller_page1, null);
-/*      Commented to avoid swipe left and right functionality when view switching
         mView_Page2 = inflater.inflate(R.layout.seller_page2, null);
-        mView_Page3 = inflater.inflate(R.layout.seller_page3, null);*/
+        mView_Page3 = inflater.inflate(R.layout.seller_page3, null);
         pageadapter.insertView(mView_Page1);
+/*
+        Commented to avoid swipe left and right functionality when view switching
         pageadapter.insertView(mView_Page2);
-        pageadapter.insertView(mView_Page3);
+        pageadapter.insertView(mView_Page3);*/
 
         mViewPager.setAdapter(pageadapter);
         mViewPager.setOnPageChangeListener(mOnPageChangeListener);
         //issue - #10 added below changes to remain 3 pages of view pager to be alive
         mViewPager.setOffscreenPageLimit(2);
 
-        mLL_uploadPhotoes = (LinearLayout) mView_Page1.findViewById(R.id.page1_ll_upload_photoes);
-        mUploadPhotoesBtn = (ImageButton) mView_Page1.findViewById(R.id.page1_ib_upload_photoes);
-        mProductTitleText = (EditText) mView_Page1.findViewById(R.id.page1_et_title);
+        mLL_uploadPhotoes = mView_Page1.findViewById(R.id.page1_ll_upload_photoes);
+        mUploadPhotoesBtn = mView_Page1.findViewById(R.id.page1_ib_upload_photoes);
+        mProductTitleText = mView_Page1.findViewById(R.id.page1_et_title);
         mProductCategoriesDropDown = mView_Page1.findViewById(R.id.page1_dropdown_product_categories);
         mProductConditionDropDown = mView_Page1.findViewById(R.id.page2_dropdown_product_condition);
         mProductSpecificTags = mView_Page1.findViewById(R.id.page1_et_product_tags);
@@ -189,14 +195,50 @@ public class SellerFragment extends Fragment {
                     if (mNextBtn.getText().equals("Submit")) {
                         final String mProductTitle = mProductTitleText.getText() + "_" + HostelohaUtils.getCurrentDateTime();
 
+                        final ProductObject mProductObject = new ProductObject();
+                        mProductObject.setSubtitle("test product");
+                        mProductObject.setDescription("test Description");
+                        mProductObject.setUsers_id(2);
+                        mProductObject.setCondition_id(1);
+                        mProductObject.setCategory_id(1);
+                        mProductObject.setDelivery_format_id(1);
+                        mProductObject.setPayment_option_id(1);
+                        mProductObject.setSelling_format_id(1);
+
+                        final Map<String, Object> jsonParams = new ArrayMap<>();
+
+                        jsonParams.put("subtitle", mProductObject.getSubtitle());
+                        jsonParams.put("description", mProductObject.getDescription());
+                        jsonParams.put("category", "Electronics");
+                        jsonParams.put("subcategory1", "Mobiles");
+                        jsonParams.put("subcategory2", "Samsung");
+                        jsonParams.put("users_id", 2);
+                        jsonParams.put("condition_id", mProductObject.getCondition_id());
+                        jsonParams.put("delivery_format_id", mProductObject.getDelivery_format_id());
+                        jsonParams.put("payment_option_id", mProductObject.getPayment_option_id());
+                        jsonParams.put("selling_format_id", mProductObject.getSelling_format_id());
+
+                        final RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),
+                                (new JSONObject(jsonParams)).toString());
+                        try {
+                            final RequestBody copy = body;
+                            final Buffer buffer = new Buffer();
+                            copy.writeTo(buffer);
+
+                            Log.d("Suhaas"," body :: "+buffer.readUtf8());
+                        }
+                        catch (final IOException e) {
+
+                        }
+
                         new AlertDialog.Builder(getContext())
                                 .setTitle(mProductTitle)
-                                .setMessage("Are you sure you want to upload the product ?")
+                                .setMessage("Are you sure you want to upload the product ? " + mProductTitle)
                                 .setIcon(android.R.drawable.ic_menu_info_details)
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int whichButton) {
                                         mProgress.show();
-                                        sendPost(mProductTitle);
+                                        sendPost(body);
                                     }
                                 })
                                 .setNegativeButton(android.R.string.no, null).show();
@@ -316,26 +358,38 @@ public class SellerFragment extends Fragment {
         }
     }
 
-    private void sendPost(String mProductTitle) {
-        ApiUtil.getServiceClass().uploadProduct(mProductTitle).enqueue(new Callback<QueryResponse>() {
+    private void sendPost(RequestBody body) {
+        ApiUtil.getServiceClass().uploadProduct(body).enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<QueryResponse> call, Response<QueryResponse> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 mProgress.dismiss();
                 if (response.isSuccessful()) {
-                    String getmQueryStatus = response.body().getmQueryStatus();
-                    String getmQueryError = response.body().getmQueryError();
-                    Toast.makeText(getActivity(), getmQueryStatus + " : " + getmQueryError, Toast.LENGTH_SHORT).show();
+                    String getmQueryStatus = null;
+                    try {
+                        getmQueryStatus = response.body().string();
+                        String getmQueryError = response.body().string();
+                        Toast.makeText(getActivity(), getmQueryStatus + " : " + getmQueryError, Toast.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                 } else {
-                    String mPopMessage = "INVALID_DATA";
+                    String mPopMessage = null;
+                    try {
+                        mPopMessage = "INVALID_DATA " + response.body();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                     Toast.makeText(getActivity(), mPopMessage, Toast.LENGTH_SHORT).show();
                 }
 
 
             }
 
+
             @Override
-            public void onFailure(Call<QueryResponse> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.e(mLOG_TAG, "Unable to submit post to API.");
             }
         });
