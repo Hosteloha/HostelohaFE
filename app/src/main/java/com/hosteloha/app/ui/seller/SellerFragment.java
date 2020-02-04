@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +44,7 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.PermissionChecker;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -71,7 +73,7 @@ public class SellerFragment extends Fragment {
     ImageButton mUploadPhotoesBtn;
     LinearLayout mLL_uploadPhotoes;
     AutoCompleteTextView mProductCategoriesDropDown, mProductConditionDropDown;
-    ChipGroup mProductTagsChipGroup;
+    ChipGroup mProductTagsChipGroup, mProductCategoriesChipGroup;
 
     ViewPager mViewPager;
     View mView_Page1, mView_Page2, mView_Page3;
@@ -121,7 +123,8 @@ public class SellerFragment extends Fragment {
         mProductCategoriesDropDown = mView_Page1.findViewById(R.id.page1_dropdown_product_categories);
         mProductConditionDropDown = mView_Page1.findViewById(R.id.page2_dropdown_product_condition);
         mProductSpecificTags = mView_Page1.findViewById(R.id.page1_et_product_tags);
-        mProductTagsChipGroup = mView_Page1.findViewById(R.id.chipGroup2);
+        mProductTagsChipGroup = mView_Page1.findViewById(R.id.chipGroupProductTags);
+        mProductCategoriesChipGroup = mView_Page1.findViewById(R.id.chipGroupProductCategories);
         mProductSpecificTags.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
@@ -130,7 +133,26 @@ public class SellerFragment extends Fragment {
                         || keyEvent.getAction() == KeyEvent.ACTION_DOWN
                         && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
                     if ((textView != null) && (textView.getText().length() > 0)) {
-                        addChipToGroup(textView.getText(), mProductTagsChipGroup);
+                        addChipToGroup(textView.getText(), mProductTagsChipGroup, false);
+                    }
+                    textView.setText(null);
+                }
+                return false;
+            }
+        });
+
+        mProductCategoriesDropDown.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH
+                        || actionId == EditorInfo.IME_ACTION_DONE
+                        || keyEvent.getAction() == KeyEvent.ACTION_DOWN
+                        && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                    if ((textView != null) && (textView.getText().length() > 0)) {
+                        CharSequence enteredText = textView.getText();
+                        if (checkifEnteredItemsIsPresentInDropdown(mProductCategoriesDropDown.getAdapter(), enteredText.toString())) {
+                            addChipToGroup(textView.getText(), mProductCategoriesChipGroup, true);
+                        }
                     }
                     textView.setText(null);
                 }
@@ -138,7 +160,7 @@ public class SellerFragment extends Fragment {
             }
         });
         // TODO :: Adding default chip for testing purpose, later remove it
-        addChipToGroup("#handmade", mProductTagsChipGroup);
+        addChipToGroup("#handmade", mProductTagsChipGroup, false);
 
 
         mPrevBtn.setOnClickListener(mOnClickListener);
@@ -169,12 +191,22 @@ public class SellerFragment extends Fragment {
         return root;
     }
 
-    private void addChipToGroup(CharSequence text, final ChipGroup chipGroup) {
+    private void addChipToGroup(CharSequence text, final ChipGroup chipGroup, boolean isHeirarchyEnabled) {
         final Chip chip = new Chip(getContext());
         chip.setText(text);
-        chip.setCloseIconEnabled(true);
+        chip.setCloseIconVisible(true);
+        chip.setTextAppearance(R.style.modifiedEditText);
         chip.setChipIconTintResource(R.color.greyish);
-
+        if (isHeirarchyEnabled) {
+            if (chipGroup != null) {
+                if (chipGroup.getChildCount() == 0) {
+                    //then no root icon
+                } else if (chipGroup.getChildCount() > 0) {
+                    // then add subroot dir icon
+                    chip.setChipIcon(ContextCompat.getDrawable(this.getContext(), R.drawable.ic_subdirectory_arrow_right_black_24dp));
+                }
+            }
+        }
         // necessary to get single selection working
         chip.setClickable(false);
         chip.setCheckable(false);
@@ -225,9 +257,8 @@ public class SellerFragment extends Fragment {
                             final Buffer buffer = new Buffer();
                             copy.writeTo(buffer);
 
-                            Log.d("Suhaas"," body :: "+buffer.readUtf8());
-                        }
-                        catch (final IOException e) {
+                            Log.d("Suhaas", " body :: " + buffer.readUtf8());
+                        } catch (final IOException e) {
 
                         }
 
@@ -272,6 +303,18 @@ public class SellerFragment extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.dropdown_menu_popup_item, dropDownData);
         editTextFilledExposedDropdown.setAdapter(adapter);
 
+    }
+
+    private boolean checkifEnteredItemsIsPresentInDropdown(ListAdapter adapter, String enteredText) {
+        if (adapter != null) {
+            for (int i = 0; i < adapter.getCount(); i++) {
+                if (enteredText.equalsIgnoreCase(adapter.getItem(i).toString())) {
+                    return true;
+                }
+            }
+        }
+        Toast.makeText(getActivity(), "Not found in list", Toast.LENGTH_SHORT).show();
+        return false;
     }
 
     private void showUploadPhotoesAlertDilogue() {

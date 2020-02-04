@@ -79,6 +79,8 @@
                     </LinearLayout>
 
 
+                    <include layout="@layout/product_categories_chiplayout" />
+
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
@@ -90,7 +92,7 @@
                             style="@style/modifiedEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:imeOptions="actionNext"
+                            android:imeOptions="actionDone"
                             android:nextFocusDown="@id/page1_et_product_tags"
                             android:singleLine="true" />
 
@@ -140,7 +142,7 @@
                             style="@style/modifiedEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:nextFocusDown="@id/page2_et_description" />
+                            android:nextFocusDown="@id/page2_et_description"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 

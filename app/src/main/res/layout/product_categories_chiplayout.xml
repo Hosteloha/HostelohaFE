@@ -17,10 +17,10 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tags: " />
+            android:text="Categories: " />
 
         <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroupProductTags"
+            android:id="@+id/chipGroupProductCategories"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:duplicateParentState="false"
