@@ -4,9 +4,13 @@ import java.sql.Timestamp;
 
 public class ProductObject {
     private int id;
+    private String title;
     private String subtitle;
     private String description;
     private int category_id;
+    private String mainCategory;
+    private String subCategory1;
+    private String subCategory2;
     private int users_id;
     private int condition_id;
     private int delivery_format_id;
@@ -17,6 +21,14 @@ public class ProductObject {
 
     public ProductObject() {
         super();
+    }
+
+    public int getCategory_id() {
+        return category_id;
+    }
+
+    public void setCategory_id(int category_id) {
+        this.category_id = category_id;
     }
 
     public ProductObject(int id, String subtitle, String description, int category_id, int users_id, int condition_id,
@@ -34,6 +46,38 @@ public class ProductObject {
         this.inserted_at = inserted_at;
         this.updated_at = updated_at;
 
+    }
+
+    public String getMainCategory() {
+        return mainCategory;
+    }
+
+    public void setMainCategory(String mainCategory) {
+        this.mainCategory = mainCategory;
+    }
+
+    public String getSubCategory1() {
+        return subCategory1;
+    }
+
+    public void setSubCategory1(String subCategory1) {
+        this.subCategory1 = subCategory1;
+    }
+
+    public String getSubCategory2() {
+        return subCategory2;
+    }
+
+    public void setSubCategory2(String subCategory2) {
+        this.subCategory2 = subCategory2;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public int getId() {
@@ -58,14 +102,6 @@ public class ProductObject {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public int getCategory_id() {
-        return category_id;
-    }
-
-    public void setCategory_id(int category_id) {
-        this.category_id = category_id;
     }
 
     public int getUsers_id() {
@@ -126,8 +162,8 @@ public class ProductObject {
 
     @Override
     public String toString() {
-        return "ProductObject [id=" + id + ", subtitle=" + subtitle + ", description=" + description + ", category_id="
-                + category_id + ", users_id=" + users_id + ", condition_id=" + condition_id + ", delivery_format_id="
+        return "ProductObject [id=" + id + ", subtitle=" + subtitle + ", description=" + description
+                + ", users_id=" + users_id + ", condition_id=" + condition_id + ", delivery_format_id="
                 + delivery_format_id + ", payment_option_id=" + payment_option_id + ", selling_format_id="
                 + selling_format_id + ", inserted_at=" + inserted_at + ", updated_at=" + updated_at + "]";
     }

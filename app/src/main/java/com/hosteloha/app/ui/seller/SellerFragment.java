@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -30,16 +31,21 @@ import android.widget.Toast;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.gson.Gson;
 import com.hosteloha.R;
+import com.hosteloha.app.beans.ProductCategory;
 import com.hosteloha.app.beans.ProductObject;
-import com.hosteloha.app.beans.QueryResponse;
 import com.hosteloha.app.retroapi.ApiUtil;
 import com.hosteloha.app.ui.seller.adapter.CustomPageAdapter;
 import com.hosteloha.app.utils.HostelohaUtils;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
@@ -49,6 +55,8 @@ import androidx.core.content.PermissionChecker;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.viewpager.widget.ViewPager;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -67,11 +75,12 @@ public class SellerFragment extends Fragment {
 
     private SellerViewModel sellerViewModel;
 
-    EditText mProductTitleText, mProductSpecificTags;
+    EditText mProductTitleText, mProductSubTitleText, mProductSpecificTags, mProductDescriptionText;
     Button mNextBtn;
     Button mPrevBtn;
     ImageButton mUploadPhotoesBtn;
     LinearLayout mLL_uploadPhotoes;
+
     AutoCompleteTextView mProductCategoriesDropDown, mProductConditionDropDown;
     ChipGroup mProductTagsChipGroup, mProductCategoriesChipGroup;
 
@@ -97,7 +106,8 @@ public class SellerFragment extends Fragment {
         });
 
         mNextBtn = (Button) root.findViewById(R.id.seller_next_btn);
-        mNextBtn.setAlpha(.1f);
+        //Here change the progress with the alpha button
+//        mNextBtn.setAlpha(.1f);
         mPrevBtn = (Button) root.findViewById(R.id.seller_prev_btn);
 
         mViewPager = root.findViewById(R.id.seller_viewpager);
@@ -120,6 +130,8 @@ public class SellerFragment extends Fragment {
         mLL_uploadPhotoes = mView_Page1.findViewById(R.id.page1_ll_upload_photoes);
         mUploadPhotoesBtn = mView_Page1.findViewById(R.id.page1_ib_upload_photoes);
         mProductTitleText = mView_Page1.findViewById(R.id.page1_et_title);
+        mProductSubTitleText = mView_Page1.findViewById(R.id.page1_et_subtitle);
+        mProductDescriptionText = mView_Page1.findViewById(R.id.page2_et_description);
         mProductCategoriesDropDown = mView_Page1.findViewById(R.id.page1_dropdown_product_categories);
         mProductConditionDropDown = mView_Page1.findViewById(R.id.page2_dropdown_product_condition);
         mProductSpecificTags = mView_Page1.findViewById(R.id.page1_et_product_tags);
@@ -152,9 +164,9 @@ public class SellerFragment extends Fragment {
                         CharSequence enteredText = textView.getText();
                         if (checkifEnteredItemsIsPresentInDropdown(mProductCategoriesDropDown.getAdapter(), enteredText.toString())) {
                             addChipToGroup(textView.getText(), mProductCategoriesChipGroup, true);
+                            refreshProductCategoryDropDown();
                         }
                     }
-                    textView.setText(null);
                 }
                 return false;
             }
@@ -167,15 +179,29 @@ public class SellerFragment extends Fragment {
         mNextBtn.setOnClickListener(mOnClickListener);
         mUploadPhotoesBtn.setOnClickListener(mOnClickListener);
 
-        String[] PRODUCT_CATEGORIES = getContext().getResources().getStringArray(R.array.product_categories);
-        addDropDownData(mProductCategoriesDropDown, PRODUCT_CATEGORIES);
+//        String[] PRODUCT_CATEGORIES = getContext().getResources().getStringArray(R.array.product_categories);
+
+//        addDropDownData(mProductCategoriesDropDown, PRODUCT_CATEGORIES);
         //To dismiss the dropdown after user selects
-        mProductCategoriesDropDown.post(new Runnable() {
+//        mProductCategoriesDropDown.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                mProductCategoriesDropDown.dismissDropDown();
+//                mProductCategoriesDropDown.setImeOptions(EditorInfo.IME_ACTION_DONE);
+//            }
+//        });
+
+        mProductCategoriesDropDown.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void run() {
-                mProductCategoriesDropDown.dismissDropDown();
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String selection = (String) adapterView.getItemAtPosition(i);
+                if (checkifEnteredItemsIsPresentInDropdown(mProductCategoriesDropDown.getAdapter(), selection)) {
+                    addChipToGroup(selection, mProductCategoriesChipGroup, true);
+                    refreshProductCategoryDropDown();
+                }
             }
         });
+
         String[] PRODUCT_CONDITION = getContext().getResources().getStringArray(R.array.product_condition);
         addDropDownData(mProductConditionDropDown, PRODUCT_CONDITION);
 
@@ -188,7 +214,106 @@ public class SellerFragment extends Fragment {
         mProgress.setCanceledOnTouchOutside(true);
         mProgress.setCancelable(true);
 
+        /**
+         * To fetch category list for main
+         */
+        fetchSubCategory(null, 0);
+
+
         return root;
+    }
+
+
+    private void fetchSubCategory(String category, int subCategory) {
+        if (subCategory == 0) {
+            ApiUtil.getServiceClass().getProductMainCategories().enqueue(new Callback<String[]>() {
+                @Override
+                public void onResponse(Call<String[]> call, Response<String[]> response) {
+                    if (response.isSuccessful()) {
+                        String[] mCategories = response.body();
+                        if (mCategories != null && mCategories.length > 0) {
+                            addDropDownData(mProductCategoriesDropDown, mCategories);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<String[]> call, Throwable t) {
+                    //showErrorMessage();
+                    Toast.makeText(getContext(), "Could not fetch categories :: "
+                                    + t.getLocalizedMessage() + "\n"
+                                    + t.getStackTrace() + " \n"
+                                    + t.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                }
+
+            });
+        } else if (subCategory == 1) {
+            ApiUtil.getServiceClass().getProductSubCategoryFirstList(category).enqueue(new Callback<String[]>() {
+                @Override
+                public void onResponse(Call<String[]> call, Response<String[]> response) {
+                    if (response.isSuccessful()) {
+                        String[] mCategories = response.body();
+                        if (mCategories != null && mCategories.length > 0) {
+                            addDropDownData(mProductCategoriesDropDown, mCategories);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<String[]> call, Throwable t) {
+                    //showErrorMessage();
+                    Toast.makeText(getContext(), "Could not fetch sub category 1 :: "
+                                    + t.getLocalizedMessage() + "\n"
+                                    + t.getStackTrace() + " \n"
+                                    + t.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                }
+
+            });
+        } else if (subCategory == 2) {
+            ApiUtil.getServiceClass().getProductSubCategorySecondList(category).enqueue(new Callback<String[]>() {
+                @Override
+                public void onResponse(Call<String[]> call, Response<String[]> response) {
+                    if (response.isSuccessful()) {
+                        String[] mCategories = response.body();
+                        if (mCategories != null && mCategories.length > 0) {
+                            addDropDownData(mProductCategoriesDropDown, mCategories);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<String[]> call, Throwable t) {
+                    //showErrorMessage();
+                    Toast.makeText(getContext(), "Could not fetch subcategory 2 :: "
+                                    + t.getLocalizedMessage() + "\n"
+                                    + t.getStackTrace() + " \n"
+                                    + t.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                }
+
+            });
+        }
+
+    }
+
+    private void refreshProductCategoryDropDown() {
+        //Here setting the adapter to null, so that the old data does not persist and cant be entered
+        mProductCategoriesDropDown.setAdapter(null);
+        int chipGroupSize = mProductCategoriesChipGroup.getChildCount();
+        if (chipGroupSize > 0 && chipGroupSize < 3) {
+            //Get more subcategories
+            Chip lastAddedChip = (Chip) mProductCategoriesChipGroup.getChildAt(chipGroupSize - 1);
+            fetchSubCategory(lastAddedChip.getText().toString(), chipGroupSize);
+            mProductCategoriesDropDown.setText(null);
+            mProductCategoriesDropDown.setHint("Choose SubCategory");
+        } else if (chipGroupSize >= 3) {
+            mProductCategoriesDropDown.setHint("limit reached");
+            mProductCategoriesDropDown.setEnabled(false);
+        } else if (chipGroupSize == 0) {
+            fetchSubCategory(null, 0);
+        }
     }
 
     private void addChipToGroup(CharSequence text, final ChipGroup chipGroup, boolean isHeirarchyEnabled) {
@@ -214,7 +339,22 @@ public class SellerFragment extends Fragment {
         chip.setOnCloseIconClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                chipGroup.removeView(chip);
+                int position = -1;
+                for (int i = 0; i < chipGroup.getChildCount(); i++) {
+                    Chip eachChip = (Chip) chipGroup.getChildAt(i);
+                    if (eachChip.equals(chip)) {
+                        position = i;
+                        Toast.makeText(getActivity(), "Chip position is :: " + i,
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                }
+
+                if (position != -1) {
+                    chipGroup.removeViews(position, chipGroup.getChildCount() - position);
+                }
+
+                refreshProductCategoryDropDown();
             }
         });
     }
@@ -225,30 +365,9 @@ public class SellerFragment extends Fragment {
             switch (v.getId()) {
                 case R.id.seller_next_btn:
                     if (mNextBtn.getText().equals("Submit")) {
-                        final String mProductTitle = mProductTitleText.getText() + "_" + HostelohaUtils.getCurrentDateTime();
+                        final String mProductTitle = mProductTitleText.getText().toString();
 
-                        final ProductObject mProductObject = new ProductObject();
-                        mProductObject.setSubtitle("test product");
-                        mProductObject.setDescription("test Description");
-                        mProductObject.setUsers_id(2);
-                        mProductObject.setCondition_id(1);
-                        mProductObject.setCategory_id(1);
-                        mProductObject.setDelivery_format_id(1);
-                        mProductObject.setPayment_option_id(1);
-                        mProductObject.setSelling_format_id(1);
-
-                        final Map<String, Object> jsonParams = new ArrayMap<>();
-
-                        jsonParams.put("subtitle", mProductObject.getSubtitle());
-                        jsonParams.put("description", mProductObject.getDescription());
-                        jsonParams.put("category", "Electronics");
-                        jsonParams.put("subcategory1", "Mobiles");
-                        jsonParams.put("subcategory2", "Samsung");
-                        jsonParams.put("users_id", 2);
-                        jsonParams.put("condition_id", mProductObject.getCondition_id());
-                        jsonParams.put("delivery_format_id", mProductObject.getDelivery_format_id());
-                        jsonParams.put("payment_option_id", mProductObject.getPayment_option_id());
-                        jsonParams.put("selling_format_id", mProductObject.getSelling_format_id());
+                        Map<String, Object> jsonParams = getProductDataToUpload();
 
                         final RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),
                                 (new JSONObject(jsonParams)).toString());
@@ -292,6 +411,83 @@ public class SellerFragment extends Fragment {
             }
         }
     };
+
+    private boolean validateDataBeforeUpload(Object mViewType, int inputFieldPosition) {
+        if (mViewType != null) {
+            if (mViewType instanceof EditText) {
+                if (((EditText) mViewType).getText().length() > 0) {
+                    return true;
+                }
+            }
+
+            if (mViewType instanceof Chip) {
+
+            }
+        }
+        Toast.makeText(getActivity(), "FIELD INVALID :: " + inputFieldPosition,
+                Toast.LENGTH_SHORT).show();
+        return false;
+    }
+
+    private Map<String, Object> getProductDataToUpload() {
+        final ProductObject mProductObject = new ProductObject();
+
+        final int SELLER_PRODUCT_FIELD_TITLE = 1;
+        final int SELLER_PRODUCT_FIELD_SUBTITLE = SELLER_PRODUCT_FIELD_TITLE + 1;
+        final int SELLER_PRODUCT_FIELD_DESCRIPTION = SELLER_PRODUCT_FIELD_SUBTITLE + 1;
+
+        if (validateDataBeforeUpload(mProductTitleText, SELLER_PRODUCT_FIELD_TITLE)) {
+            mProductObject.setTitle(mProductTitleText.getText().toString());
+        }
+
+        if (validateDataBeforeUpload(mProductSubTitleText, SELLER_PRODUCT_FIELD_SUBTITLE)) {
+            mProductObject.setSubtitle(mProductSubTitleText.getText().toString());
+        }
+
+        if (validateDataBeforeUpload(mProductDescriptionText, SELLER_PRODUCT_FIELD_DESCRIPTION)) {
+            mProductObject.setDescription(mProductDescriptionText.getText().toString());
+        }
+
+        if (mProductCategoriesChipGroup != null && mProductCategoriesChipGroup.getChildCount() > 0) {
+            for (int i = 0; i < mProductCategoriesChipGroup.getChildCount(); i++) {
+                Chip eachChip = (Chip) mProductCategoriesChipGroup.getChildAt(i);
+                String chipText = eachChip.getText().toString();
+                if (i == 0) {
+                    mProductObject.setMainCategory(chipText);
+                } else if (i == 1) {
+                    mProductObject.setSubCategory1(chipText);
+                } else if (i == 2) {
+                    mProductObject.setSubCategory2(chipText);
+                }
+            }
+        } else {
+            // Category not chosen
+        }
+
+        /**
+         * Yet to configure for these fields, since data is not correct.
+         */
+        mProductObject.setUsers_id(2);
+        mProductObject.setCondition_id(1);
+        mProductObject.setDelivery_format_id(1);
+        mProductObject.setPayment_option_id(1);
+        mProductObject.setSelling_format_id(1);
+
+        final Map<String, Object> jsonParams = new ArrayMap<>();
+
+        jsonParams.put("title", mProductObject.getTitle());
+        jsonParams.put("subtitle", mProductObject.getSubtitle());
+        jsonParams.put("description", mProductObject.getDescription());
+        jsonParams.put("category", mProductObject.getMainCategory());
+        jsonParams.put("subcategory1", mProductObject.getSubCategory1());
+        jsonParams.put("subcategory2", mProductObject.getSubCategory2());
+        jsonParams.put("users_id", 2);
+        jsonParams.put("condition_id", mProductObject.getCondition_id());
+        jsonParams.put("delivery_format_id", mProductObject.getDelivery_format_id());
+        jsonParams.put("payment_option_id", mProductObject.getPayment_option_id());
+        jsonParams.put("selling_format_id", mProductObject.getSelling_format_id());
+        return jsonParams;
+    }
 
     /**
      * To add the dropdown data, we pass the particular dropdown and the data to be filled.
@@ -402,19 +598,16 @@ public class SellerFragment extends Fragment {
     }
 
     private void sendPost(RequestBody body) {
-        ApiUtil.getServiceClass().uploadProduct(body).enqueue(new Callback<ResponseBody>() {
+        ApiUtil.getServiceClass().uploadProduct(body).enqueue(new Callback<ProductObject>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(Call<ProductObject> call, Response<ProductObject> response) {
                 mProgress.dismiss();
                 if (response.isSuccessful()) {
                     String getmQueryStatus = null;
-                    try {
-                        getmQueryStatus = response.body().string();
-                        String getmQueryError = response.body().string();
-                        Toast.makeText(getActivity(), getmQueryStatus + " : " + getmQueryError, Toast.LENGTH_SHORT).show();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    ProductObject productObject = response.body();
+                    String dialogMessage = " Product :: " + productObject.getId() + " with title " + productObject.getSubtitle()
+                            + " is uploaded";
+                    showDialogPopUpProductUploaded(dialogMessage);
 
                 } else {
                     String mPopMessage = null;
@@ -432,10 +625,38 @@ public class SellerFragment extends Fragment {
 
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<ProductObject> call, Throwable t) {
                 Log.e(mLOG_TAG, "Unable to submit post to API.");
             }
         });
+    }
+
+    private void showDialogPopUpProductUploaded(String message) {
+
+        new MaterialAlertDialogBuilder(getActivity(), R.style.AlertDialogTheme)
+                .setTitle("Product Uploaded")
+                .setMessage(message)
+                .setPositiveButton("Upload new product", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Navigation.findNavController(getView()).navigate(R.id.nav_seller);
+                    }
+                })
+                .setNeutralButton("Preview Product", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Navigation.findNavController(getView()).navigate(R.id.nav_buyer);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Keep the values same
+                    }
+                })
+                .setCancelable(false)
+                .show();
+
     }
 
     ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
