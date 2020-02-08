@@ -29,4 +29,34 @@
     <!-- Snack Bar -->
     <string name="snackbar_exit_message">Hosteloha misses you</string>
     <string name="snackbar_exit_button">EXIT</string>
+
+
+    <!-- Static data -->
+    <string-array name="product_categories">
+        <item>Books</item>
+        <item>Business &amp; Industrial</item>
+        <item>Clothing</item>
+        <item>Shoes &amp; Accessories</item>
+        <item>Collectibles</item>
+        <item>Consumer Electronics</item>
+        <item>Crafts</item>
+        <item>Dolls &amp; Bears</item>
+        <item>Home &amp; Garden</item>
+        <item>Motors</item>
+        <item>Pet Supplies</item>
+        <item>Sporting Goods</item>
+        <item>Sports Mem</item>
+        <item>Cards &amp; Fan Shop</item>
+        <item>Toys &amp; Hobbies</item>
+        <item>Antiques</item>
+        <item>Computers/Tablets &amp; Networking</item>
+    </string-array>
+
+    <string-array name="product_condition">
+        <item>Brand New</item>
+        <item>Like New</item>
+        <item>Very Good</item>
+        <item>Good</item>
+        <item>Acceptable</item>
+    </string-array>
 </resources>

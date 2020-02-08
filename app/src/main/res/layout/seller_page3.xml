@@ -1,109 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/page3"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/page3_tv_selling_formate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Selling Formate *" />
+    <androidx.cardview.widget.CardView
+        android:id="@+id/sellerPage1_productdetails"
+        style="@style/centreLocatorCardDesign"
+        android:layout_marginTop="10dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="10dp">
 
-    <RadioGroup
-        android:id="@+id/page3_rg_selling_formate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/page3_tv_selling_formate"
-        android:layout_marginTop="10dip">
-
-        <RadioButton
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Fixed Price (Buy it now)" />
+            android:layout_gravity="center"
+            android:focusableInTouchMode="false"
+            android:orientation="vertical"
+            android:padding="20dp">
 
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Auction" />
+            <TextView
+                android:id="@+id/page3_et_payment_options"
+                style="@style/modifiedEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dip"
+                android:text="Available Payment Options" />
 
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Auction + Fixed Price" />
+            <CheckBox
+                android:id="@+id/page3_ctv_payment_options_paytm"
+                style="@style/modifiedEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:text="Paytm" />
 
-    </RadioGroup>
+            <CheckBox
+                android:id="@+id/page3_ctv_payment_options_paypal"
+                style="@style/modifiedEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:text="PayPal" />
 
-    <TextView
-        android:id="@+id/page3_tv_shipping_options"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/page3_rg_selling_formate"
-        android:layout_marginTop="20dip"
-        android:text="Shipping options *" />
+            <CheckBox
+                android:id="@+id/page3_ctv_payment_options_pickup_pay"
+                style="@style/modifiedEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:text="Pay at Pickup" />
 
-    <RadioGroup
-        android:id="@+id/page3_rg_shipping_options"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/page3_tv_shipping_options"
-        android:layout_marginTop="10dip">
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Product delivered by seller" />
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Product pick by buyer from the seller" />
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Common pickup point for buyer and seller" />
-
-    </RadioGroup>
-
-
-    <TextView
-        android:id="@+id/page3_et_payment_options"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/page3_rg_shipping_options"
-        android:layout_marginTop="20dip"
-        android:text="Product Description *" />
-
-    <CheckBox
-        android:id="@+id/page3_ctv_payment_options_paytm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/page3_et_payment_options"
-        android:layout_marginTop="10dip"
-        android:text="Paytm" />
-
-    <CheckBox
-        android:id="@+id/page3_ctv_payment_options_paypal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/page3_ctv_payment_options_paytm"
-        android:layout_marginTop="10dip"
-        android:text="PayPal" />
-
-    <CheckBox
-        android:id="@+id/page3_ctv_payment_options_pickup_pay"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/page3_ctv_payment_options_paypal"
-        android:layout_marginTop="10dip"
-        android:text="Pay at Pickup" />
-
-    <CheckBox
-        android:id="@+id/page1_checkBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="Save as Default options" />
+            <CheckBox
+                android:id="@+id/page1_checkBox"
+                style="@style/modifiedEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:text="Save as Default options" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>
+
