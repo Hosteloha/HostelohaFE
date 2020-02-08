@@ -1,54 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/page2"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/page2_tv_condition"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Product Condition *" />
+    <androidx.cardview.widget.CardView
+        android:id="@+id/sellerPage1_productdetails"
+        style="@style/centreLocatorCardDesign"
+        android:layout_marginTop="10dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="10dp">
 
-    <EditText
-        android:id="@+id/page2_et_condition"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:maxHeight="100dp"
-        android:layout_below="@id/page2_tv_condition"
-        android:hint="Enter yor product condition" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:focusableInTouchMode="false"
+            android:orientation="vertical"
+            android:padding="20dp">
 
-    <TextView
-        android:id="@+id/page2_tv_product_specifics"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dip"
-        android:layout_below="@id/page2_et_condition"
-        android:text="Product Specifics *" />
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Product condition">
 
-    <EditText
-        android:id="@+id/page2_et_product_specifics"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:maxHeight="100dp"
-        android:layout_below="@id/page2_tv_product_specifics"
-        android:hint="Enter the features specific to this Product" />
+                <AutoCompleteTextView
+                    android:id="@+id/page2_dropdown_product_condition"
+                    style="@style/modifiedEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nextFocusDown="@id/page2_et_description" />
 
-    <TextView
-        android:id="@+id/page2_tv_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dip"
-        android:layout_below="@id/page2_et_product_specifics"
-        android:text="Product Description *" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/page2_et_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:maxHeight="100dp"
-        android:layout_below="@id/page2_tv_description"
-        android:hint="Enter the Description for the product" />
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:counterEnabled="true"
+                app:counterMaxLength="100">
+
+                <EditText
+                    android:id="@+id/page2_et_description"
+                    style="@style/modifiedEditText"
+                    android:layout_height="150dp"
+                    android:gravity="top"
+                    android:hint="Product Description"
+                    android:inputType="textMultiLine"
+                    android:nextFocusDown="@id/page1_et_subtitle"
+                    android:overScrollMode="always"
+                    android:padding="15dp"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="vertical"
+                    android:singleLine="false" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/page3_tv_selling_formate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Choose below the selling format" />
+
+            <RadioGroup
+                android:id="@+id/page3_rg_selling_formate"
+                style="@style/modifiedEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/page3_tv_selling_formate"
+                android:layout_marginTop="10dip">
+
+                <RadioButton
+                    style="@style/modifiedEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fixed Price (Buy it now)" />
+
+                <RadioButton
+                    style="@style/modifiedEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Auction" />
+
+                <RadioButton
+                    style="@style/modifiedEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Auction + Fixed Price" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/page3_tv_shipping_options"
+                style="@style/modifiedEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/page3_rg_selling_formate"
+                android:layout_marginTop="20dip"
+                android:text="Choose below the Shipping options" />
+
+            <RadioGroup
+                android:id="@+id/page3_rg_shipping_options"
+                style="@style/modifiedEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/page3_tv_shipping_options"
+                android:layout_marginTop="10dip">
+
+                <RadioButton
+                    style="@style/modifiedEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Product delivered by seller" />
+
+                <RadioButton
+                    style="@style/modifiedEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Product pick by buyer from the seller" />
+
+                <RadioButton
+                    style="@style/modifiedEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Common pickup point for buyer and seller" />
+
+            </RadioGroup>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>

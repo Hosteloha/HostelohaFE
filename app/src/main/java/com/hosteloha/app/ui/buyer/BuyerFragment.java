@@ -6,9 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hosteloha.R;
-import com.hosteloha.app.beans.ApiObject;
+import com.hosteloha.app.beans.ProductObject;
 import com.hosteloha.app.retroapi.ApiUtil;
 import com.hosteloha.app.ui.buyer.adapter.RecyclerAdapter;
 
@@ -31,10 +32,10 @@ import retrofit2.Response;
 public class BuyerFragment extends Fragment {
 
     private static final String TAG = BuyerFragment.class.getSimpleName();
-    private BuyerViewModel buyerViewModel;
     RecyclerView mRecyclerView;
     RecyclerAdapter mRecyclerAdapter;
     NavController mNavController = null;
+    private BuyerViewModel buyerViewModel;
     private ArrayList<String> mArrayList = new ArrayList<String>();
     private RecyclerAdapter.OnItemClickListener mOnItemClickListener = new RecyclerAdapter.OnItemClickListener() {
         @Override
@@ -68,17 +69,21 @@ public class BuyerFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
         mRecyclerView.setLayoutManager(layoutManager);
 
-        ApiUtil.getServiceClass().getAllPost().enqueue(new Callback<List<ApiObject>>() {
+
+        // To dismiss the dialog
+
+
+        ApiUtil.getServiceClass().getAllPost().enqueue(new Callback<List<ProductObject>>() {
             @Override
-            public void onResponse(Call<List<ApiObject>> call, Response<List<ApiObject>> response) {
+            public void onResponse(Call<List<ProductObject>> call, Response<List<ProductObject>> response) {
                 if (response.isSuccessful()) {
-                    List<ApiObject> postList = response.body();
+                    List<ProductObject> postList = response.body();
                     Log.d(TAG, "Returned count " + postList.size());
                     mArrayList.clear();
-                    for (ApiObject item : postList) {
+                    for (ProductObject item : postList) {
                         mArrayList.add(item.getDescription());
                         CharSequence previousText = textView.getText();
-                        textView.setText(previousText + "\n ID :: " + item.getTitle() +
+                        textView.setText(previousText + "\n ID :: " + item.getSubtitle() +
                                 "Title : " + item.getDescription() + "\n");
                     }
                     mRecyclerAdapter.setArrayList(mArrayList);
@@ -87,8 +92,9 @@ public class BuyerFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<List<ApiObject>> call, Throwable t) {
+            public void onFailure(Call<List<ProductObject>> call, Throwable t) {
                 //showErrorMessage();
+                Toast.makeText(getContext(), "Could not fetch data from server", Toast.LENGTH_LONG).show();
                 Log.d(TAG, "error loading from API");
             }
 
