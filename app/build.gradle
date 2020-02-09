@@ -6,8 +6,8 @@ android {
         applicationId "com.hosteloha"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 2
-        versionName "2.0 [Diwali_Dhamaka_2019]"
+        versionCode 3
+        versionName "3.0 [Seller Product Upload]"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -49,7 +49,4 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
     implementation 'com.google.code.gson:gson:2.8.6'
-
-    // Pin Lock View
-    implementation 'com.andrognito.pinlockview:pinlockview:2.1.0'
 }
