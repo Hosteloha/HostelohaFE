@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "340689374347",
+    "firebase_url": "https://hosteloha.firebaseio.com",
+    "project_id": "hosteloha",
+    "storage_bucket": "hosteloha.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:340689374347:android:5d2e8a571f7053be17188e",
+        "android_client_info": {
+          "package_name": "com.hosteloha"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "340689374347-f4si6vvip1rpk843354pnlu2i3j1jnhg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hosteloha",
+            "certificate_hash": "f9b6991c8342145c3c2358e8ba4f813f8ac03ca5"
+          }
+        },
+        {
+          "client_id": "340689374347-bkjpgklt7hou0q0k6bsb8pfvmsujfjic.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAt5d5GP8Lk-Wo6czVeCkdf_O9iplEhSM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "340689374347-bkjpgklt7hou0q0k6bsb8pfvmsujfjic.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.hosteloha.R;
 
 import androidx.annotation.NonNull;
@@ -52,6 +53,18 @@ public class HomeFragment extends Fragment {
                 navController.navigate(R.id.action_nav_home_to_nav_buyer);
             }
         });
+
+        final Button mUserSignOut = root.findViewById(R.id.usertype_logout);
+        mUserSignOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+//                final NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+//                navController.navigate(R.id.nav_login);
+                getActivity().finish();
+            }
+        });
+
 
         return root;
     }

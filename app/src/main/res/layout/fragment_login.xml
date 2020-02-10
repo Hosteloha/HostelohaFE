@@ -73,21 +73,20 @@
                         style="@style/modifiedEditText"
                         android:gravity="center"
                         android:hint="Enter phone number"
-                        android:inputType="number"
-                        android:maxLength="10"
-                        android:nextFocusDown="@id/loginpage_verifyPhoneNoBtn"
+                        android:inputType="phone"
+                        android:nextFocusDown="@id/loginpage_sendOTPButton"
                         android:singleLine="true" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
-                    android:id="@+id/loginpage_verifyPhoneNoBtn"
+                    android:id="@+id/loginpage_sendOTPButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:background="@drawable/centre_button"
                     android:gravity="center"
                     android:padding="8dp"
-                    android:text="Send OTP"
+                    android:text="Get OTP"
                     android:textColor="@color/whiteTextColor" />
             </LinearLayout>
 
@@ -95,7 +94,8 @@
                 android:id="@+id/loginpage_phoneNoVerifyLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="100dp"
