@@ -14,6 +14,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
@@ -34,6 +42,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
@@ -51,9 +60,12 @@ public class LoginFragment extends Fragment {
     private LinearLayout mGetOTPLayout, mVerifyOTPLayout;
     private ProgressDialog mProgressDialog;
     private PhoneAuthProvider mPhoneAuthProvider;
+    GoogleSignInClient mGoogleSignInClient;
+    private int RC_SIGN_IN = 8231;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        signOutIfGoogleExisting();
         mProgressDialog = new ProgressDialog(getActivity());
 
         loginViewModel =
@@ -85,6 +97,18 @@ public class LoginFragment extends Fragment {
 //            auth.signOut();
 //            FirebaseAuth.getInstance().signOut();
 //        }
+
+
+        /**
+         * Google SignIN
+         */
+        root.findViewById(R.id.sign_in_button).setOnClickListener(mOnClickListener);
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this.getActivity(), gso);
+
 
         return root;
     }
@@ -119,6 +143,10 @@ public class LoginFragment extends Fragment {
                     String OTP = mOTPInput.getText().toString();
                     PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationCode, OTP);
                     SigninWithPhone(credential);
+                    break;
+                case R.id.sign_in_button:
+                    Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+                    startActivityForResult(signInIntent, RC_SIGN_IN);
                     break;
             }
         }
@@ -176,6 +204,69 @@ public class LoginFragment extends Fragment {
         }
         final NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
         navController.navigate(R.id.action_nav_login_to_nav_home);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+        }
+    }
+
+
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+
+            // Signed in successfully, show authenticated UI.
+            updateUI(account);
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+            updateUI(null);
+        }
+    }
+
+    private void updateUI(GoogleSignInAccount account) {
+        if (account != null) {
+            Toast.makeText(getActivity(), " User ::" + account.getDisplayName() + " Email :: " + account.getEmail() + " is logged IN", Toast.LENGTH_SHORT).show();
+            switchToHostfragment();
+        } else {
+            Toast.makeText(getActivity(), " User :: NULL", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void signOutIfGoogleExisting() {
+
+        //signing out even the phone numbers
+        FirebaseAuth instance = FirebaseAuth.getInstance();
+        if (instance != null) {
+            instance.signOut();
+        }
+
+
+        // Firebase sign out
+        if (auth != null) {
+            auth.signOut();
+        }
+
+        // Google sign out
+        if (mGoogleSignInClient != null) {
+            mGoogleSignInClient.signOut().addOnCompleteListener(mActivity,
+                    new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            updateUI(null);
+                        }
+                    });
+        }
+
     }
 }
 
