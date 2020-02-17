@@ -3,23 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/nav_login">
-
-    <fragment
-        android:id="@+id/nav_login"
-        android:name="com.hosteloha.app.ui.login.LoginFragment"
-        android:label="@string/menu_login"
-        tools:layout="@layout/fragment_login">
-        <action
-            android:id="@+id/action_nav_login_to_nav_home"
-            app:destination="@id/nav_home"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:popUpTo="@id/nav_login"
-            app:popUpToInclusive="true" />
-    </fragment>
+    app:startDestination="@id/navigation">
 
     <fragment
         android:id="@+id/nav_home"
@@ -41,6 +25,7 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+
     </fragment>
 
     <fragment
@@ -91,5 +76,76 @@
         android:name="com.hosteloha.app.ui.buyer.BuyerProductFragment"
         android:label="fragment_buyer_product"
         tools:layout="@layout/fragment_buyer_product" />
+    <navigation
+        android:id="@+id/navigation"
+        app:startDestination="@id/hostelOhaMain">
+        <fragment
+            android:id="@+id/hostelOhaMain"
+            android:name="com.hosteloha.app.ui.main.HostelOhaMain"
+            android:label="fragment_hostel_oha_main"
+            tools:layout="@layout/fragment_hostel_oha_main">
+            <action
+                android:id="@+id/action_hostelOhaMain_to_mainLoginFragment"
+                app:destination="@id/mainLoginFragment"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_left"
+                app:popExitAnim="@anim/slide_out_right"
+                app:popUpTo="@+id/hostelOhaMain"
+                app:popUpToInclusive="true" />
+        </fragment>
+        <fragment
+            android:id="@+id/mainLoginFragment"
+            android:name="com.hosteloha.app.ui.login.MainLoginFragment"
+            android:label="fragment_login_main"
+            tools:layout="@layout/fragment_login_main">
+            <action
+                android:id="@+id/action_mainLoginFragment_to_signUpFragment"
+                app:destination="@id/signUpFragment"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_left"
+                app:popExitAnim="@anim/slide_out_right" />
+            <action
+                android:id="@+id/action_mainLoginFragment_to_nav_login"
+                app:destination="@id/nav_login"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_left"
+                app:popExitAnim="@anim/slide_out_right"
+                app:popUpTo="@+id/mainLoginFragment"
+                app:popUpToInclusive="true" />
+        </fragment>
+        <fragment
+            android:id="@+id/signUpFragment"
+            android:name="com.hosteloha.app.ui.login.SignUpFragment"
+            android:label="fragment_sign_up"
+            tools:layout="@layout/fragment_sign_up">
+            <action
+                android:id="@+id/action_signUpFragment_to_nav_login"
+                app:destination="@id/nav_login"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_left"
+                app:popExitAnim="@anim/slide_out_right"
+                app:popUpTo="@+id/mainLoginFragment"
+                app:popUpToInclusive="true" />
+        </fragment>
+        <fragment
+            android:id="@+id/nav_login"
+            android:name="com.hosteloha.app.ui.login.LoginPinFragment"
+            android:label="@string/menu_login"
+            tools:layout="@layout/fragment_login">
+            <action
+                android:id="@+id/action_nav_login_to_nav_home"
+                app:destination="@id/nav_home"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_left"
+                app:popExitAnim="@anim/slide_out_right"
+                app:popUpTo="@+id/navigation"
+                app:popUpToInclusive="true" />
+        </fragment>
+    </navigation>
 
 </navigation>

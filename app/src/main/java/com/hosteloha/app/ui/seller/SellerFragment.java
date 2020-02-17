@@ -240,7 +240,7 @@ public class SellerFragment extends Fragment {
                 @Override
                 public void onFailure(Call<String[]> call, Throwable t) {
                     //showErrorMessage();
-                    Toast.makeText(getContext(), "Could not fetch categories :: "
+                    Toast.makeText(getActivity(), "Could not fetch categories :: "
                                     + t.getLocalizedMessage() + "\n"
                                     + t.getStackTrace() + " \n"
                                     + t.getMessage(),

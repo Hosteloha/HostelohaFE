@@ -48,20 +48,59 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-public class LoginFragment extends Fragment {
+
+public class LoginPinFragment extends Fragment {
+
+    PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
+    FirebaseAuth auth;
+    GoogleSignInClient mGoogleSignInClient;
     private Button mSendOTPButton, mVerifyOTPButton;
     private EditText mPhoneNumberInput, mOTPInput;
     private LoginViewModel loginViewModel;
     private String TAG = LoginViewModel.class.getSimpleName();
-    PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
-    FirebaseAuth auth;
     private String verificationCode;
     private Activity mActivity;
     private LinearLayout mGetOTPLayout, mVerifyOTPLayout;
     private ProgressDialog mProgressDialog;
     private PhoneAuthProvider mPhoneAuthProvider;
-    GoogleSignInClient mGoogleSignInClient;
     private int RC_SIGN_IN = 8231;
+    View.OnClickListener mOnClickListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.loginpage_sendOTPButton:
+
+                    Log.d("Suhaas", " current user :: " + auth.getCurrentUser() + " UID " + auth.getUid());
+                    Log.d("Suhaas", " Firebase instance:: " + FirebaseAuth.getInstance().getCurrentUser() + " UID " + FirebaseAuth.getInstance().getCurrentUser());
+
+                    mGetOTPLayout.setVisibility(View.GONE);
+                    mVerifyOTPLayout.setVisibility(View.VISIBLE);
+                    String phoneNumberIs = mPhoneNumberInput.getText().toString();
+                    Log.d("Suhaas", "Phone Number is :: " + phoneNumberIs);
+
+                    if (phoneNumberIs != null && phoneNumberIs.length() > 0) {
+                        mPhoneAuthProvider.verifyPhoneNumber(
+                                phoneNumberIs,
+                                60,
+                                TimeUnit.SECONDS,
+                                mActivity,
+                                mCallbacks);
+                    }
+                    mProgressDialog.setMessage("Sending verification code...");
+                    mProgressDialog.show();
+                    break;
+                case R.id.loginpage_verifyOtpBtn:
+                    String OTP = mOTPInput.getText().toString();
+                    PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationCode, OTP);
+                    SigninWithPhone(credential);
+                    break;
+                case R.id.sign_in_button:
+                    Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+                    startActivityForResult(signInIntent, RC_SIGN_IN);
+                    break;
+
+            }}};
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -113,46 +152,18 @@ public class LoginFragment extends Fragment {
         return root;
     }
 
-    View.OnClickListener mOnClickListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View view) {
-            switch (view.getId()) {
-                case R.id.loginpage_sendOTPButton:
-
-                    Log.d("Suhaas", " current user :: " + auth.getCurrentUser() + " UID " + auth.getUid());
-                    Log.d("Suhaas", " Firebase instance:: " + FirebaseAuth.getInstance().getCurrentUser() + " UID " + FirebaseAuth.getInstance().getCurrentUser());
-
-                    mGetOTPLayout.setVisibility(View.GONE);
-                    mVerifyOTPLayout.setVisibility(View.VISIBLE);
-                    String phoneNumberIs = mPhoneNumberInput.getText().toString();
-                    Log.d("Suhaas", "Phone Number is :: " + phoneNumberIs);
-
-                    if (phoneNumberIs != null && phoneNumberIs.length() > 0) {
-                        mPhoneAuthProvider.verifyPhoneNumber(
-                                phoneNumberIs,
-                                60,
-                                TimeUnit.SECONDS,
-                                mActivity,
-                                mCallbacks);
-                    }
-                    mProgressDialog.setMessage("Sending verification code...");
-                    mProgressDialog.show();
-                    break;
-                case R.id.loginpage_verifyOtpBtn:
-                    String OTP = mOTPInput.getText().toString();
-                    PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationCode, OTP);
-                    SigninWithPhone(credential);
-                    break;
-                case R.id.sign_in_button:
-                    Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-                    startActivityForResult(signInIntent, RC_SIGN_IN);
-                    break;
-            }
+    public void onComplete (String pin){
+        Log.d(TAG, "Pin complete: " + pin + " current pin :: " + HostelohaUtils.getCurrentTimePin());
+        // Added 4560 as default pin.
+        if (pin.equals("4560")) {
+            final NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+            navController.navigate(R.id.action_nav_login_to_nav_home);
+        } else {
+            Snackbar.make(getView(), "Invalid pin", Snackbar.LENGTH_SHORT).show();
         }
-    };
+    }
 
-    private void StartFirebaseLogin() {
+    private void StartFirebaseLogin () {
 
         auth = FirebaseAuth.getInstance();
         mPhoneAuthProvider = PhoneAuthProvider.getInstance();
@@ -182,7 +193,7 @@ public class LoginFragment extends Fragment {
     }
 
 
-    private void SigninWithPhone(PhoneAuthCredential credential) {
+    private void SigninWithPhone (PhoneAuthCredential credential){
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -198,7 +209,7 @@ public class LoginFragment extends Fragment {
                 });
     }
 
-    private void switchToHostfragment() {
+    private void switchToHostfragment () {
         if (mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
@@ -207,7 +218,7 @@ public class LoginFragment extends Fragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult ( int requestCode, int resultCode, @Nullable Intent data){
         super.onActivityResult(requestCode, resultCode, data);
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
@@ -219,7 +230,7 @@ public class LoginFragment extends Fragment {
     }
 
 
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+    private void handleSignInResult (Task < GoogleSignInAccount > completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
@@ -233,7 +244,7 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    private void updateUI(GoogleSignInAccount account) {
+    private void updateUI (GoogleSignInAccount account){
         if (account != null) {
             Toast.makeText(getActivity(), " User ::" + account.getDisplayName() + " Email :: " + account.getEmail() + " is logged IN", Toast.LENGTH_SHORT).show();
             switchToHostfragment();
@@ -242,7 +253,7 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    private void signOutIfGoogleExisting() {
+    private void signOutIfGoogleExisting () {
 
         //signing out even the phone numbers
         FirebaseAuth instance = FirebaseAuth.getInstance();
@@ -268,6 +279,7 @@ public class LoginFragment extends Fragment {
         }
 
     }
+
 }
 
 
