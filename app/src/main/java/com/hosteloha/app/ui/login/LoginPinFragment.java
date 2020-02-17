@@ -22,7 +22,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-public class LoginFragment extends Fragment {
+public class LoginPinFragment extends Fragment {
 
     private LoginViewModel loginViewModel;
     private String TAG = LoginViewModel.class.getSimpleName();
@@ -54,7 +54,8 @@ public class LoginFragment extends Fragment {
         @Override
         public void onComplete(String pin) {
             Log.d(TAG, "Pin complete: " + pin + " current pin :: " + HostelohaUtils.getCurrentTimePin());
-            if (pin.equals(HostelohaUtils.getCurrentTimePin())) {
+            // Added 4560 as default pin.
+            if (pin.equals("4560")) {
                 final NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
                 navController.navigate(R.id.action_nav_login_to_nav_home);
             } else {
