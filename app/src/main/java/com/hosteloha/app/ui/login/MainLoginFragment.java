@@ -3,12 +3,15 @@ package com.hosteloha.app.ui.login;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chaos.view.PinView;
@@ -16,6 +19,7 @@ import com.hosteloha.R;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -27,9 +31,10 @@ public class MainLoginFragment extends Fragment {
 
     Button mReuestOtpBtn;
     Button mSubmitOtpBtn;
+    TextView mOTPSentVariableNumber;
     EditText mPhoneNumberEditText;
-    LinearLayout mPhoneNumberView;
-    LinearLayout mOtpView;
+    CardView mPhoneNumberView;
+    CardView mOtpView;
     PinView otpPin;
 
     NavController navController;
@@ -45,6 +50,8 @@ public class MainLoginFragment extends Fragment {
                 if (phoneNum.length() == 10) {
                     mPhoneNumberView.setVisibility(View.GONE);
                     mOtpView.setVisibility(View.VISIBLE);
+                    String OTPSentTo = getResources().getString(R.string.otp_sent_variable_phone, phoneNum);
+                    mOTPSentVariableNumber.setText(OTPSentTo);
                 } else {
                     Toast.makeText(getContext(), "Please Enter Valid Phone Number", Toast.LENGTH_LONG).show();
                 }
@@ -69,12 +76,69 @@ public class MainLoginFragment extends Fragment {
         mPhoneNumberView = root.findViewById(R.id.send_otp_view);
         mOtpView = root.findViewById(R.id.verify_otp_view);
         mPhoneNumberEditText = root.findViewById(R.id.et_number);
+        mOTPSentVariableNumber = root.findViewById(R.id.tv_otp_received);
+        mPhoneNumberEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                processButtonByTextLength(mPhoneNumberEditText.getId());
+            }
+        });
+        mPhoneNumberEditText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                // Get key action, up or down.
+                int action = keyEvent.getAction();
+                if (action == KeyEvent.ACTION_UP) {
+                    processButtonByTextLength(mPhoneNumberEditText.getId());
+                }
+                return false;
+            }
+        });
+
         mReuestOtpBtn = root.findViewById(R.id.btn_send_otp);
         mReuestOtpBtn.setOnClickListener(onClickListener);
+        enableButton(mReuestOtpBtn, false);
         mSubmitOtpBtn = root.findViewById(R.id.btn_submit);
         mSubmitOtpBtn.setOnClickListener(onClickListener);
+        enableButton(mSubmitOtpBtn, false);
         otpPin = root.findViewById(R.id.pinView);
+        otpPin.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                processButtonByTextLength(otpPin.getId());
+            }
+        });
+        otpPin.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                // Get key action, up or down.
+                int action = keyEvent.getAction();
+                if (action == KeyEvent.ACTION_UP) {
+                    processButtonByTextLength(otpPin.getId());
+                }
+                return false;
+            }
+        });
         mBuilder = new AlertDialog.Builder(getContext());
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
         return root;
@@ -127,4 +191,29 @@ public class MainLoginFragment extends Fragment {
         alert.show();
     }
 
+    /**
+     * To enable the button request OTP button if the text length is 10.
+     */
+    private void processButtonByTextLength(int editTextId) {
+        switch (editTextId) {
+            case R.id.et_number:
+                String inputText = mPhoneNumberEditText.getText().toString();
+                enableButton(mReuestOtpBtn, (inputText.length() >= 10));
+                break;
+            case R.id.pinView:
+                String inputPin = otpPin.getText().toString();
+                enableButton(mSubmitOtpBtn, (inputPin.length() >= 4));
+                break;
+
+        }
+    }
+
+    public void enableButton(Button button, boolean isEnable) {
+        button.setEnabled(isEnable);
+        if (isEnable) {
+            button.setAlpha(1f);
+        } else {
+            button.setAlpha(0.2f);
+        }
+    }
 }

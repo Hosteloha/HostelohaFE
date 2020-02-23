@@ -30,7 +30,6 @@
     <string name="snackbar_exit_message">Hosteloha misses you</string>
     <string name="snackbar_exit_button">EXIT</string>
 
-
     <!-- Static data -->
     <string-array name="product_categories">
         <item>Books</item>
@@ -59,5 +58,8 @@
         <item>Good</item>
         <item>Acceptable</item>
     </string-array>
+
+    <!-- Authentication Page -->
+    <string name="otp_sent_variable_phone">OTP Sent to +91 %1$s</string>
 
 </resources>

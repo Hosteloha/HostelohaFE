@@ -1,109 +1,191 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cardview_dark_background"
-    tools:context=".app.ui.login.MainLoginFragment">
+    android:background="@color/mine_shaft"
+    tools:context="com.hosteloha.app.MainActivity">
 
-    <com.google.android.material.card.MaterialCardView
+    <TextView
+        android:id="@+id/text_login"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="3dp"
-        app:cardBackgroundColor="@color/cardview_light_background"
-        app:cardCornerRadius="5dp">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:visibility="gone" />
 
-        <TextView
+    <ImageView
+        android:id="@+id/profile_image"
+        android:layout_width="84dp"
+        android:layout_height="84dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/img_no_avatar" />
+
+    <TextView
+        android:id="@+id/profile_name"
+        android:layout_width="256dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profile_image"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="36dp"
+        android:fontFamily="sans-serif-thin"
+        android:gravity="center"
+        android:maxLines="1"
+        android:text="Login"
+        android:textColor="@color/white"
+        android:textSize="34sp" />
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/send_otp_view"
+        style="@style/loginViewBasedCardDesign"
+        android:layout_below="@+id/profile_name"
+        android:layout_margin="20dp"
+        android:visibility="visible"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="10dp">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/centre_background"
-            android:gravity="center"
-            android:text="Login / SignUp"
-            android:textColor="@color/design_default_color_primary_dark"
-            android:textSize="26sp" />
-
-        <LinearLayout
-            android:id="@+id/send_otp_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:gravity="center"
-                android:text="Enter Phone Number "
-                android:textSize="20sp" />
-
-            <EditText
-                android:id="@+id/et_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="6"
-                android:gravity="center"
-                android:inputType="phone"
-                android:maxLength="10" />
-
-            <Button
-                android:id="@+id/btn_send_otp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/centre_button"
-                android:text="Request OTP" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/verify_otp_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
+            android:layout_gravity="center"
+            android:focusableInTouchMode="false"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:padding="20dp">
 
-            <TextView
-                android:id="@+id/tv_otp_received"
+            <LinearLayout
+                android:id="@+id/loginpage_phoneNoEnterLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="visible">
+
+                    <com.hosteloha.app.utils.PrefixEditText
+                        android:id="@+id/et_number"
+                        style="@style/modifiedEditText"
+                        android:gravity="start|center_vertical"
+                        android:hint="Phone Number"
+                        android:inputType="number"
+                        android:nextFocusDown="@id/loginpage_sendOTPButton"
+                        android:singleLine="true"
+                        android:tag="IN +91   "
+                        android:maxLength="10"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/btn_send_otp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/centre_button"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:enabled="false"
+                    android:text="Continue"
+                    android:textColor="@color/whiteTextColor" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
                 android:layout_margin="10dp"
-                android:gravity="center"
-                android:text="Enter OTP recevided to your phone"
-                android:textSize="20sp" />
+                android:background="#c0c0c0" />
 
-            <com.chaos.view.PinView
-                android:id="@+id/pinView"
-                style="@style/PinWidget.PinView"
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/sign_in_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:inputType="number"
-                android:padding="10dp"
-                android:textSize="18sp"
-                app:itemCount="4"
-                app:itemHeight="48dp"
-                app:itemRadius="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:lineColor="@android:color/darker_gray"
-                app:viewType="rectangle" />
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="2dp" />
 
-            <Button
-                android:id="@+id/btn_submit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/centre_button"
-                android:text="Verify" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="10dp"
+                android:background="#c0c0c0" />
+
         </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-    </com.google.android.material.card.MaterialCardView>
 
-</FrameLayout>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/verify_otp_view"
+        style="@style/loginViewBasedCardDesign"
+        android:layout_below="@+id/profile_name"
+        android:layout_margin="20dp"
+        android:visibility="gone"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:focusableInTouchMode="false"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_otp_received"
+                    style="@style/modifiedEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="@string/otp_sent_variable_phone" />
+
+                <com.chaos.view.PinView
+                    android:id="@+id/pinView"
+                    style="@style/PinWidget.PinView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:inputType="number"
+                    android:padding="10dp"
+                    android:textSize="18sp"
+                    app:itemCount="4"
+                    app:itemHeight="48dp"
+                    app:itemRadius="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:lineColor="@android:color/darker_gray"
+                    app:viewType="rectangle" />
+
+                <Button
+                    android:id="@+id/btn_submit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/centre_button"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:text="Verify and Proceed"
+                    android:textColor="@color/whiteTextColor" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>
