@@ -1,5 +1,6 @@
 package com.hosteloha.app.retroapi;
 
+import com.hosteloha.app.beans.AuthenticationTokenJWT;
 import com.hosteloha.app.beans.ProductCategory;
 import com.hosteloha.app.beans.ProductObject;
 import com.hosteloha.app.beans.QueryResponse;
@@ -15,6 +16,9 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface RetrofitInterface {
+    @POST("/authenticate")
+    public Call<AuthenticationTokenJWT> getAuthenticationToken(@Body RequestBody params);
+
     @GET("/products")
     Call<List<ProductObject>> getAllPost();
 

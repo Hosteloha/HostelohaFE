@@ -7,14 +7,20 @@ import java.util.Locale;
 
 public class HostelohaUtils {
 
-    public static String getCurrentDateTime(){
+    public static String AUTHENTICATION_TOKEN = "";
+
+    public static String getCurrentDateTime() {
         Date currentTime = Calendar.getInstance().getTime();
         return String.valueOf(currentTime);
     }
 
-    public static String getCurrentTimePin(){
+    public static String getCurrentTimePin() {
         SimpleDateFormat sdf = new SimpleDateFormat("HHmm", Locale.getDefault());
         String currentDateandTime = sdf.format(new Date());
         return currentDateandTime;
+    }
+
+    public static void setAuthenticationToken(String token) {
+        AUTHENTICATION_TOKEN = "Bearer " + token;
     }
 }

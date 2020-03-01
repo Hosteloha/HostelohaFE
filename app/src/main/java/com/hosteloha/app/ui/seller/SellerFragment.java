@@ -603,7 +603,6 @@ public class SellerFragment extends Fragment {
             public void onResponse(Call<ProductObject> call, Response<ProductObject> response) {
                 mProgress.dismiss();
                 if (response.isSuccessful()) {
-                    String getmQueryStatus = null;
                     ProductObject productObject = response.body();
                     String dialogMessage = " Product :: " + productObject.getId() + " with title " + productObject.getSubtitle()
                             + " is uploaded";
