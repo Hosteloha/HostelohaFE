@@ -5,31 +5,8 @@
     android:background="@color/mine_shaft">
 
     <TextView
-        android:id="@+id/text_seller"
+        android:id="@+id/text_home"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone" />
-
-    <Button
-        android:id="@+id/usertype_seller"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="@string/menu_seller" />
-
-    <Button
-        android:id="@+id/usertype_buyer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/usertype_seller"
-        android:layout_centerInParent="true"
-        android:text="@string/menu_buyer" />
-
-    <Button
-        android:id="@+id/usertype_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/usertype_buyer"
-        android:layout_centerInParent="true"
-        android:text="logout" />
 </RelativeLayout>

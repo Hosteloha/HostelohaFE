@@ -1,15 +1,18 @@
 package com.hosteloha.app;
 
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.hosteloha.R;
+import com.hosteloha.app.utils.HostelohaUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);
         //To disable the side bar.
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //To disable the above toolbar.
@@ -65,20 +67,36 @@ public class MainActivity extends AppCompatActivity {
                     toolbar.setVisibility(View.VISIBLE);
                     // To remove the items from the side bar navigation view
                     navigationView.getMenu().findItem(R.id.nav_home).setVisible(false);
-                    navigationView.getMenu().findItem(R.id.nav_buyer).setVisible(false);
+//                    navigationView.getMenu().findItem(R.id.nav_buyer).setVisible(false);
                     mAppBarConfiguration.getDrawerLayout().removeView(findViewById(R.id.nav_seller));
                 } else if (destination.getId() == R.id.nav_buyer) {
                     drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                     toolbar.setVisibility(View.VISIBLE);
                     // To remove the items from the side bar navigation view
                     navigationView.getMenu().findItem(R.id.nav_home).setVisible(false);
-                    navigationView.getMenu().findItem(R.id.nav_seller).setVisible(false);
+//                    navigationView.getMenu().findItem(R.id.nav_seller).setVisible(false);
                 } else if (destination.getId() == R.id.nav_home) {
                     //Hiding the action when reaching the home screen since it cannot go back.
                     getSupportActionBar().hide();
                 }
             }
         });
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration configuration) {
+        super.onConfigurationChanged(configuration);
+        int currentNightMode = configuration.uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        switch (currentNightMode) {
+            case Configuration.UI_MODE_NIGHT_NO:
+                // Night mode is not active, we're using the light theme
+                HostelohaUtils.showSnackBarNotification(this,"Light Theme enabled");
+                break;
+            case Configuration.UI_MODE_NIGHT_YES:
+                // Night mode is active, we're using dark theme
+                HostelohaUtils.showSnackBarNotification(this,"Dark Theme enabled");
+                break;
+        }
     }
 
     @Override
@@ -134,4 +152,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_logout:
+                HostelohaUtils.logOutUser(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
 }

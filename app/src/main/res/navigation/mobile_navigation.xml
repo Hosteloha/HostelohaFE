@@ -10,21 +10,6 @@
         android:name="com.hosteloha.app.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home">
-        <action
-            android:id="@+id/action_nav_home_to_nav_seller"
-            app:destination="@id/nav_seller"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
-
-        <action
-            android:id="@+id/action_nav_home_to_nav_buyer"
-            app:destination="@id/nav_buyer"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
 
     </fragment>
 
@@ -85,6 +70,24 @@
             android:label="fragment_hostel_oha_main"
             tools:layout="@layout/fragment_hostel_oha_main">
             <action
+                android:id="@+id/action_hostelOhaMain_to_nav_buyer"
+                app:destination="@id/nav_buyer"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_left"
+                app:popExitAnim="@anim/slide_out_right"
+                app:popUpTo="@+id/hostelOhaMain"
+                app:popUpToInclusive="true" />
+            <action
+                android:id="@+id/action_hostelOhaMain_to_nav_seller"
+                app:destination="@id/nav_seller"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_left"
+                app:popExitAnim="@anim/slide_out_right"
+                app:popUpTo="@+id/hostelOhaMain"
+                app:popUpToInclusive="true" />
+            <action
                 android:id="@+id/action_hostelOhaMain_to_mainLoginFragment"
                 app:destination="@id/mainLoginFragment"
                 app:enterAnim="@anim/slide_in_right"
@@ -107,8 +110,17 @@
                 app:popEnterAnim="@anim/slide_in_left"
                 app:popExitAnim="@anim/slide_out_right" />
             <action
-                android:id="@+id/action_mainLoginFragment_to_nav_login"
-                app:destination="@id/nav_login"
+                android:id="@+id/action_mainLoginFragment_to_nav_buyer"
+                app:destination="@id/nav_buyer"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_left"
+                app:popExitAnim="@anim/slide_out_right"
+                app:popUpTo="@+id/mainLoginFragment"
+                app:popUpToInclusive="true" />
+            <action
+                android:id="@+id/action_mainLoginFragment_to_nav_seller"
+                app:destination="@id/nav_seller"
                 app:enterAnim="@anim/slide_in_right"
                 app:exitAnim="@anim/slide_out_left"
                 app:popEnterAnim="@anim/slide_in_left"

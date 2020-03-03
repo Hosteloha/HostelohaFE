@@ -12,6 +12,7 @@
     <string name="action_settings">Settings</string>
     <string name="action_help">Help</string>
     <string name="menu_login">Login</string>
+    <string name="menu_logout">Logout</string>
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
@@ -60,6 +61,6 @@
     </string-array>
 
     <!-- Authentication Page -->
-    <string name="otp_sent_variable_phone">OTP Sent to +91 %1$s</string>
+    <string name="otp_sent_variable_phone">OTP Sent to %1$s</string>
 
 </resources>
