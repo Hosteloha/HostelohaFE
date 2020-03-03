@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.hosteloha.R;
+import com.hosteloha.app.utils.Define;
+import com.hosteloha.app.utils.HostelohaUtils;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
@@ -23,9 +25,19 @@ public class HostelOhaMain extends Fragment {
             @Override
             public void run() {
                 final NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-                navController.navigate(R.id.action_hostelOhaMain_to_mainLoginFragment);
+                if (HostelohaUtils.getUserLoginInfo(getContext())) {
+                    String viewType = HostelohaUtils.getPreviousViewType(getContext());
+                    boolean isPreviousViewBuyer = (viewType.equals(Define.VIEW_BUYER));
+                    if (isPreviousViewBuyer) {
+                        navController.navigate(R.id.action_hostelOhaMain_to_nav_buyer);
+                    } else {
+                        navController.navigate(R.id.action_hostelOhaMain_to_nav_seller);
+                    }
+                } else {
+                    navController.navigate(R.id.action_hostelOhaMain_to_mainLoginFragment);
+                }
             }
-        }, 2000);
+        }, 1000);
     }
 
     @Override
