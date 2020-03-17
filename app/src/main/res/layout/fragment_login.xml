@@ -40,24 +40,103 @@
         android:textColor="@color/white"
         android:textSize="34sp" />
 
-    <com.andrognito.pinlockview.IndicatorDots
-        android:id="@+id/indicator_dots"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/profile_name"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="36dp" />
 
-    <com.andrognito.pinlockview.PinLockView
-        android:id="@+id/pin_lock_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/indicator_dots"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        app:keypadButtonSize="72dp"
-        app:keypadShowDeleteButton="true"
-        app:keypadTextColor="@color/white"
-        app:keypadTextSize="18dp" />
+    <androidx.cardview.widget.CardView
+        android:id="@+id/sellerPage1_productdetails"
+        style="@style/loginViewBasedCardDesign"
+        android:layout_below="@+id/profile_name"
+        android:layout_marginTop="10dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:focusableInTouchMode="false"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <LinearLayout
+                android:id="@+id/loginpage_phoneNoEnterLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+
+                    <EditText
+                        android:id="@+id/loginpage_phoneNo"
+                        style="@style/modifiedEditText"
+                        android:gravity="center"
+                        android:hint="Enter phone number"
+                        android:inputType="phone"
+                        android:nextFocusDown="@id/loginpage_sendOTPButton"
+                        android:singleLine="true" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/loginpage_sendOTPButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/centre_button"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:text="Get OTP"
+                    android:textColor="@color/whiteTextColor" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/loginpage_phoneNoVerifyLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+
+                    <EditText
+                        android:id="@+id/loginpage_otpPhoneVerify"
+                        style="@style/modifiedEditText"
+                        android:gravity="center"
+                        android:hint="Enter OTP"
+                        android:inputType="number"
+                        android:nextFocusDown="@id/loginpage_verifyOtpBtn"
+                        android:singleLine="true" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <Button
+                    android:id="@+id/loginpage_verifyOtpBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/centre_button"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:text="Verify OTP"
+                    android:textColor="@color/whiteTextColor" />
+            </LinearLayout>
+
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/sign_in_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
 
 </RelativeLayout>

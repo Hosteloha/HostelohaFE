@@ -12,9 +12,12 @@ import com.hosteloha.R;
 import com.hosteloha.app.beans.ProductObject;
 import com.hosteloha.app.retroapi.ApiUtil;
 import com.hosteloha.app.ui.buyer.adapter.RecyclerAdapter;
+import com.hosteloha.app.utils.Define;
+import com.hosteloha.app.utils.HostelohaUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -51,6 +54,7 @@ public class BuyerFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        HostelohaUtils.storeCurrentViewTypeInPrefs(getContext(), Define.VIEW_BUYER);
         buyerViewModel =
                 ViewModelProviders.of(this).get(BuyerViewModel.class);
         View root = inflater.inflate(R.layout.fragment_buyer, container, false);
@@ -73,7 +77,7 @@ public class BuyerFragment extends Fragment {
         // To dismiss the dialog
 
 
-        ApiUtil.getServiceClass().getAllPost().enqueue(new Callback<List<ProductObject>>() {
+        ApiUtil.getServiceClass().getAllPost(HostelohaUtils.AUTHENTICATION_TOKEN).enqueue(new Callback<List<ProductObject>>() {
             @Override
             public void onResponse(Call<List<ProductObject>> call, Response<List<ProductObject>> response) {
                 if (response.isSuccessful()) {
@@ -94,12 +98,19 @@ public class BuyerFragment extends Fragment {
             @Override
             public void onFailure(Call<List<ProductObject>> call, Throwable t) {
                 //showErrorMessage();
-                Toast.makeText(getContext(), "Could not fetch data from server", Toast.LENGTH_LONG).show();
+                String message = "Failed to fetch data";
+                HostelohaUtils.showSnackBarNotification(Objects.requireNonNull(getActivity()), message);
                 Log.d(TAG, "error loading from API");
             }
 
         });
         return root;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        HostelohaUtils.storeCurrentViewTypeInPrefs(getContext(), Define.VIEW_BUYER);
     }
 
     @Override

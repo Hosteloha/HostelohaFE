@@ -1,109 +1,299 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/cardview_dark_background"
-    tools:context=".app.ui.login.MainLoginFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.google.android.material.card.MaterialCardView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="3dp"
-        app:cardBackgroundColor="@color/cardview_light_background"
-        app:cardCornerRadius="5dp">
+        android:background="@color/mine_shaft"
+        tools:context="com.hosteloha.app.MainActivity">
 
         <TextView
+            android:id="@+id/text_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/centre_background"
-            android:gravity="center"
-            android:text="Login / SignUp"
-            android:textColor="@color/design_default_color_primary_dark"
-            android:textSize="26sp" />
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:visibility="gone" />
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/profile_image"
+            android:layout_width="84dp"
+            android:layout_height="84dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/img_no_avatar" />
+
+        <TextView
+            android:id="@+id/profile_name"
+            android:layout_width="256dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profile_image"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="36dp"
+            android:fontFamily="sans-serif-thin"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="Login"
+            android:textColor="@color/white"
+            android:textSize="34sp" />
+
+
+        <androidx.cardview.widget.CardView
             android:id="@+id/send_otp_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical">
+            style="@style/loginViewBasedCardDesign"
+            android:layout_below="@+id/profile_name"
+            android:layout_margin="20dp"
+            android:visibility="visible"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="10dp">
 
-            <TextView
-                android:id="@+id/textView"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:gravity="center"
-                android:text="Enter Phone Number "
-                android:textSize="20sp" />
+                android:layout_gravity="center"
+                android:focusableInTouchMode="false"
+                android:orientation="vertical"
+                android:padding="20dp">
 
-            <EditText
-                android:id="@+id/et_number"
-                android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/loginpage_phoneNoEnterLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:visibility="visible">
+
+                        <com.hosteloha.app.utils.PrefixEditText
+                            android:id="@+id/et_number"
+                            style="@style/modifiedEditText"
+                            android:gravity="start|center_vertical"
+                            android:hint="Phone Number"
+                            android:inputType="number"
+                            android:maxLength="10"
+                            android:nextFocusDown="@id/loginpage_sendOTPButton"
+                            android:singleLine="true"
+                            android:tag="IN +91   " />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Button
+                        android:id="@+id/btn_send_otp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/centre_button"
+                        android:enabled="false"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:text="Continue"
+                        android:textColor="@color/whiteTextColor" />
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/google_signin_seperator"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="10dp"
+                    android:background="#c0c0c0" />
+
+
+                <com.google.android.gms.common.SignInButton
+                    android:id="@+id/sign_in_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="2dp" />
+
+                <View
+                    android:id="@+id/web_login_seperator"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="10dp"
+                    android:background="#c0c0c0" />
+
+                <androidx.cardview.widget.CardView
+                    style="@style/loginViewBasedCardDesign"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:visibility="visible"
+                    app:cardElevation="10dp">
+
+                    <LinearLayout
+                        android:id="@+id/web_authentication_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_horizontal"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:visibility="visible">
+
+                        <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_marginStart="15dp"
+                            android:padding="1dp"
+                            android:src="@drawable/ic_mail_outline_black_24dp"
+                            android:tint="@color/mine_shaft" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginEnd="15dp"
+                            android:fontFamily="sans-serif-medium"
+                            android:text="Email / Username"
+                            android:textColor="@color/grisaille" />
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/verify_webauthentication_view"
+            style="@style/loginViewBasedCardDesign"
+            android:layout_below="@+id/profile_name"
+            android:layout_margin="20dp"
+            android:visibility="gone"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="10dp">
+
+            <LinearLayout
+                android:id="@+id/web_authentication_view_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="6"
-                android:gravity="center"
-                android:inputType="phone"
-                android:maxLength="10" />
+                android:layout_gravity="center"
+                android:focusableInTouchMode="false"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:visibility="visible">
 
-            <Button
-                android:id="@+id/btn_send_otp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/centre_button"
-                android:text="Request OTP" />
-        </LinearLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:visibility="visible">
 
-        <LinearLayout
+                    <EditText
+                        android:id="@+id/et_webauth_username"
+                        style="@style/modifiedEditText"
+                        android:gravity="start|center_vertical"
+                        android:hint="Email or Username"
+                        android:inputType="text"
+                        android:singleLine="true" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:visibility="visible">
+
+                    <EditText
+                        android:id="@+id/et_webauth_password"
+                        style="@style/modifiedEditText"
+                        android:gravity="start|center_vertical"
+                        android:hint="Password"
+                        android:inputType="textWebPassword"
+                        android:singleLine="true" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <Button
+                    android:id="@+id/btn_submit_webauthentication"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/centre_button"
+                    android:enabled="false"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:text="Submit"
+                    android:textColor="@color/whiteTextColor" />
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
             android:id="@+id/verify_otp_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone">
+            style="@style/loginViewBasedCardDesign"
+            android:layout_below="@+id/profile_name"
+            android:layout_margin="20dp"
+            android:visibility="gone"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="10dp">
 
-            <TextView
-                android:id="@+id/tv_otp_received"
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:gravity="center"
-                android:text="Enter OTP recevided to your phone"
-                android:textSize="20sp" />
+                android:layout_gravity="center"
+                android:focusableInTouchMode="false"
+                android:orientation="vertical"
+                android:padding="20dp">
 
-            <com.chaos.view.PinView
-                android:id="@+id/pinView"
-                style="@style/PinWidget.PinView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:inputType="number"
-                android:padding="10dp"
-                android:textSize="18sp"
-                app:itemCount="4"
-                app:itemHeight="48dp"
-                app:itemRadius="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:lineColor="@android:color/darker_gray"
-                app:viewType="rectangle" />
+                <TextView
+                    android:id="@+id/tv_otp_received"
+                    style="@style/modifiedEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="@string/otp_sent_variable_phone" />
 
-            <Button
-                android:id="@+id/btn_submit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/centre_button"
-                android:text="Verify" />
-        </LinearLayout>
+                <com.chaos.view.PinView
+                    android:id="@+id/pinView"
+                    style="@style/PinWidget.PinView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:inputType="number"
+                    android:padding="6dp"
+                    android:textSize="16sp"
+                    app:itemCount="6"
+                    app:itemHeight="40dp"
+                    app:itemRadius="5dp"
+                    app:itemWidth="40dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:lineColor="@android:color/darker_gray"
+                    app:viewType="rectangle" />
 
-    </com.google.android.material.card.MaterialCardView>
-
-</FrameLayout>
+                <Button
+                    android:id="@+id/btn_submit_otp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/centre_button"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:text="Verify and Proceed"
+                    android:textColor="@color/whiteTextColor" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+</layout>

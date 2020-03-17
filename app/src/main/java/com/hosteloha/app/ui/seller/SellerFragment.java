@@ -1,9 +1,11 @@
 package com.hosteloha.app.ui.seller;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -27,7 +29,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -38,6 +39,7 @@ import com.hosteloha.app.beans.ProductCategory;
 import com.hosteloha.app.beans.ProductObject;
 import com.hosteloha.app.retroapi.ApiUtil;
 import com.hosteloha.app.ui.seller.adapter.CustomPageAdapter;
+import com.hosteloha.app.utils.Define;
 import com.hosteloha.app.utils.HostelohaUtils;
 
 import org.json.JSONException;
@@ -47,6 +49,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -74,6 +77,7 @@ import static com.hosteloha.app.utils.Define.REQUEST_CODE_READ_STORAGE_PERMISSIO
 public class SellerFragment extends Fragment {
 
     private SellerViewModel sellerViewModel;
+    private Activity mActivity = getActivity();
 
     EditText mProductTitleText, mProductSubTitleText, mProductSpecificTags, mProductDescriptionText;
     Button mNextBtn;
@@ -93,6 +97,8 @@ public class SellerFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
+        HostelohaUtils.storeCurrentViewTypeInPrefs(mActivity, Define.VIEW_SELLER);
 
         sellerViewModel =
                 ViewModelProviders.of(this).get(SellerViewModel.class);
@@ -202,8 +208,10 @@ public class SellerFragment extends Fragment {
             }
         });
 
-        String[] PRODUCT_CONDITION = getContext().getResources().getStringArray(R.array.product_condition);
-        addDropDownData(mProductConditionDropDown, PRODUCT_CONDITION);
+        if (mActivity != null) {
+            String[] PRODUCT_CONDITION = mActivity.getResources().getStringArray(R.array.product_condition);
+            addDropDownData(mProductConditionDropDown, PRODUCT_CONDITION);
+        }
 
         //Progress dialog
         mProgress = new ProgressDialog(getContext());
@@ -223,10 +231,15 @@ public class SellerFragment extends Fragment {
         return root;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        HostelohaUtils.storeCurrentViewTypeInPrefs(getContext(), Define.VIEW_SELLER);
+    }
 
     private void fetchSubCategory(String category, int subCategory) {
         if (subCategory == 0) {
-            ApiUtil.getServiceClass().getProductMainCategories().enqueue(new Callback<String[]>() {
+            ApiUtil.getServiceClass().getProductMainCategories(HostelohaUtils.AUTHENTICATION_TOKEN).enqueue(new Callback<String[]>() {
                 @Override
                 public void onResponse(Call<String[]> call, Response<String[]> response) {
                     if (response.isSuccessful()) {
@@ -239,17 +252,12 @@ public class SellerFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<String[]> call, Throwable t) {
-                    //showErrorMessage();
-                    Toast.makeText(getContext(), "Could not fetch categories :: "
-                                    + t.getLocalizedMessage() + "\n"
-                                    + t.getStackTrace() + " \n"
-                                    + t.getMessage(),
-                            Toast.LENGTH_LONG).show();
+                    HostelohaUtils.showSnackBarNotification(mActivity, "Could not fetch categories _ 1 ");
                 }
 
             });
         } else if (subCategory == 1) {
-            ApiUtil.getServiceClass().getProductSubCategoryFirstList(category).enqueue(new Callback<String[]>() {
+            ApiUtil.getServiceClass().getProductSubCategoryFirstList(category, HostelohaUtils.AUTHENTICATION_TOKEN).enqueue(new Callback<String[]>() {
                 @Override
                 public void onResponse(Call<String[]> call, Response<String[]> response) {
                     if (response.isSuccessful()) {
@@ -262,17 +270,12 @@ public class SellerFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<String[]> call, Throwable t) {
-                    //showErrorMessage();
-                    Toast.makeText(getContext(), "Could not fetch sub category 1 :: "
-                                    + t.getLocalizedMessage() + "\n"
-                                    + t.getStackTrace() + " \n"
-                                    + t.getMessage(),
-                            Toast.LENGTH_LONG).show();
+                    HostelohaUtils.showSnackBarNotification(mActivity, "Could not fetch categories _ 2");
                 }
 
             });
         } else if (subCategory == 2) {
-            ApiUtil.getServiceClass().getProductSubCategorySecondList(category).enqueue(new Callback<String[]>() {
+            ApiUtil.getServiceClass().getProductSubCategorySecondList(category, HostelohaUtils.AUTHENTICATION_TOKEN).enqueue(new Callback<String[]>() {
                 @Override
                 public void onResponse(Call<String[]> call, Response<String[]> response) {
                     if (response.isSuccessful()) {
@@ -285,14 +288,8 @@ public class SellerFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<String[]> call, Throwable t) {
-                    //showErrorMessage();
-                    Toast.makeText(getContext(), "Could not fetch subcategory 2 :: "
-                                    + t.getLocalizedMessage() + "\n"
-                                    + t.getStackTrace() + " \n"
-                                    + t.getMessage(),
-                            Toast.LENGTH_LONG).show();
+                    HostelohaUtils.showSnackBarNotification(mActivity, "Could not fetch categories _ 3");
                 }
-
             });
         }
 
@@ -344,8 +341,6 @@ public class SellerFragment extends Fragment {
                     Chip eachChip = (Chip) chipGroup.getChildAt(i);
                     if (eachChip.equals(chip)) {
                         position = i;
-                        Toast.makeText(getActivity(), "Chip position is :: " + i,
-                                Toast.LENGTH_SHORT).show();
                         break;
                     }
                 }
@@ -424,8 +419,7 @@ public class SellerFragment extends Fragment {
 
             }
         }
-        Toast.makeText(getActivity(), "FIELD INVALID :: " + inputFieldPosition,
-                Toast.LENGTH_SHORT).show();
+        HostelohaUtils.showSnackBarNotification(mActivity, "FIELD INVALID :: " + inputFieldPosition);
         return false;
     }
 
@@ -496,9 +490,10 @@ public class SellerFragment extends Fragment {
      * @param dropDownData
      */
     private void addDropDownData(AutoCompleteTextView editTextFilledExposedDropdown, String[] dropDownData) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.dropdown_menu_popup_item, dropDownData);
-        editTextFilledExposedDropdown.setAdapter(adapter);
-
+        if (dropDownData != null && dropDownData.length > 0) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(mActivity, R.layout.dropdown_menu_popup_item, dropDownData);
+            editTextFilledExposedDropdown.setAdapter(adapter);
+        }
     }
 
     private boolean checkifEnteredItemsIsPresentInDropdown(ListAdapter adapter, String enteredText) {
@@ -509,7 +504,7 @@ public class SellerFragment extends Fragment {
                 }
             }
         }
-        Toast.makeText(getActivity(), "Not found in list", Toast.LENGTH_SHORT).show();
+        HostelohaUtils.showSnackBarNotification(mActivity, "Item not found in list");
         return false;
     }
 
@@ -598,12 +593,11 @@ public class SellerFragment extends Fragment {
     }
 
     private void sendPost(RequestBody body) {
-        ApiUtil.getServiceClass().uploadProduct(body).enqueue(new Callback<ProductObject>() {
+        ApiUtil.getServiceClass().uploadProduct(body, HostelohaUtils.AUTHENTICATION_TOKEN).enqueue(new Callback<ProductObject>() {
             @Override
             public void onResponse(Call<ProductObject> call, Response<ProductObject> response) {
                 mProgress.dismiss();
                 if (response.isSuccessful()) {
-                    String getmQueryStatus = null;
                     ProductObject productObject = response.body();
                     String dialogMessage = " Product :: " + productObject.getId() + " with title " + productObject.getSubtitle()
                             + " is uploaded";
@@ -617,7 +611,7 @@ public class SellerFragment extends Fragment {
                         e.printStackTrace();
                     }
 
-                    Toast.makeText(getActivity(), mPopMessage, Toast.LENGTH_SHORT).show();
+                    HostelohaUtils.showSnackBarNotification(mActivity, mPopMessage);
                 }
 
 
