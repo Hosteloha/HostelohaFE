@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hosteloha.R;
 import com.hosteloha.app.beans.ProductObject;
@@ -39,7 +38,7 @@ public class BuyerFragment extends Fragment {
     RecyclerAdapter mRecyclerAdapter;
     NavController mNavController = null;
     private BuyerViewModel buyerViewModel;
-    private ArrayList<String> mArrayList = new ArrayList<String>();
+    private List<ProductObject> mArrayList = new ArrayList<ProductObject>();
     private RecyclerAdapter.OnItemClickListener mOnItemClickListener = new RecyclerAdapter.OnItemClickListener() {
         @Override
         public void onItemClick(View itemView, int position) {
@@ -77,19 +76,14 @@ public class BuyerFragment extends Fragment {
         // To dismiss the dialog
 
 
-        ApiUtil.getServiceClass().getAllPost(HostelohaUtils.AUTHENTICATION_TOKEN).enqueue(new Callback<List<ProductObject>>() {
+        ApiUtil.getServiceClass().getAllProcducts(HostelohaUtils.AUTHENTICATION_TOKEN).enqueue(new Callback<List<ProductObject>>() {
             @Override
             public void onResponse(Call<List<ProductObject>> call, Response<List<ProductObject>> response) {
                 if (response.isSuccessful()) {
                     List<ProductObject> postList = response.body();
                     Log.d(TAG, "Returned count " + postList.size());
                     mArrayList.clear();
-                    for (ProductObject item : postList) {
-                        mArrayList.add(item.getDescription());
-                        CharSequence previousText = textView.getText();
-                        textView.setText(previousText + "\n ID :: " + item.getSubtitle() +
-                                "Title : " + item.getDescription() + "\n");
-                    }
+                    mArrayList = postList;
                     mRecyclerAdapter.setArrayList(mArrayList);
 
                 }
