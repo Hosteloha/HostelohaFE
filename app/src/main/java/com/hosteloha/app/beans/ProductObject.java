@@ -1,22 +1,46 @@
 package com.hosteloha.app.beans;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.sql.Timestamp;
 
 public class ProductObject {
-    private int id;
-    private String title;
-    private String subtitle;
-    private String description;
-    private int category_id;
-    private String mainCategory;
-    private String subCategory1;
-    private String subCategory2;
-    private int users_id;
-    private int condition_id;
-    private int delivery_format_id;
-    private int payment_option_id;
-    private int selling_format_id;
+    // Initialised with default values.
+    @SerializedName("id")
+    private int productId = 0;
+    @SerializedName("product_title")
+    private String title = "";
+    @SerializedName("subtitle")
+    private String subtitle = "";
+    @SerializedName("description")
+    private String description = "";
+    @SerializedName("category_id")
+    private int category_id = 1;
+    @SerializedName("category")
+    private String mainCategory = "Beauty";
+    @SerializedName("subcategory1")
+    private String subCategory1 = "FaceCreams";
+    @SerializedName("subcategory2")
+    private String subCategory2 = "Facewash";
+    @SerializedName("users_id")
+    private int users_id = 61; // testuser@gmail.com
+    @SerializedName("condition_id")
+    private int condition_id = 1;
+    @SerializedName("delivery_format_id")
+    private int delivery_format_id = 1;
+    @SerializedName("payment_option_id")
+    private int payment_option_id = 1;
+    @SerializedName("selling_format_id")
+    private int selling_format_id = 1;
+    @SerializedName("currency")
+    private String currency = "";
+    @SerializedName("quantity")
+    private int quantity = 1;
+    @SerializedName("selling_price")
+    private int sellingPrice = 0;
+    @SerializedName("inserted_at")
     private Timestamp inserted_at;
+    @SerializedName("updated_at")
     private Timestamp updated_at;
 
     public ProductObject() {
@@ -31,10 +55,10 @@ public class ProductObject {
         this.category_id = category_id;
     }
 
-    public ProductObject(int id, String subtitle, String description, int category_id, int users_id, int condition_id,
-                         int delivery_format_id, int payment_option_id, int selling_format_id, Timestamp inserted_at,
-                         Timestamp updated_at) {
-        this.id = id;
+    public ProductObject(int productId, String subtitle, String description, int category_id, int users_id, int condition_id,
+                         int delivery_format_id, int payment_option_id, int selling_format_id, String currency, int quantity,
+                         int sellingPrice, Timestamp inserted_at, Timestamp updated_at) {
+        this.productId = productId;
         this.subtitle = subtitle;
         this.description = description;
         this.category_id = category_id;
@@ -43,6 +67,9 @@ public class ProductObject {
         this.delivery_format_id = delivery_format_id;
         this.payment_option_id = payment_option_id;
         this.selling_format_id = selling_format_id;
+        this.currency = currency;
+        this.quantity = quantity;
+        this.sellingPrice = sellingPrice;
         this.inserted_at = inserted_at;
         this.updated_at = updated_at;
 
@@ -80,12 +107,12 @@ public class ProductObject {
         this.title = title;
     }
 
-    public int getId() {
-        return id;
+    public int getProductId() {
+        return productId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 
     public String getSubtitle() {
@@ -160,11 +187,36 @@ public class ProductObject {
         this.updated_at = updated_at;
     }
 
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getSellingPrice() {
+        return sellingPrice;
+    }
+
+    public void setSellingPrice(int sellingPrice) {
+        this.sellingPrice = sellingPrice;
+    }
+
     @Override
     public String toString() {
-        return "ProductObject [id=" + id + ", subtitle=" + subtitle + ", description=" + description
+        return "ProductObject [productId=" + productId + ", subtitle=" + subtitle + ", description=" + description
                 + ", users_id=" + users_id + ", condition_id=" + condition_id + ", delivery_format_id="
                 + delivery_format_id + ", payment_option_id=" + payment_option_id + ", selling_format_id="
-                + selling_format_id + ", inserted_at=" + inserted_at + ", updated_at=" + updated_at + "]";
+                + selling_format_id + ", currency = " + currency + ", quantity=" + quantity
+                + ", sellingPrice=" + sellingPrice + ", inserted_at=" + inserted_at + ", updated_at=" + updated_at + "]";
     }
 }

@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ClipData;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -33,23 +32,14 @@ import android.widget.TextView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.gson.Gson;
 import com.hosteloha.R;
-import com.hosteloha.app.beans.ProductCategory;
 import com.hosteloha.app.beans.ProductObject;
 import com.hosteloha.app.retroapi.ApiUtil;
 import com.hosteloha.app.ui.seller.adapter.CustomPageAdapter;
 import com.hosteloha.app.utils.Define;
 import com.hosteloha.app.utils.HostelohaUtils;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -58,12 +48,8 @@ import androidx.core.content.PermissionChecker;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.viewpager.widget.ViewPager;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import okio.Buffer;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -111,10 +97,10 @@ public class SellerFragment extends Fragment {
             }
         });
 
-        mNextBtn = (Button) root.findViewById(R.id.seller_next_btn);
+        mNextBtn = root.findViewById(R.id.seller_next_btn);
         //Here change the progress with the alpha button
 //        mNextBtn.setAlpha(.1f);
-        mPrevBtn = (Button) root.findViewById(R.id.seller_prev_btn);
+        mPrevBtn = root.findViewById(R.id.seller_prev_btn);
 
         mViewPager = root.findViewById(R.id.seller_viewpager);
         pageadapter = new CustomPageAdapter(inflater);
@@ -360,9 +346,19 @@ public class SellerFragment extends Fragment {
             switch (v.getId()) {
                 case R.id.seller_next_btn:
                     if (mNextBtn.getText().equals("Submit")) {
-                        final String mProductTitle = mProductTitleText.getText().toString();
+                        final ProductObject productObject = new ProductObject();
+                        productObject.setTitle(mProductTitleText.getText().toString());
+                        productObject.setSubtitle(mProductSubTitleText.getText().toString());
+                        productObject.setDescription(mProductDescriptionText.getText().toString());
 
-                        Map<String, Object> jsonParams = getProductDataToUpload();
+                        /* Updating with default values ... Need to get values from user */
+                        productObject.setMainCategory("Beauty");
+                        productObject.setSubCategory1("FaceCreams");
+                        productObject.setSubCategory2("Facewash");
+                        productObject.setPayment_option_id(1);
+                        productObject.setSelling_format_id(1);
+
+/*                        Map<String, Object> jsonParams = getProductDataToUpload();
 
                         final RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),
                                 (new JSONObject(jsonParams)).toString());
@@ -374,16 +370,16 @@ public class SellerFragment extends Fragment {
                             Log.d("Suhaas", " body :: " + buffer.readUtf8());
                         } catch (final IOException e) {
 
-                        }
+                        }*/
 
                         new AlertDialog.Builder(getContext())
-                                .setTitle(mProductTitle)
-                                .setMessage("Are you sure you want to upload the product ? " + mProductTitle)
+                                .setTitle(productObject.getDescription())
+                                .setMessage("Are you sure you want to upload the product ? " + productObject.getDescription())
                                 .setIcon(android.R.drawable.ic_menu_info_details)
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int whichButton) {
                                         mProgress.show();
-                                        sendPost(body);
+                                        sendPost(productObject);
                                     }
                                 })
                                 .setNegativeButton(android.R.string.no, null).show();
@@ -491,7 +487,7 @@ public class SellerFragment extends Fragment {
      */
     private void addDropDownData(AutoCompleteTextView editTextFilledExposedDropdown, String[] dropDownData) {
         if (dropDownData != null && dropDownData.length > 0) {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(mActivity, R.layout.dropdown_menu_popup_item, dropDownData);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_menu_popup_item, dropDownData);
             editTextFilledExposedDropdown.setAdapter(adapter);
         }
     }
@@ -592,14 +588,14 @@ public class SellerFragment extends Fragment {
         }
     }
 
-    private void sendPost(RequestBody body) {
-        ApiUtil.getServiceClass().uploadProduct(body, HostelohaUtils.AUTHENTICATION_TOKEN).enqueue(new Callback<ProductObject>() {
+    private void sendPost(ProductObject productObject) {
+        ApiUtil.getServiceClass().uploadProduct(productObject, HostelohaUtils.AUTHENTICATION_TOKEN).enqueue(new Callback<ProductObject>() {
             @Override
             public void onResponse(Call<ProductObject> call, Response<ProductObject> response) {
                 mProgress.dismiss();
                 if (response.isSuccessful()) {
                     ProductObject productObject = response.body();
-                    String dialogMessage = " Product :: " + productObject.getId() + " with title " + productObject.getSubtitle()
+                    String dialogMessage = " Product :: " + productObject.getProductId() + " with title " + productObject.getSubtitle()
                             + " is uploaded";
                     showDialogPopUpProductUploaded(dialogMessage);
 
@@ -611,7 +607,7 @@ public class SellerFragment extends Fragment {
                         e.printStackTrace();
                     }
 
-                    HostelohaUtils.showSnackBarNotification(mActivity, mPopMessage);
+                    HostelohaUtils.showSnackBarNotification(getActivity(), mPopMessage);
                 }
 
 
@@ -662,7 +658,7 @@ public class SellerFragment extends Fragment {
         @Override
         public void onPageSelected(int position) {
             if (mPrevBtn != null)
-                mPrevBtn.setEnabled((position == 0) ? false : true);
+                mPrevBtn.setEnabled(position != 0);
 
             if (mNextBtn != null)
                 mNextBtn.setText((position == 2) ? "Submit" : "Next");

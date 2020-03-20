@@ -8,22 +8,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hosteloha.R;
+import com.hosteloha.app.beans.ProductObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder> {
 
-    ArrayList<String> mArraylist;
+    List<ProductObject> mArraylist;
     private OnItemClickListener mItemClickListener;
 
-    public RecyclerAdapter(ArrayList arrayList) {
+    public RecyclerAdapter(List arrayList) {
         mArraylist = arrayList;
     }
 
-    public void setArrayList(ArrayList<String> arrayList) {
+    public void setArrayList(List<ProductObject> arrayList) {
         mArraylist = arrayList;
         notifyDataSetChanged();
     }
@@ -44,7 +46,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder viewHolder, int position) {
 
-        viewHolder.mProductTitle.setText(mArraylist.get(position));
+        viewHolder.mProductTitle.setText(mArraylist.get(position).getTitle());
+        viewHolder.mProductCost.setText(mArraylist.get(position).getSellingPrice()+"");
     }
 
     @Override
