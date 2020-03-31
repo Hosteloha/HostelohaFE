@@ -146,41 +146,14 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:counterEnabled="true"
-                        app:counterMaxLength="100">
-
-                        <EditText
-                            android:id="@+id/page2_et_description"
-                            style="@style/modifiedEditText"
-                            android:layout_height="150dp"
-                            android:gravity="top"
-                            android:hint="Product Description"
-                            android:inputType="textMultiLine"
-                            android:nextFocusDown="@id/page1_et_subtitle"
-                            android:overScrollMode="always"
-                            android:padding="15dp"
-                            android:scrollbarStyle="insideInset"
-                            android:scrollbars="vertical"
-                            android:singleLine="false" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <TextView
-                        android:id="@+id/page3_tv_selling_formate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Choose below the selling format" />
-
                     <RadioGroup
                         android:id="@+id/page3_rg_selling_formate"
                         style="@style/modifiedEditText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/page3_tv_selling_formate"
-                        android:layout_marginTop="10dp">
+                        android:layout_marginTop="10dp"
+                        android:visibility="gone">
 
                         <RadioButton
                             style="@style/modifiedEditText"
@@ -200,6 +173,61 @@
                             android:layout_height="wrap_content"
                             android:text="Auction + Fixed Price" />
                     </RadioGroup>
+
+                    <TextView
+                        android:id="@+id/page3_tv_selling_formate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Choose below the selling format"
+                        android:visibility="gone" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/page2_et_selling_cost"
+                            style="@style/modifiedEditText"
+                            android:hint="Selling Cost of product"
+                            android:inputType="number"
+                            android:nextFocusDown="@id/page3_tv_shipping_options"
+                            android:singleLine="true" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="100">
+
+                        <EditText
+                            android:id="@+id/page2_et_description"
+                            style="@style/modifiedEditText"
+                            android:layout_height="150dp"
+                            android:gravity="top"
+                            android:hint="Product Description"
+                            android:inputType="textMultiLine"
+                            android:nextFocusDown="@id/page2_et_product_cost"
+                            android:overScrollMode="always"
+                            android:padding="15dp"
+                            android:scrollbarStyle="insideInset"
+                            android:scrollbars="vertical"
+                            android:singleLine="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/page2_et_product_cost"
+                            style="@style/modifiedEditText"
+                            android:hint="Actual cost of Product "
+                            android:inputType="number"
+                            android:nextFocusDown="@id/page1_dropdown_product_categories"
+                            android:singleLine="true" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/page3_tv_shipping_options"

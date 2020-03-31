@@ -36,6 +36,8 @@ public class ProductObject {
     private String currency = "";
     @SerializedName("quantity")
     private int quantity = 1;
+    @SerializedName("cost_price")
+    private int costPrice = 0;
     @SerializedName("selling_price")
     private int sellingPrice = 0;
     @SerializedName("inserted_at")
@@ -57,7 +59,7 @@ public class ProductObject {
 
     public ProductObject(int productId, String subtitle, String description, int category_id, int users_id, int condition_id,
                          int delivery_format_id, int payment_option_id, int selling_format_id, String currency, int quantity,
-                         int sellingPrice, Timestamp inserted_at, Timestamp updated_at) {
+                         int sellingPrice, int costPrice, Timestamp inserted_at, Timestamp updated_at) {
         this.productId = productId;
         this.subtitle = subtitle;
         this.description = description;
@@ -70,6 +72,7 @@ public class ProductObject {
         this.currency = currency;
         this.quantity = quantity;
         this.sellingPrice = sellingPrice;
+        this.costPrice = costPrice;
         this.inserted_at = inserted_at;
         this.updated_at = updated_at;
 
@@ -211,12 +214,20 @@ public class ProductObject {
         this.sellingPrice = sellingPrice;
     }
 
+    public int getCostPrice() {
+        return costPrice;
+    }
+
+    public void setCostPrice(int costPrice) {
+        this.costPrice = costPrice;
+    }
+
     @Override
     public String toString() {
         return "ProductObject [productId=" + productId + ", subtitle=" + subtitle + ", description=" + description
                 + ", users_id=" + users_id + ", condition_id=" + condition_id + ", delivery_format_id="
                 + delivery_format_id + ", payment_option_id=" + payment_option_id + ", selling_format_id="
                 + selling_format_id + ", currency = " + currency + ", quantity=" + quantity
-                + ", sellingPrice=" + sellingPrice + ", inserted_at=" + inserted_at + ", updated_at=" + updated_at + "]";
+                + ", sellingPrice=" + sellingPrice + ", costPrice = " + costPrice + ", inserted_at=" + inserted_at + ", updated_at=" + updated_at + "]";
     }
 }

@@ -11,7 +11,6 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.ArrayMap;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -29,6 +28,16 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.PermissionChecker;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
+import androidx.viewpager.widget.ViewPager;
+
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -39,17 +48,6 @@ import com.hosteloha.app.ui.seller.adapter.CustomPageAdapter;
 import com.hosteloha.app.utils.Define;
 import com.hosteloha.app.utils.HostelohaUtils;
 
-import java.util.Map;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.PermissionChecker;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.Navigation;
-import androidx.viewpager.widget.ViewPager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -65,7 +63,7 @@ public class SellerFragment extends Fragment {
     private SellerViewModel sellerViewModel;
     private Activity mActivity = getActivity();
 
-    EditText mProductTitleText, mProductSubTitleText, mProductSpecificTags, mProductDescriptionText;
+    EditText mProductTitleText, mProductSubTitleText, mProductSpecificTags, mProductDescriptionText, mCostPrice, mSelleingPrice;
     Button mNextBtn;
     Button mPrevBtn;
     ImageButton mUploadPhotoesBtn;
@@ -79,143 +77,44 @@ public class SellerFragment extends Fragment {
     private CustomPageAdapter pageadapter;
     private ProgressDialog mProgress;
     private String mLOG_TAG = SellerFragment.class.getSimpleName();
+    View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.seller_next_btn:
+                    if (mNextBtn.getText().equals("Submit")) {
+                        final ProductObject productObject = getProductDataToUpload();
 
+                        new AlertDialog.Builder(getContext())
+                                .setTitle(productObject.getDescription())
+                                .setMessage("Are you sure you want to upload the product ? " + productObject.getDescription())
+                                .setIcon(android.R.drawable.ic_menu_info_details)
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        mProgress.show();
+                                        sendPost(productObject);
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, null).show();
+                    }
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-
-        HostelohaUtils.storeCurrentViewTypeInPrefs(mActivity, Define.VIEW_SELLER);
-
-        sellerViewModel =
-                ViewModelProviders.of(this).get(SellerViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_seller, container, false);
-        final TextView textView = root.findViewById(R.id.text_seller);
-        sellerViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
-
-        mNextBtn = root.findViewById(R.id.seller_next_btn);
-        //Here change the progress with the alpha button
-//        mNextBtn.setAlpha(.1f);
-        mPrevBtn = root.findViewById(R.id.seller_prev_btn);
-
-        mViewPager = root.findViewById(R.id.seller_viewpager);
-        pageadapter = new CustomPageAdapter(inflater);
-
-        mView_Page1 = inflater.inflate(R.layout.seller_page1, null);
-        mView_Page2 = inflater.inflate(R.layout.seller_page2, null);
-        mView_Page3 = inflater.inflate(R.layout.seller_page3, null);
-        pageadapter.insertView(mView_Page1);
 /*
-        Commented to avoid swipe left and right functionality when view switching
-        pageadapter.insertView(mView_Page2);
-        pageadapter.insertView(mView_Page3);*/
+                    To add the functionality to previous and next button
+                    if (mViewPager != null)
+                        mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
+*/
 
-        mViewPager.setAdapter(pageadapter);
-        mViewPager.setOnPageChangeListener(mOnPageChangeListener);
-        //issue - #10 added below changes to remain 3 pages of view pager to be alive
-        mViewPager.setOffscreenPageLimit(2);
-
-        mLL_uploadPhotoes = mView_Page1.findViewById(R.id.page1_ll_upload_photoes);
-        mUploadPhotoesBtn = mView_Page1.findViewById(R.id.page1_ib_upload_photoes);
-        mProductTitleText = mView_Page1.findViewById(R.id.page1_et_title);
-        mProductSubTitleText = mView_Page1.findViewById(R.id.page1_et_subtitle);
-        mProductDescriptionText = mView_Page1.findViewById(R.id.page2_et_description);
-        mProductCategoriesDropDown = mView_Page1.findViewById(R.id.page1_dropdown_product_categories);
-        mProductConditionDropDown = mView_Page1.findViewById(R.id.page2_dropdown_product_condition);
-        mProductSpecificTags = mView_Page1.findViewById(R.id.page1_et_product_tags);
-        mProductTagsChipGroup = mView_Page1.findViewById(R.id.chipGroupProductTags);
-        mProductCategoriesChipGroup = mView_Page1.findViewById(R.id.chipGroupProductCategories);
-        mProductSpecificTags.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH
-                        || actionId == EditorInfo.IME_ACTION_DONE
-                        || keyEvent.getAction() == KeyEvent.ACTION_DOWN
-                        && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-                    if ((textView != null) && (textView.getText().length() > 0)) {
-                        addChipToGroup(textView.getText(), mProductTagsChipGroup, false);
-                    }
-                    textView.setText(null);
-                }
-                return false;
+                    break;
+                case R.id.seller_prev_btn:
+                    if (mViewPager != null)
+                        mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
+                    break;
+                case R.id.page1_ib_upload_photoes:
+                    showUploadPhotoesAlertDilogue();
+                    break;
             }
-        });
-
-        mProductCategoriesDropDown.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH
-                        || actionId == EditorInfo.IME_ACTION_DONE
-                        || keyEvent.getAction() == KeyEvent.ACTION_DOWN
-                        && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-                    if ((textView != null) && (textView.getText().length() > 0)) {
-                        CharSequence enteredText = textView.getText();
-                        if (checkifEnteredItemsIsPresentInDropdown(mProductCategoriesDropDown.getAdapter(), enteredText.toString())) {
-                            addChipToGroup(textView.getText(), mProductCategoriesChipGroup, true);
-                            refreshProductCategoryDropDown();
-                        }
-                    }
-                }
-                return false;
-            }
-        });
-        // TODO :: Adding default chip for testing purpose, later remove it
-        addChipToGroup("#handmade", mProductTagsChipGroup, false);
-
-
-        mPrevBtn.setOnClickListener(mOnClickListener);
-        mNextBtn.setOnClickListener(mOnClickListener);
-        mUploadPhotoesBtn.setOnClickListener(mOnClickListener);
-
-//        String[] PRODUCT_CATEGORIES = getContext().getResources().getStringArray(R.array.product_categories);
-
-//        addDropDownData(mProductCategoriesDropDown, PRODUCT_CATEGORIES);
-        //To dismiss the dropdown after user selects
-//        mProductCategoriesDropDown.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                mProductCategoriesDropDown.dismissDropDown();
-//                mProductCategoriesDropDown.setImeOptions(EditorInfo.IME_ACTION_DONE);
-//            }
-//        });
-
-        mProductCategoriesDropDown.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String selection = (String) adapterView.getItemAtPosition(i);
-                if (checkifEnteredItemsIsPresentInDropdown(mProductCategoriesDropDown.getAdapter(), selection)) {
-                    addChipToGroup(selection, mProductCategoriesChipGroup, true);
-                    refreshProductCategoryDropDown();
-                }
-            }
-        });
-
-        if (mActivity != null) {
-            String[] PRODUCT_CONDITION = mActivity.getResources().getStringArray(R.array.product_condition);
-            addDropDownData(mProductConditionDropDown, PRODUCT_CONDITION);
         }
-
-        //Progress dialog
-        mProgress = new ProgressDialog(getContext());
-        mProgress.setTitle("Processing...");
-        mProgress.setMessage("Please wait...");
-        mProgress.setCancelable(false);
-        mProgress.setIndeterminate(true);
-        mProgress.setCanceledOnTouchOutside(true);
-        mProgress.setCancelable(true);
-
-        /**
-         * To fetch category list for main
-         */
-        fetchSubCategory(null, 0);
-
-
-        return root;
-    }
+    };
 
     @Override
     public void onPause() {
@@ -340,68 +239,143 @@ public class SellerFragment extends Fragment {
         });
     }
 
-    View.OnClickListener mOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.seller_next_btn:
-                    if (mNextBtn.getText().equals("Submit")) {
-                        final ProductObject productObject = new ProductObject();
-                        productObject.setTitle(mProductTitleText.getText().toString());
-                        productObject.setSubtitle(mProductSubTitleText.getText().toString());
-                        productObject.setDescription(mProductDescriptionText.getText().toString());
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
 
-                        /* Updating with default values ... Need to get values from user */
-                        productObject.setMainCategory("Beauty");
-                        productObject.setSubCategory1("FaceCreams");
-                        productObject.setSubCategory2("Facewash");
-                        productObject.setPayment_option_id(1);
-                        productObject.setSelling_format_id(1);
+        HostelohaUtils.storeCurrentViewTypeInPrefs(mActivity, Define.VIEW_SELLER);
 
-/*                        Map<String, Object> jsonParams = getProductDataToUpload();
-
-                        final RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),
-                                (new JSONObject(jsonParams)).toString());
-                        try {
-                            final RequestBody copy = body;
-                            final Buffer buffer = new Buffer();
-                            copy.writeTo(buffer);
-
-                            Log.d("Suhaas", " body :: " + buffer.readUtf8());
-                        } catch (final IOException e) {
-
-                        }*/
-
-                        new AlertDialog.Builder(getContext())
-                                .setTitle(productObject.getDescription())
-                                .setMessage("Are you sure you want to upload the product ? " + productObject.getDescription())
-                                .setIcon(android.R.drawable.ic_menu_info_details)
-                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                        mProgress.show();
-                                        sendPost(productObject);
-                                    }
-                                })
-                                .setNegativeButton(android.R.string.no, null).show();
-                    }
-
-/*
-                    To add the functionality to previous and next button
-                    if (mViewPager != null)
-                        mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
-*/
-
-                    break;
-                case R.id.seller_prev_btn:
-                    if (mViewPager != null)
-                        mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
-                    break;
-                case R.id.page1_ib_upload_photoes:
-                    showUploadPhotoesAlertDilogue();
-                    break;
+        sellerViewModel =
+                ViewModelProviders.of(this).get(SellerViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_seller, container, false);
+        final TextView textView = root.findViewById(R.id.text_seller);
+        sellerViewModel.getText().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                textView.setText(s);
             }
+        });
+
+        mNextBtn = root.findViewById(R.id.seller_next_btn);
+        //Here change the progress with the alpha button
+//        mNextBtn.setAlpha(.1f);
+        mPrevBtn = root.findViewById(R.id.seller_prev_btn);
+
+        mViewPager = root.findViewById(R.id.seller_viewpager);
+        pageadapter = new CustomPageAdapter(inflater);
+
+        mView_Page1 = inflater.inflate(R.layout.seller_page1, null);
+        mView_Page2 = inflater.inflate(R.layout.seller_page2, null);
+        mView_Page3 = inflater.inflate(R.layout.seller_page3, null);
+        pageadapter.insertView(mView_Page1);
+/*
+        Commented to avoid swipe left and right functionality when view switching
+        pageadapter.insertView(mView_Page2);
+        pageadapter.insertView(mView_Page3);*/
+
+        mViewPager.setAdapter(pageadapter);
+        mViewPager.setOnPageChangeListener(mOnPageChangeListener);
+        //issue - #10 added below changes to remain 3 pages of view pager to be alive
+        mViewPager.setOffscreenPageLimit(2);
+
+        mLL_uploadPhotoes = mView_Page1.findViewById(R.id.page1_ll_upload_photoes);
+        mUploadPhotoesBtn = mView_Page1.findViewById(R.id.page1_ib_upload_photoes);
+        mProductTitleText = mView_Page1.findViewById(R.id.page1_et_title);
+        mProductSubTitleText = mView_Page1.findViewById(R.id.page1_et_subtitle);
+        mProductDescriptionText = mView_Page1.findViewById(R.id.page2_et_description);
+        mCostPrice = mView_Page1.findViewById(R.id.page2_et_product_cost);
+        mSelleingPrice = mView_Page1.findViewById(R.id.page2_et_selling_cost);
+        mProductCategoriesDropDown = mView_Page1.findViewById(R.id.page1_dropdown_product_categories);
+        mProductConditionDropDown = mView_Page1.findViewById(R.id.page2_dropdown_product_condition);
+        mProductSpecificTags = mView_Page1.findViewById(R.id.page1_et_product_tags);
+        mProductTagsChipGroup = mView_Page1.findViewById(R.id.chipGroupProductTags);
+        mProductCategoriesChipGroup = mView_Page1.findViewById(R.id.chipGroupProductCategories);
+        mProductSpecificTags.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH
+                        || actionId == EditorInfo.IME_ACTION_DONE
+                        || keyEvent.getAction() == KeyEvent.ACTION_DOWN
+                        && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                    if ((textView != null) && (textView.getText().length() > 0)) {
+                        addChipToGroup(textView.getText(), mProductTagsChipGroup, false);
+                    }
+                    textView.setText(null);
+                }
+                return false;
+            }
+        });
+
+        mProductCategoriesDropDown.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH
+                        || actionId == EditorInfo.IME_ACTION_DONE
+                        || keyEvent.getAction() == KeyEvent.ACTION_DOWN
+                        && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                    if ((textView != null) && (textView.getText().length() > 0)) {
+                        CharSequence enteredText = textView.getText();
+                        if (checkifEnteredItemsIsPresentInDropdown(mProductCategoriesDropDown.getAdapter(), enteredText.toString())) {
+                            addChipToGroup(textView.getText(), mProductCategoriesChipGroup, true);
+                            refreshProductCategoryDropDown();
+                        }
+                    }
+                }
+                return false;
+            }
+        });
+        // TODO :: Adding default chip for testing purpose, later remove it
+        addChipToGroup("#handmade", mProductTagsChipGroup, false);
+
+
+        mPrevBtn.setOnClickListener(mOnClickListener);
+        mNextBtn.setOnClickListener(mOnClickListener);
+        mUploadPhotoesBtn.setOnClickListener(mOnClickListener);
+
+//        String[] PRODUCT_CATEGORIES = getContext().getResources().getStringArray(R.array.product_categories);
+
+//        addDropDownData(mProductCategoriesDropDown, PRODUCT_CATEGORIES);
+        //To dismiss the dropdown after user selects
+//        mProductCategoriesDropDown.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                mProductCategoriesDropDown.dismissDropDown();
+//                mProductCategoriesDropDown.setImeOptions(EditorInfo.IME_ACTION_DONE);
+//            }
+//        });
+
+        mProductCategoriesDropDown.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String selection = (String) adapterView.getItemAtPosition(i);
+                if (checkifEnteredItemsIsPresentInDropdown(mProductCategoriesDropDown.getAdapter(), selection)) {
+                    addChipToGroup(selection, mProductCategoriesChipGroup, true);
+                    refreshProductCategoryDropDown();
+                }
+            }
+        });
+
+        if (mActivity != null) {
+            String[] PRODUCT_CONDITION = mActivity.getResources().getStringArray(R.array.product_condition);
+            addDropDownData(mProductConditionDropDown, PRODUCT_CONDITION);
         }
-    };
+
+        //Progress dialog
+        mProgress = new ProgressDialog(getContext());
+        mProgress.setTitle("Processing...");
+        mProgress.setMessage("Please wait...");
+        mProgress.setCancelable(false);
+        mProgress.setIndeterminate(true);
+        mProgress.setCanceledOnTouchOutside(true);
+        mProgress.setCancelable(true);
+
+        /**
+         * To fetch category list for main
+         */
+        fetchSubCategory(null, 0);
+
+
+        return root;
+    }
 
     private boolean validateDataBeforeUpload(Object mViewType, int inputFieldPosition) {
         if (mViewType != null) {
@@ -419,7 +393,7 @@ public class SellerFragment extends Fragment {
         return false;
     }
 
-    private Map<String, Object> getProductDataToUpload() {
+    private ProductObject getProductDataToUpload() {
         final ProductObject mProductObject = new ProductObject();
 
         final int SELLER_PRODUCT_FIELD_TITLE = 1;
@@ -457,26 +431,24 @@ public class SellerFragment extends Fragment {
         /**
          * Yet to configure for these fields, since data is not correct.
          */
-        mProductObject.setUsers_id(2);
+        mProductObject.setUsers_id(61);
         mProductObject.setCondition_id(1);
         mProductObject.setDelivery_format_id(1);
         mProductObject.setPayment_option_id(1);
         mProductObject.setSelling_format_id(1);
+        int cp = 0;
+        if (!"".equals(mCostPrice.getText().toString())) {
+            cp = Integer.parseInt(mCostPrice.getText().toString());
+        }
+        mProductObject.setCostPrice(cp);
 
-        final Map<String, Object> jsonParams = new ArrayMap<>();
+        int sp = 0;
+        if (!"".equals(mCostPrice.getText().toString())) {
+            sp = Integer.parseInt(mCostPrice.getText().toString());
+        }
+        mProductObject.setSellingPrice(sp);
 
-        jsonParams.put("title", mProductObject.getTitle());
-        jsonParams.put("subtitle", mProductObject.getSubtitle());
-        jsonParams.put("description", mProductObject.getDescription());
-        jsonParams.put("category", mProductObject.getMainCategory());
-        jsonParams.put("subcategory1", mProductObject.getSubCategory1());
-        jsonParams.put("subcategory2", mProductObject.getSubCategory2());
-        jsonParams.put("users_id", 2);
-        jsonParams.put("condition_id", mProductObject.getCondition_id());
-        jsonParams.put("delivery_format_id", mProductObject.getDelivery_format_id());
-        jsonParams.put("payment_option_id", mProductObject.getPayment_option_id());
-        jsonParams.put("selling_format_id", mProductObject.getSelling_format_id());
-        return jsonParams;
+        return mProductObject;
     }
 
     /**
