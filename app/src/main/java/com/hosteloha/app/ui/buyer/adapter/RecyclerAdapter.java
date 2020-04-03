@@ -7,14 +7,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.hosteloha.R;
 import com.hosteloha.app.beans.ProductObject;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder> {
 
@@ -47,7 +46,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
     public void onBindViewHolder(@NonNull RecyclerViewHolder viewHolder, int position) {
 
         viewHolder.mProductTitle.setText(mArraylist.get(position).getTitle());
-        viewHolder.mProductCost.setText(mArraylist.get(position).getSellingPrice()+"");
+        viewHolder.mProductCost.setText("RS " + mArraylist.get(position).getSellingPrice());
+        viewHolder.mActualCost.setText("RS " + mArraylist.get(position).getCostPrice());
+        if (mArraylist.get(position).getSellingPrice() != mArraylist.get(position).getCostPrice() && mArraylist.get(position).getCostPrice() != 0) {
+
+            int disocunt = 100 * (mArraylist.get(position).getCostPrice() - mArraylist.get(position).getSellingPrice()) / mArraylist.get(position).getCostPrice();
+            if (disocunt != 0)
+                viewHolder.mDiscount.setText(disocunt + " %");
+            else
+                viewHolder.mDiscount.setVisibility(View.GONE);
+        } else
+            viewHolder.mDiscount.setVisibility(View.GONE);
     }
 
     @Override
