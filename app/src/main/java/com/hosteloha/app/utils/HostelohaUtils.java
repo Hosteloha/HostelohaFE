@@ -11,13 +11,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.PhoneAuthProvider;
 import com.hosteloha.R;
 import com.hosteloha.app.MainActivity;
+import com.hosteloha.app.beans.ProductObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class HostelohaUtils {
@@ -27,6 +29,7 @@ public class HostelohaUtils {
     public static String AUTHENTICATION_TOKEN = "";
     static GoogleSignInClient mGoogleSignInClient = null;
 
+    static List<ProductObject> mAllProducts = new ArrayList<ProductObject>();
 
     public static String getCurrentDateTime() {
         Date currentTime = Calendar.getInstance().getTime();
@@ -121,5 +124,13 @@ public class HostelohaUtils {
         sharedPreferences = getSharedPreferences(context);
         String viewType = sharedPreferences.getString(Define.KEY_CURRENT_VIEW_TYPE, Define.VIEW_BUYER);
         return viewType;
+    }
+
+    public static List<ProductObject> getAllProducts() {
+        return mAllProducts;
+    }
+
+    public static void setAllProducts(List<ProductObject> allProducts) {
+        mAllProducts = allProducts;
     }
 }

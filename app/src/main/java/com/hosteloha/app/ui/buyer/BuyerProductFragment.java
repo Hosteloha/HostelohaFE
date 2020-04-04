@@ -4,12 +4,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.hosteloha.R;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.hosteloha.R;
 
 
 public class BuyerProductFragment extends Fragment {
@@ -17,6 +18,8 @@ public class BuyerProductFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Toast.makeText(getContext(), " product position " + getArguments().getInt("product_position"), Toast.LENGTH_SHORT).show();
 
     }
 
