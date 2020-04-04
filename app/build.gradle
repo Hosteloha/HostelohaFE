@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 android {
-    compileSdkVersion 29
+    compileSdkVersion 28
     dataBinding {
         enabled = true
     }
     defaultConfig {
         applicationId "com.hosteloha"
         minSdkVersion 23
-        targetSdkVersion 29
+        targetSdkVersion 28
         versionCode 3
         versionName "3.0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
