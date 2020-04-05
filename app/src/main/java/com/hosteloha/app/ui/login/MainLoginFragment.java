@@ -18,6 +18,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -40,16 +49,10 @@ import com.hosteloha.app.utils.Define;
 import com.hosteloha.app.utils.HostelohaUtils;
 import com.hosteloha.databinding.FragmentLoginMainBinding;
 
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -367,6 +370,7 @@ public class MainLoginFragment extends Fragment {
                     dismissProgressDialog("Verfied Successfully");
                     AuthenticationTokenJWT mAuthenticationTokenJWT = response.body();
                     HostelohaUtils.setAuthenticationToken(mAuthenticationTokenJWT.getJwt());
+                    requestSplashdata();
                     HostelohaUtils.storeUserLoginInfo(getContext(), true, HostelohaUtils.AUTHENTICATION_TOKEN);
                     navigateToHomeScreen(HostelohaUtils.getPreviousViewType(getContext()));
                     Log.d("MainLoginFragment", "user id :  " + mAuthenticationTokenJWT.getUserId() + "  JWT " + mAuthenticationTokenJWT.getJwt());
@@ -479,5 +483,25 @@ public class MainLoginFragment extends Fragment {
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             HostelohaUtils.showSnackBarNotification(getActivity(), "Google Sign IN :: " + e.getStatusCode());
         }
+    }
+
+    public void requestSplashdata() {
+        ApiUtil.getServiceClass().getCategoryMapList(HostelohaUtils.AUTHENTICATION_TOKEN).enqueue(new Callback<Map<String, Set<String>>>() {
+            @Override
+            public void onResponse(Call<Map<String, Set<String>>> call, Response<Map<String, Set<String>>> response) {
+
+                Log.d("MainLoginFragment", "  categoriesMap  " + response.isSuccessful());
+                if (response.isSuccessful()) {
+                    Map<String, Set<String>> categoriesMap = response.body();
+                    if (categoriesMap != null)
+                        HostelohaUtils.setAllCategoriesMap(categoriesMap);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Map<String, Set<String>>> call, Throwable t) {
+                Log.d("MainLoginFragment", "  onFailure  ");
+            }
+        });
     }
 }

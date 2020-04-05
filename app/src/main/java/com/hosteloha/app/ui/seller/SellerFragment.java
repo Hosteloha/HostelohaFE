@@ -48,6 +48,9 @@ import com.hosteloha.app.ui.seller.adapter.CustomPageAdapter;
 import com.hosteloha.app.utils.Define;
 import com.hosteloha.app.utils.HostelohaUtils;
 
+import java.util.Map;
+import java.util.Set;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -123,61 +126,15 @@ public class SellerFragment extends Fragment {
         HostelohaUtils.storeCurrentViewTypeInPrefs(getContext(), Define.VIEW_SELLER);
     }
 
-    private void fetchSubCategory(String category, int subCategory) {
-        if (subCategory == 0) {
-            ApiUtil.getServiceClass().getProductMainCategories(HostelohaUtils.AUTHENTICATION_TOKEN).enqueue(new Callback<String[]>() {
-                @Override
-                public void onResponse(Call<String[]> call, Response<String[]> response) {
-                    if (response.isSuccessful()) {
-                        String[] mCategories = response.body();
-                        if (mCategories != null && mCategories.length > 0) {
-                            addDropDownData(mProductCategoriesDropDown, mCategories);
-                        }
-                    }
-                }
+    private void fetchSubCategory(String category) {
 
-                @Override
-                public void onFailure(Call<String[]> call, Throwable t) {
-                    HostelohaUtils.showSnackBarNotification(mActivity, "Could not fetch categories _ 1 ");
-                }
+        String[] catogiriesList = new String[0];
+        if (HostelohaUtils.getAllCategoriesMap() != null) {
+            catogiriesList = HostelohaUtils.getAllCategoriesMap().get(category).toArray(new String[0]);
+            addDropDownData(mProductCategoriesDropDown, catogiriesList);
+        } else
+            requestSplashdata();
 
-            });
-        } else if (subCategory == 1) {
-            ApiUtil.getServiceClass().getProductSubCategoryFirstList(category, HostelohaUtils.AUTHENTICATION_TOKEN).enqueue(new Callback<String[]>() {
-                @Override
-                public void onResponse(Call<String[]> call, Response<String[]> response) {
-                    if (response.isSuccessful()) {
-                        String[] mCategories = response.body();
-                        if (mCategories != null && mCategories.length > 0) {
-                            addDropDownData(mProductCategoriesDropDown, mCategories);
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<String[]> call, Throwable t) {
-                    HostelohaUtils.showSnackBarNotification(mActivity, "Could not fetch categories _ 2");
-                }
-
-            });
-        } else if (subCategory == 2) {
-            ApiUtil.getServiceClass().getProductSubCategorySecondList(category, HostelohaUtils.AUTHENTICATION_TOKEN).enqueue(new Callback<String[]>() {
-                @Override
-                public void onResponse(Call<String[]> call, Response<String[]> response) {
-                    if (response.isSuccessful()) {
-                        String[] mCategories = response.body();
-                        if (mCategories != null && mCategories.length > 0) {
-                            addDropDownData(mProductCategoriesDropDown, mCategories);
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<String[]> call, Throwable t) {
-                    HostelohaUtils.showSnackBarNotification(mActivity, "Could not fetch categories _ 3");
-                }
-            });
-        }
 
     }
 
@@ -188,14 +145,14 @@ public class SellerFragment extends Fragment {
         if (chipGroupSize > 0 && chipGroupSize < 3) {
             //Get more subcategories
             Chip lastAddedChip = (Chip) mProductCategoriesChipGroup.getChildAt(chipGroupSize - 1);
-            fetchSubCategory(lastAddedChip.getText().toString(), chipGroupSize);
+            fetchSubCategory(lastAddedChip.getText().toString());
             mProductCategoriesDropDown.setText(null);
             mProductCategoriesDropDown.setHint("Choose SubCategory");
         } else if (chipGroupSize >= 3) {
             mProductCategoriesDropDown.setHint("limit reached");
             mProductCategoriesDropDown.setEnabled(false);
         } else if (chipGroupSize == 0) {
-            fetchSubCategory(null, 0);
+            fetchSubCategory("root");
         }
     }
 
@@ -372,7 +329,7 @@ public class SellerFragment extends Fragment {
         /**
          * To fetch category list for main
          */
-        fetchSubCategory(null, 0);
+        fetchSubCategory("root");
 
 
         return root;
@@ -643,4 +600,26 @@ public class SellerFragment extends Fragment {
 
         }
     };
+
+    public void requestSplashdata() {
+        ApiUtil.getServiceClass().getCategoryMapList(HostelohaUtils.AUTHENTICATION_TOKEN).enqueue(new Callback<Map<String, Set<String>>>() {
+            @Override
+            public void onResponse(Call<Map<String, Set<String>>> call, Response<Map<String, Set<String>>> response) {
+
+                Log.d("SellerFragement", "  categoriesMap  " + response.isSuccessful());
+                if (response.isSuccessful()) {
+                    Map<String, Set<String>> categoriesMap = response.body();
+                    if (categoriesMap != null)
+                        HostelohaUtils.setAllCategoriesMap(categoriesMap);
+
+                    refreshProductCategoryDropDown();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Map<String, Set<String>>> call, Throwable t) {
+                Log.d("SellerFragement", "  onFailure  ");
+            }
+        });
+    }
 }

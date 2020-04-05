@@ -21,6 +21,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 public class HostelohaUtils {
 
@@ -30,6 +32,7 @@ public class HostelohaUtils {
     static GoogleSignInClient mGoogleSignInClient = null;
 
     static List<ProductObject> mAllProducts = new ArrayList<ProductObject>();
+    static Map<String, Set<String>> mAllCategoriesMap = null;
 
     public static String getCurrentDateTime() {
         Date currentTime = Calendar.getInstance().getTime();
@@ -132,5 +135,13 @@ public class HostelohaUtils {
 
     public static void setAllProducts(List<ProductObject> allProducts) {
         mAllProducts = allProducts;
+    }
+
+    public static Map<String, Set<String>> getAllCategoriesMap() {
+        return mAllCategoriesMap;
+    }
+
+    public static void setAllCategoriesMap(Map<String, Set<String>> allCategoriesMap) {
+        mAllCategoriesMap = allCategoriesMap;
     }
 }
