@@ -5,8 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hosteloha.R;
 import com.hosteloha.app.beans.ProductObject;
@@ -14,6 +12,7 @@ import com.hosteloha.app.retroapi.ApiUtil;
 import com.hosteloha.app.ui.buyer.adapter.RecyclerAdapter;
 import com.hosteloha.app.utils.Define;
 import com.hosteloha.app.utils.HostelohaUtils;
+import com.hosteloha.databinding.FragmentBuyerBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +20,7 @@ import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -33,20 +33,21 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class BuyerFragment extends Fragment {
-
+    FragmentBuyerBinding mBuyerBinding;
     private static final String TAG = BuyerFragment.class.getSimpleName();
-    RecyclerView mRecyclerView;
     RecyclerAdapter mRecyclerAdapter;
     NavController mNavController = null;
     private BuyerViewModel buyerViewModel;
-    private ArrayList<String> mArrayList = new ArrayList<String>();
+    private List<ProductObject> mArrayList = new ArrayList<ProductObject>();
     private RecyclerAdapter.OnItemClickListener mOnItemClickListener = new RecyclerAdapter.OnItemClickListener() {
         @Override
         public void onItemClick(View itemView, int position) {
 
             Log.d("HostelOha", " main product view onItemClick  " + position);
             if (mNavController != null) {
-                mNavController.navigate(R.id.action_nav_buyer_to_buyerProductFragment);
+                Bundle bundle = new Bundle();
+                bundle.putInt("product_position", position);
+                mNavController.navigate(R.id.action_nav_buyer_to_buyerProductFragment, bundle);
             }
 
         }
@@ -54,43 +55,43 @@ public class BuyerFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        mBuyerBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_buyer, container, false);
+
+
         HostelohaUtils.storeCurrentViewTypeInPrefs(getContext(), Define.VIEW_BUYER);
         buyerViewModel =
                 ViewModelProviders.of(this).get(BuyerViewModel.class);
         View root = inflater.inflate(R.layout.fragment_buyer, container, false);
-        final TextView textView = root.findViewById(R.id.text_buyer);
         buyerViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
-                textView.setText(s);
+                mBuyerBinding.textBuyer.setText(s);
             }
         });
 
-        mRecyclerView = root.findViewById(R.id.buyer_recyclerView);
-        mRecyclerAdapter = new RecyclerAdapter(mArrayList);
+        mRecyclerAdapter = new RecyclerAdapter(HostelohaUtils.getAllProducts());
         mRecyclerAdapter.setOnItemClickListener(mOnItemClickListener);
-        mRecyclerView.setAdapter(mRecyclerAdapter);
+        mBuyerBinding.buyerRecyclerView.setAdapter(mRecyclerAdapter);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
-        mRecyclerView.setLayoutManager(layoutManager);
+        mBuyerBinding.buyerRecyclerView.setLayoutManager(layoutManager);
 
 
         // To dismiss the dialog
 
 
-        ApiUtil.getServiceClass().getAllPost(HostelohaUtils.AUTHENTICATION_TOKEN).enqueue(new Callback<List<ProductObject>>() {
+        ApiUtil.getServiceClass().getAllProcducts(HostelohaUtils.AUTHENTICATION_TOKEN).enqueue(new Callback<List<ProductObject>>() {
             @Override
             public void onResponse(Call<List<ProductObject>> call, Response<List<ProductObject>> response) {
                 if (response.isSuccessful()) {
-                    List<ProductObject> postList = response.body();
-                    Log.d(TAG, "Returned count " + postList.size());
-                    mArrayList.clear();
-                    for (ProductObject item : postList) {
-                        mArrayList.add(item.getDescription());
-                        CharSequence previousText = textView.getText();
-                        textView.setText(previousText + "\n ID :: " + item.getSubtitle() +
-                                "Title : " + item.getDescription() + "\n");
+                    mArrayList = response.body();
+
+                    Log.d(TAG, "response products list  count " + mArrayList.size());
+                    if (mArrayList != null && mArrayList.equals(HostelohaUtils.getAllProducts()))
+                        Log.d(TAG, " No change in the list");
+                    else {
+                        HostelohaUtils.setAllProducts(mArrayList);
+                        mRecyclerAdapter.setArrayList(HostelohaUtils.getAllProducts());
                     }
-                    mRecyclerAdapter.setArrayList(mArrayList);
 
                 }
             }
@@ -104,7 +105,7 @@ public class BuyerFragment extends Fragment {
             }
 
         });
-        return root;
+        return mBuyerBinding.getRoot();
     }
 
     @Override

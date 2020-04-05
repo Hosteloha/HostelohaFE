@@ -40,21 +40,16 @@ import com.hosteloha.app.utils.Define;
 import com.hosteloha.app.utils.HostelohaUtils;
 import com.hosteloha.databinding.FragmentLoginMainBinding;
 
-import org.json.JSONObject;
-
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.collection.ArrayMap;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -214,10 +209,7 @@ public class MainLoginFragment extends Fragment {
     private boolean isUserExists(String phoneNum) {
         //ToDO   Check user exists or not in DataBase
 
-        if (phoneNum.equals("0000000000"))
-            return true;
-        else
-            return false;
+        return phoneNum.equals("0000000000");
 
     }
 
@@ -367,14 +359,8 @@ public class MainLoginFragment extends Fragment {
     }
 
     private void getAuthenticationToken(UserAuthentication userAuthentication) {
-        Map<String, Object> jsonParams = new ArrayMap<>();
-        jsonParams.put("username", userAuthentication.getUsername());
-        jsonParams.put("password", userAuthentication.getPassword());
-        Log.e(mLOG_TAG, "Sending data " + jsonParams.values());
-        final RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),
-                (new JSONObject(jsonParams)).toString());
 
-        ApiUtil.getServiceClass().getAuthenticationToken(body).enqueue(new Callback<AuthenticationTokenJWT>() {
+        ApiUtil.getServiceClass().getAuthenticationToken(userAuthentication).enqueue(new Callback<AuthenticationTokenJWT>() {
             @Override
             public void onResponse(Call<AuthenticationTokenJWT> call, Response<AuthenticationTokenJWT> response) {
                 if (response.isSuccessful()) {
@@ -383,6 +369,7 @@ public class MainLoginFragment extends Fragment {
                     HostelohaUtils.setAuthenticationToken(mAuthenticationTokenJWT.getJwt());
                     HostelohaUtils.storeUserLoginInfo(getContext(), true, HostelohaUtils.AUTHENTICATION_TOKEN);
                     navigateToHomeScreen(HostelohaUtils.getPreviousViewType(getContext()));
+                    Log.d("MainLoginFragment", "user id :  " + mAuthenticationTokenJWT.getUserId() + "  JWT " + mAuthenticationTokenJWT.getJwt());
                 } else {
                     String mPopMessage = null;
                     try {

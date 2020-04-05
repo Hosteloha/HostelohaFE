@@ -1,7 +1,11 @@
 package com.hosteloha.app.beans;
 
+import com.google.gson.annotations.SerializedName;
+
 public class UserAuthentication {
+    @SerializedName("username")
     private String username;
+    @SerializedName("password")
     private String password;
     private String userAuthenticationToken;
     private String jwt;

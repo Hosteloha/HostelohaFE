@@ -7,24 +7,25 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.hosteloha.R;
-
-import java.util.ArrayList;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hosteloha.R;
+import com.hosteloha.app.beans.ProductObject;
+
+import java.util.List;
+
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder> {
 
-    ArrayList<String> mArraylist;
+    List<ProductObject> mAllProducts;
     private OnItemClickListener mItemClickListener;
 
-    public RecyclerAdapter(ArrayList arrayList) {
-        mArraylist = arrayList;
+    public RecyclerAdapter(List arrayList) {
+        mAllProducts = arrayList;
     }
 
-    public void setArrayList(ArrayList<String> arrayList) {
-        mArraylist = arrayList;
+    public void setArrayList(List<ProductObject> arrayList) {
+        mAllProducts = arrayList;
         notifyDataSetChanged();
     }
 
@@ -44,12 +45,25 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder viewHolder, int position) {
 
-        viewHolder.mProductTitle.setText(mArraylist.get(position));
+        viewHolder.mProductTitle.setText(mAllProducts.get(position).getTitle());
+        viewHolder.mProductCost.setText("RS " + mAllProducts.get(position).getSellingPrice());
+        viewHolder.mActualCost.setText("RS " + mAllProducts.get(position).getCostPrice());
+        if (mAllProducts.get(position).getSellingPrice() < mAllProducts.get(position).getCostPrice() && mAllProducts.get(position).getCostPrice() != 0) {
+
+            int disocunt = 100 * (mAllProducts.get(position).getCostPrice() - mAllProducts.get(position).getSellingPrice()) / mAllProducts.get(position).getCostPrice();
+            if (disocunt != 0)
+                viewHolder.mDiscount.setText(disocunt + " %");
+            else
+                viewHolder.mDiscount.setVisibility(View.GONE);
+        } else {
+            viewHolder.mDiscount.setVisibility(View.GONE);
+            viewHolder.mActualCost.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return mArraylist.size();
+        return mAllProducts.size();
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {

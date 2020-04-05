@@ -59,6 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_weight="1"
+                android:foreground="@drawable/textview_strike_trough"
                 android:text="Rs 100" />
 
             <TextView
