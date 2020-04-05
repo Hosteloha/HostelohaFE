@@ -62,6 +62,7 @@ public class SellerFragment extends Fragment {
 
     private SellerViewModel sellerViewModel;
     private Activity mActivity = getActivity();
+    private String LOG_TAG = SellerFragment.class.getSimpleName();
 
     EditText mProductTitleText, mProductSubTitleText, mProductSpecificTags, mProductDescriptionText, mCostPrice, mSelleingPrice;
     Button mNextBtn;
@@ -84,10 +85,10 @@ public class SellerFragment extends Fragment {
                 case R.id.seller_next_btn:
                     if (mNextBtn.getText().equals("Submit")) {
                         final ProductObject productObject = getProductDataToUpload();
-
+                        Log.d(LOG_TAG, "  Submit button onClick  ------------->   " + productObject.toString());
                         new AlertDialog.Builder(getContext())
-                                .setTitle(productObject.getDescription())
-                                .setMessage("Are you sure you want to upload the product ? " + productObject.getDescription())
+                                .setTitle(productObject.getTitle())
+                                .setMessage("Are you sure you want to upload the product ? " + productObject.getTitle())
                                 .setIcon(android.R.drawable.ic_menu_info_details)
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int whichButton) {
@@ -443,8 +444,8 @@ public class SellerFragment extends Fragment {
         mProductObject.setCostPrice(cp);
 
         int sp = 0;
-        if (!"".equals(mCostPrice.getText().toString())) {
-            sp = Integer.parseInt(mCostPrice.getText().toString());
+        if (!"".equals(mSelleingPrice.getText().toString())) {
+            sp = Integer.parseInt(mSelleingPrice.getText().toString());
         }
         mProductObject.setSellingPrice(sp);
 
@@ -561,6 +562,7 @@ public class SellerFragment extends Fragment {
     }
 
     private void sendPost(ProductObject productObject) {
+
         ApiUtil.getServiceClass().uploadProduct(productObject, HostelohaUtils.AUTHENTICATION_TOKEN).enqueue(new Callback<ProductObject>() {
             @Override
             public void onResponse(Call<ProductObject> call, Response<ProductObject> response) {

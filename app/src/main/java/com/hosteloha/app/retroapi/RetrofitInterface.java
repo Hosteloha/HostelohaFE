@@ -5,6 +5,8 @@ import com.hosteloha.app.beans.ProductObject;
 import com.hosteloha.app.beans.UserAuthentication;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -26,6 +28,9 @@ public interface RetrofitInterface {
 
     @GET("/AllCategories")
     Call<String[]> getProductMainCategories(@Header("Authorization") String auth);
+
+    @GET("/categorymaplist")
+    Call<Map<String, Set<String>>> getCategoryMapList(@Header("Authorization") String auth);
 
     @GET("/{categoryname}/subcategory1")
     Call<String[]> getProductSubCategoryFirstList(@Path("categoryname") String categoryName, @Header("Authorization") String auth);

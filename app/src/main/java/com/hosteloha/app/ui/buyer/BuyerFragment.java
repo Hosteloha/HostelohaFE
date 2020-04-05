@@ -7,6 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.hosteloha.R;
 import com.hosteloha.app.beans.ProductObject;
 import com.hosteloha.app.retroapi.ApiUtil;
@@ -18,15 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,7 +46,9 @@ public class BuyerFragment extends Fragment {
 
             Log.d("HostelOha", " main product view onItemClick  " + position);
             if (mNavController != null) {
-                mNavController.navigate(R.id.action_nav_buyer_to_buyerProductFragment);
+                Bundle bundle = new Bundle();
+                bundle.putInt("product_position", position);
+                mNavController.navigate(R.id.action_nav_buyer_to_buyerProductFragment, bundle);
             }
 
         }
@@ -66,7 +69,7 @@ public class BuyerFragment extends Fragment {
         });
 
         mRecyclerView = root.findViewById(R.id.buyer_recyclerView);
-        mRecyclerAdapter = new RecyclerAdapter(mArrayList);
+        mRecyclerAdapter = new RecyclerAdapter(HostelohaUtils.getAllProducts());
         mRecyclerAdapter.setOnItemClickListener(mOnItemClickListener);
         mRecyclerView.setAdapter(mRecyclerAdapter);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
@@ -80,11 +83,15 @@ public class BuyerFragment extends Fragment {
             @Override
             public void onResponse(Call<List<ProductObject>> call, Response<List<ProductObject>> response) {
                 if (response.isSuccessful()) {
-                    List<ProductObject> postList = response.body();
-                    Log.d(TAG, "Returned count " + postList.size());
-                    mArrayList.clear();
-                    mArrayList = postList;
-                    mRecyclerAdapter.setArrayList(mArrayList);
+                    mArrayList = response.body();
+
+                    Log.d(TAG, "response products list  count " + mArrayList.size());
+                    if (mArrayList != null && mArrayList.equals(HostelohaUtils.getAllProducts()))
+                        Log.d(TAG, " No change in the list");
+                    else {
+                        HostelohaUtils.setAllProducts(mArrayList);
+                        mRecyclerAdapter.setArrayList(HostelohaUtils.getAllProducts());
+                    }
 
                 }
             }
