@@ -10,6 +10,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <service
+            android:name=".app.service.HostelOhaService"
+            android:enabled="true"
+            android:exported="true"
+            android:persistent="true">
+            <intent-filter>
+                <action android:name="com.hosteloha.app.service.HostelOhaService" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".app.MainActivity"
             android:configChanges="uiMode"
@@ -24,7 +35,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
+
     <!--Permission to upload instant product images using camera -->
     <uses-permission android:name="android.permission.CAMERA" />
     <!--Permission to save and retrieve images -->

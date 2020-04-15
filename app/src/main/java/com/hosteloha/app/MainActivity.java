@@ -9,11 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
-import com.hosteloha.R;
-import com.hosteloha.app.utils.HostelohaUtils;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,16 +21,29 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import com.hosteloha.R;
+import com.hosteloha.app.service.HostelOhaService;
+import com.hosteloha.app.utils.HostelohaUtils;
+
 public class MainActivity extends AppCompatActivity {
 
-    private AppBarConfiguration mAppBarConfiguration;
-    private boolean doubleBackToExitPressedOnce = false;
     private String TAG = MainActivity.class.getSimpleName();
+
+    private AppBarConfiguration mAppBarConfiguration;
+    private HostelOhaService mHostelOhaService = null;
+
+    private boolean doubleBackToExitPressedOnce = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mHostelOhaService = HostelohaUtils.getHostelOhaService(getApplicationContext());
+
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);
         //To disable the side bar.

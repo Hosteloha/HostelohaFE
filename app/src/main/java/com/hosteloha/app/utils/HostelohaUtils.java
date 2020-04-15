@@ -13,13 +13,11 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.hosteloha.R;
 import com.hosteloha.app.MainActivity;
-import com.hosteloha.app.beans.ProductObject;
+import com.hosteloha.app.service.HostelOhaService;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -31,7 +29,6 @@ public class HostelohaUtils {
     public static String AUTHENTICATION_TOKEN = "";
     static GoogleSignInClient mGoogleSignInClient = null;
 
-    static List<ProductObject> mAllProducts = new ArrayList<ProductObject>();
     static Map<String, Set<String>> mAllCategoriesMap = null;
 
     public static String getCurrentDateTime() {
@@ -129,19 +126,23 @@ public class HostelohaUtils {
         return viewType;
     }
 
-    public static List<ProductObject> getAllProducts() {
-        return mAllProducts;
-    }
-
-    public static void setAllProducts(List<ProductObject> allProducts) {
-        mAllProducts = allProducts;
-    }
-
     public static Map<String, Set<String>> getAllCategoriesMap() {
         return mAllCategoriesMap;
     }
 
     public static void setAllCategoriesMap(Map<String, Set<String>> allCategoriesMap) {
         mAllCategoriesMap = allCategoriesMap;
+    }
+
+    public static HostelOhaService getHostelOhaService(Context context) {
+        HostelOhaService service = HostelOhaService.getService();
+        if (service == null) {
+            Intent intent = new Intent();
+            intent.setAction("com.hosteloha.app.service.HostelOhaService");
+            intent.setPackage("com.hosteloha");
+            context.startService(intent);
+        }
+
+        return service;
     }
 }

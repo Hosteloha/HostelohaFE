@@ -10,7 +10,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,13 +37,13 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.hosteloha.R;
 import com.hosteloha.app.beans.AuthenticationTokenJWT;
 import com.hosteloha.app.beans.UserAuthentication;
+import com.hosteloha.app.log.AppLog;
 import com.hosteloha.app.retroapi.ApiUtil;
+import com.hosteloha.app.service.HostelOhaService;
 import com.hosteloha.app.utils.Define;
 import com.hosteloha.app.utils.HostelohaUtils;
 import com.hosteloha.databinding.FragmentLoginMainBinding;
 
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
@@ -63,6 +62,9 @@ import retrofit2.Response;
  * A simple {@link Fragment} subclass.
  */
 public class MainLoginFragment extends Fragment {
+
+    private HostelOhaService mHostelOhaService = null;
+
     FragmentLoginMainBinding mFLMBinding;
     private ProgressDialog mProgressDialog;
     NavController navController;
@@ -111,6 +113,7 @@ public class MainLoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        mHostelOhaService = HostelohaUtils.getHostelOhaService(getContext());
         mProgressDialog = new ProgressDialog(getActivity());
         mProgressDialog.setTitle("Processing...");
         mProgressDialog.setMessage("Please wait...");
@@ -211,7 +214,7 @@ public class MainLoginFragment extends Fragment {
 
             @Override
             public void onVerificationFailed(FirebaseException e) {
-                Log.d("Suhaas", " Exception " + e.getMessage() + " StackTrace" + e.getStackTrace());
+                AppLog.debugOut(" Exception " + e.getMessage() + " StackTrace" + e.getStackTrace());
                 HostelohaUtils.showSnackBarNotification(getActivity(), " Verfication Failed ");
             }
 
@@ -391,10 +394,11 @@ public class MainLoginFragment extends Fragment {
                     dismissProgressDialog("Verfied Successfully");
                     AuthenticationTokenJWT mAuthenticationTokenJWT = response.body();
                     HostelohaUtils.setAuthenticationToken(mAuthenticationTokenJWT.getJwt());
-                    requestSplashdata();
+                    if (mHostelOhaService != null)
+                        mHostelOhaService.getSplashdata();
                     HostelohaUtils.storeUserLoginInfo(getContext(), true, HostelohaUtils.AUTHENTICATION_TOKEN);
                     navigateToHomeScreen(HostelohaUtils.getPreviousViewType(getContext()));
-                    Log.d("MainLoginFragment", "user id :  " + mAuthenticationTokenJWT.getUserId() + "  JWT " + mAuthenticationTokenJWT.getJwt());
+                    AppLog.debugOut("user id :  " + mAuthenticationTokenJWT.getUserId() + "  JWT " + mAuthenticationTokenJWT.getJwt());
                 } else {
                     String mPopMessage = null;
                     try {
@@ -415,7 +419,7 @@ public class MainLoginFragment extends Fragment {
             @Override
             public void onFailure(Call<AuthenticationTokenJWT> call, Throwable t) {
                 dismissProgressDialog("Host unreachable");
-                Log.e(mLOG_TAG, "Unable to submit post to API.");
+                AppLog.debugOut("Unable to submit post to API.");
             }
         });
 
@@ -504,25 +508,5 @@ public class MainLoginFragment extends Fragment {
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             HostelohaUtils.showSnackBarNotification(getActivity(), "Google Sign IN :: " + e.getStatusCode());
         }
-    }
-
-    public void requestSplashdata() {
-        ApiUtil.getServiceClass().getCategoryMapList(HostelohaUtils.AUTHENTICATION_TOKEN).enqueue(new Callback<Map<String, Set<String>>>() {
-            @Override
-            public void onResponse(Call<Map<String, Set<String>>> call, Response<Map<String, Set<String>>> response) {
-
-                Log.d("MainLoginFragment", "  categoriesMap  " + response.isSuccessful());
-                if (response.isSuccessful()) {
-                    Map<String, Set<String>> categoriesMap = response.body();
-                    if (categoriesMap != null)
-                        HostelohaUtils.setAllCategoriesMap(categoriesMap);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Map<String, Set<String>>> call, Throwable t) {
-                Log.d("MainLoginFragment", "  onFailure  ");
-            }
-        });
     }
 }
