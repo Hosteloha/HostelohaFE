@@ -43,13 +43,12 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.hosteloha.R;
 import com.hosteloha.app.beans.ProductObject;
+import com.hosteloha.app.log.AppLog;
 import com.hosteloha.app.retroapi.ApiUtil;
+import com.hosteloha.app.service.HostelOhaService;
 import com.hosteloha.app.ui.seller.adapter.CustomPageAdapter;
 import com.hosteloha.app.utils.Define;
 import com.hosteloha.app.utils.HostelohaUtils;
-
-import java.util.Map;
-import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -62,6 +61,8 @@ import static com.hosteloha.app.utils.Define.REQUEST_CODE_CAMERA_PERMISSION;
 import static com.hosteloha.app.utils.Define.REQUEST_CODE_READ_STORAGE_PERMISSION;
 
 public class SellerFragment extends Fragment {
+
+    private HostelOhaService mHostelOhaService = null;
 
     private SellerViewModel sellerViewModel;
     private Activity mActivity = getActivity();
@@ -116,6 +117,13 @@ public class SellerFragment extends Fragment {
                 case R.id.page1_ib_upload_photoes:
                     showUploadPhotoesAlertDilogue();
                     break;
+
+                case R.id.page1_dropdown_product_categories:
+                    AppLog.debugOut(" ProductCategoriesDropDown  clicked ...!");
+                    if (mProductCategoriesDropDown != null && mProductCategoriesDropDown.getAdapter() == null
+                            || (mProductCategoriesDropDown.getAdapter() != null && mProductCategoriesDropDown.getAdapter().getCount() == 0))
+                        refreshProductCategoryDropDown();
+                    break;
             }
         }
     };
@@ -132,9 +140,10 @@ public class SellerFragment extends Fragment {
         if (HostelohaUtils.getAllCategoriesMap() != null) {
             catogiriesList = HostelohaUtils.getAllCategoriesMap().get(category).toArray(new String[0]);
             addDropDownData(mProductCategoriesDropDown, catogiriesList);
-        } else
-            requestSplashdata();
-
+        } else {
+            if (mHostelOhaService != null)
+                mHostelOhaService.getSplashdata();
+        }
 
     }
 
@@ -200,6 +209,8 @@ public class SellerFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
+        mHostelOhaService = HostelohaUtils.getHostelOhaService(getContext());
+
         HostelohaUtils.storeCurrentViewTypeInPrefs(mActivity, Define.VIEW_SELLER);
 
         sellerViewModel =
@@ -263,6 +274,7 @@ public class SellerFragment extends Fragment {
             }
         });
 
+        mProductCategoriesDropDown.setOnClickListener(mOnClickListener);
         mProductCategoriesDropDown.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
@@ -601,25 +613,4 @@ public class SellerFragment extends Fragment {
         }
     };
 
-    public void requestSplashdata() {
-        ApiUtil.getServiceClass().getCategoryMapList(HostelohaUtils.AUTHENTICATION_TOKEN).enqueue(new Callback<Map<String, Set<String>>>() {
-            @Override
-            public void onResponse(Call<Map<String, Set<String>>> call, Response<Map<String, Set<String>>> response) {
-
-                Log.d("SellerFragement", "  categoriesMap  " + response.isSuccessful());
-                if (response.isSuccessful()) {
-                    Map<String, Set<String>> categoriesMap = response.body();
-                    if (categoriesMap != null)
-                        HostelohaUtils.setAllCategoriesMap(categoriesMap);
-
-                    refreshProductCategoryDropDown();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Map<String, Set<String>>> call, Throwable t) {
-                Log.d("SellerFragement", "  onFailure  ");
-            }
-        });
-    }
 }

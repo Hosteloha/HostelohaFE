@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import com.hosteloha.R;
 import com.hosteloha.app.beans.ProductObject;
-import com.hosteloha.app.utils.HostelohaUtils;
+import com.hosteloha.app.data.AllProductsSubject;
 import com.hosteloha.databinding.FragmentBuyerProductBinding;
 
 
@@ -27,8 +27,8 @@ public class BuyerProductFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mProductPosition = getArguments().getInt("product_position");
-        if (HostelohaUtils.getAllProducts() != null && HostelohaUtils.getAllProducts().size() >= mProductPosition)
-            mProductObject = HostelohaUtils.getAllProducts().get(mProductPosition);
+        if (AllProductsSubject.getAllProductsSubject().getProductsList() != null && AllProductsSubject.getAllProductsSubject().getProductsList().size() >= mProductPosition)
+            mProductObject = AllProductsSubject.getAllProductsSubject().getProductsList().get(mProductPosition);
 
     }
 
