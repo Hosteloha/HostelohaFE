@@ -9,8 +9,8 @@ android {
         applicationId "com.hosteloha"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 3
-        versionName "3.0.1"
+        versionCode 5
+        versionName "5.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -57,5 +57,5 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:17.2.2'
     implementation 'com.google.firebase:firebase-auth:19.2.0'
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
-
+    implementation 'com.google.android.gms:play-services-auth-api-phone:17.4.0'
 }
