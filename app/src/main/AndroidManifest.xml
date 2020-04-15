@@ -3,12 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.hosteloha">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_hosteloha_v1"
@@ -16,6 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <service
             android:name=".app.service.HostelOhaService"
             android:enabled="true"
@@ -43,4 +38,11 @@
 
     </application>
 
+    <!--Permission to upload instant product images using camera -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!--Permission to save and retrieve images -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!--Permission to hit the API. -->
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>
