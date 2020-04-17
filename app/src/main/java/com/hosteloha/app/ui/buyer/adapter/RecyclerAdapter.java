@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hosteloha.R;
 import com.hosteloha.app.beans.ProductObject;
 import com.hosteloha.app.data.AllProductsSubject;
-import com.hosteloha.app.log.AppLog;
+import com.hosteloha.app.log.HostelohaLog;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
     private AllProductsSubject.ProductsObserver observer = new AllProductsSubject.ProductsObserver() {
         @Override
         public void onProductsChanged(List<ProductObject> arrylist) {
-            AppLog.debugOut(" arrylist size : " + arrylist.size());
+            HostelohaLog.debugOut(" arrylist size : " + arrylist.size());
             setArrayList(arrylist);
         }
     };

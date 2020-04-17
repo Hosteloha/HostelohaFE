@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme">
 
         <service
-            android:name=".app.service.HostelOhaService"
+            android:name=".app.service.HostelohaService"
             android:enabled="true"
             android:exported="true"
             android:persistent="true">

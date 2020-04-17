@@ -13,7 +13,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.hosteloha.R;
 import com.hosteloha.app.MainActivity;
-import com.hosteloha.app.service.HostelOhaService;
+import com.hosteloha.app.log.HostelohaLog;
+import com.hosteloha.app.service.HostelohaService;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -134,15 +135,12 @@ public class HostelohaUtils {
         mAllCategoriesMap = allCategoriesMap;
     }
 
-    public static HostelOhaService getHostelOhaService(Context context) {
-        HostelOhaService service = HostelOhaService.getService();
+    public static HostelohaService getHostelohaService(Context context) {
+        HostelohaService service = HostelohaService.getService();
         if (service == null) {
-            Intent intent = new Intent();
-            intent.setAction("com.hosteloha.app.service.HostelOhaService");
-            intent.setPackage("com.hosteloha");
-            context.startService(intent);
+            HostelohaLog.debugOut(" Service found NULL :: getHostelohaService :: starting");
+            context.startService(new Intent(context, HostelohaService.class));
         }
-
         return service;
     }
 }

@@ -28,6 +28,18 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.hosteloha.R;
+import com.hosteloha.app.beans.ProductObject;
+import com.hosteloha.app.log.HostelohaLog;
+import com.hosteloha.app.retroapi.ApiUtil;
+import com.hosteloha.app.service.HostelohaService;
+import com.hosteloha.app.ui.seller.adapter.CustomPageAdapter;
+import com.hosteloha.app.utils.Define;
+import com.hosteloha.app.utils.HostelohaUtils;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -37,19 +49,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.viewpager.widget.ViewPager;
-
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.hosteloha.R;
-import com.hosteloha.app.beans.ProductObject;
-import com.hosteloha.app.log.AppLog;
-import com.hosteloha.app.retroapi.ApiUtil;
-import com.hosteloha.app.service.HostelOhaService;
-import com.hosteloha.app.ui.seller.adapter.CustomPageAdapter;
-import com.hosteloha.app.utils.Define;
-import com.hosteloha.app.utils.HostelohaUtils;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,7 +61,7 @@ import static com.hosteloha.app.utils.Define.REQUEST_CODE_READ_STORAGE_PERMISSIO
 
 public class SellerFragment extends Fragment {
 
-    private HostelOhaService mHostelOhaService = null;
+    private HostelohaService mHostelohaService = null;
 
     private SellerViewModel sellerViewModel;
     private Activity mActivity = getActivity();
@@ -119,7 +118,7 @@ public class SellerFragment extends Fragment {
                     break;
 
                 case R.id.page1_dropdown_product_categories:
-                    AppLog.debugOut(" ProductCategoriesDropDown  clicked ...!");
+                    HostelohaLog.debugOut(" ProductCategoriesDropDown  clicked ...!");
                     if (mProductCategoriesDropDown != null && mProductCategoriesDropDown.getAdapter() == null
                             || (mProductCategoriesDropDown.getAdapter() != null && mProductCategoriesDropDown.getAdapter().getCount() == 0))
                         refreshProductCategoryDropDown();
@@ -136,13 +135,13 @@ public class SellerFragment extends Fragment {
 
     private void fetchSubCategory(String category) {
 
-        String[] catogiriesList = new String[0];
+        String[] categoriesList = new String[0];
         if (HostelohaUtils.getAllCategoriesMap() != null) {
-            catogiriesList = HostelohaUtils.getAllCategoriesMap().get(category).toArray(new String[0]);
-            addDropDownData(mProductCategoriesDropDown, catogiriesList);
+            categoriesList = HostelohaUtils.getAllCategoriesMap().get(category).toArray(new String[0]);
+            addDropDownData(mProductCategoriesDropDown, categoriesList);
         } else {
-            if (mHostelOhaService != null)
-                mHostelOhaService.getSplashdata();
+            if (mHostelohaService != null)
+                mHostelohaService.req_getCategoryMapList();
         }
 
     }
@@ -209,7 +208,7 @@ public class SellerFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        mHostelOhaService = HostelohaUtils.getHostelOhaService(getContext());
+        mHostelohaService = HostelohaUtils.getHostelohaService(getContext());
 
         HostelohaUtils.storeCurrentViewTypeInPrefs(mActivity, Define.VIEW_SELLER);
 

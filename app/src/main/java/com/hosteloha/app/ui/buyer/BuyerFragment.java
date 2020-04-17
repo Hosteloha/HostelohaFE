@@ -19,8 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hosteloha.R;
 import com.hosteloha.app.beans.ProductObject;
 import com.hosteloha.app.data.AllProductsSubject;
-import com.hosteloha.app.log.AppLog;
-import com.hosteloha.app.service.HostelOhaService;
+import com.hosteloha.app.log.HostelohaLog;
+import com.hosteloha.app.service.HostelohaService;
 import com.hosteloha.app.ui.buyer.adapter.RecyclerAdapter;
 import com.hosteloha.app.utils.Define;
 import com.hosteloha.app.utils.HostelohaUtils;
@@ -31,7 +31,7 @@ import java.util.List;
 
 public class BuyerFragment extends Fragment {
 
-    private HostelOhaService mHostelOhaService = null;
+    private HostelohaService mHostelohaService = null;
     FragmentBuyerBinding mBuyerBinding;
     private static final String TAG = BuyerFragment.class.getSimpleName();
     RecyclerAdapter mRecyclerAdapter;
@@ -41,7 +41,7 @@ public class BuyerFragment extends Fragment {
     private RecyclerAdapter.OnItemClickListener mOnItemClickListener = new RecyclerAdapter.OnItemClickListener() {
         @Override
         public void onItemClick(View itemView, int position) {
-            AppLog.debugOut(" main product view onItemClick  " + position);
+            HostelohaLog.debugOut(" main product view onItemClick  " + position);
             if (mNavController != null) {
                 Bundle bundle = new Bundle();
                 bundle.putInt("product_position", position);
@@ -73,9 +73,9 @@ public class BuyerFragment extends Fragment {
         mBuyerBinding.buyerRecyclerView.setLayoutManager(layoutManager);
 
 
-        mHostelOhaService = HostelohaUtils.getHostelOhaService(getContext());
-        if (mHostelOhaService != null) {
-            mHostelOhaService.getAllProducts();
+        mHostelohaService = HostelohaUtils.getHostelohaService(getContext());
+        if (mHostelohaService != null) {
+            mHostelohaService.req_getAllProducts();
         }
 
         return mBuyerBinding.getRoot();

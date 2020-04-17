@@ -24,7 +24,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.hosteloha.R;
-import com.hosteloha.app.service.HostelOhaService;
+import com.hosteloha.app.service.HostelohaService;
 import com.hosteloha.app.utils.HostelohaUtils;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private String TAG = MainActivity.class.getSimpleName();
 
     private AppBarConfiguration mAppBarConfiguration;
-    private HostelOhaService mHostelOhaService = null;
+    private HostelohaService mHostelohaService = null;
 
     private boolean doubleBackToExitPressedOnce = false;
 
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mHostelOhaService = HostelohaUtils.getHostelOhaService(getApplicationContext());
+        mHostelohaService = HostelohaUtils.getHostelohaService(getApplicationContext());
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);

@@ -4,33 +4,31 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
-import androidx.annotation.Nullable;
-
 import com.hosteloha.app.beans.AuthenticationTokenJWT;
 import com.hosteloha.app.beans.ProductObject;
 import com.hosteloha.app.beans.UserAuthentication;
 import com.hosteloha.app.data.AllProductsSubject;
-import com.hosteloha.app.log.AppLog;
+import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.retroapi.ApiUtil;
+import com.hosteloha.app.retroapi.CallbackWithRetry;
 import com.hosteloha.app.utils.HostelohaUtils;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import androidx.annotation.Nullable;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HostelOhaService extends Service {
+public class HostelohaService extends Service {
 
-    private static HostelOhaService mHostelOhaService = null;
+    private static HostelohaService mHostelohaService = null;
     private String mDefaultUserJWT = null;
 
-    public static HostelOhaService getService() {
-        return mHostelOhaService;
+    public static HostelohaService getService() {
+        return mHostelohaService;
     }
-
 
     @Nullable
     @Override
@@ -41,10 +39,10 @@ public class HostelOhaService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        mHostelOhaService = this;
-        AppLog.debugOut("  service onCreate");
-        autenticateDefaultUser();
-        getSplashdata();
+        mHostelohaService = this;
+        HostelohaLog.debugOut("  service onCreate");
+        req_authenticateDefaultUser();
+        getSplashData();
     }
 
     @Override
@@ -55,39 +53,41 @@ public class HostelOhaService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        AppLog.debugOut("  service onDestroy");
+        HostelohaLog.debugOut("  service onDestroy");
     }
 
-
-    private void autenticateDefaultUser() {
+    private void req_authenticateDefaultUser() {
         UserAuthentication defaultUser = new UserAuthentication("testuser@gmail.com", "password");
-        ApiUtil.getServiceClass().getAuthenticationToken(defaultUser).enqueue(new Callback<AuthenticationTokenJWT>() {
+        ApiUtil.getServiceClass().getAuthenticationToken(defaultUser).enqueue(new CallbackWithRetry<AuthenticationTokenJWT>() {
             @Override
             public void onResponse(Call<AuthenticationTokenJWT> call, Response<AuthenticationTokenJWT> response) {
                 if (response.isSuccessful()) {
                     AuthenticationTokenJWT authenticationTokenJWT = response.body();
                     mDefaultUserJWT = "Bearer " + authenticationTokenJWT.getJwt();
-                    getSplashdata();
-                    getAllProducts();
-                    AppLog.debugOut("user id :  " + authenticationTokenJWT.getUserId() + "  JWT " + authenticationTokenJWT.getJwt());
+                    getSplashData();
+                    req_getAllProducts();
+                    HostelohaLog.debugOut("user id :  " + authenticationTokenJWT.getUserId() + "  JWT " + authenticationTokenJWT.getJwt());
                 } else {
-                    AppLog.debugOut(" ===>  Default user response not Successful");
+                    HostelohaLog.debugOut(" ===>  Default user response not Successful");
                 }
             }
 
             @Override
             public void onFailure(Call<AuthenticationTokenJWT> call, Throwable t) {
-                AppLog.debugOut(" ===> autenticateDefaultUser response Failed");
+                HostelohaLog.debugOut(" ===> autenticateDefaultUser response Failed");
             }
         });
     }
 
-    public void getSplashdata() {
-        ApiUtil.getServiceClass().getCategoryMapList(mDefaultUserJWT).enqueue(new Callback<Map<String, Set<String>>>() {
+    public void getSplashData() {
+        req_getCategoryMapList();
+    }
+
+    public void req_getCategoryMapList() {
+        ApiUtil.getServiceClass().getCategoryMapList(mDefaultUserJWT).enqueue(new CallbackWithRetry<Map<String, Set<String>>>() {
             @Override
             public void onResponse(Call<Map<String, Set<String>>> call, Response<Map<String, Set<String>>> response) {
-
-                AppLog.debugOut("  categoriesMap  " + response.isSuccessful());
+                HostelohaLog.debugOut("  categoriesMap  " + response.isSuccessful());
                 if (response.isSuccessful()) {
                     Map<String, Set<String>> categoriesMap = response.body();
                     if (categoriesMap != null)
@@ -97,20 +97,19 @@ public class HostelOhaService extends Service {
 
             @Override
             public void onFailure(Call<Map<String, Set<String>>> call, Throwable t) {
-                AppLog.debugOut(" getSplashdata ===>  onFailure  ");
-                getSplashdata();
+                HostelohaLog.debugOut(" getSplashdata ===>  onFailure  ");
             }
         });
     }
 
-    public void getAllProducts() {
-        ApiUtil.getServiceClass().getAllProcducts(mDefaultUserJWT).enqueue(new Callback<List<ProductObject>>() {
+    public void req_getAllProducts() {
+        ApiUtil.getServiceClass().getAllProcducts(mDefaultUserJWT).enqueue(new CallbackWithRetry<List<ProductObject>>() {
             @Override
             public void onResponse(Call<List<ProductObject>> call, Response<List<ProductObject>> response) {
-                AppLog.debugOut(" getAllProducts  =====> ......isSuccessful  " + response.isSuccessful());
+                HostelohaLog.debugOut(" getAllProducts  =====> ......isSuccessful  " + response.isSuccessful());
                 if (response.isSuccessful()) {
                     List<ProductObject> mArrayList = response.body();
-                    AppLog.debugOut("response products list  count " + mArrayList.size());
+                    HostelohaLog.debugOut("response products list  count " + mArrayList.size());
                     if (mArrayList != null) {
                         AllProductsSubject.getAllProductsSubject().setProductsList(mArrayList);
                     }
@@ -119,11 +118,8 @@ public class HostelOhaService extends Service {
 
             @Override
             public void onFailure(Call<List<ProductObject>> call, Throwable t) {
-                AppLog.debugOut("error loading allProducts from server");
-                getAllProducts();
+                HostelohaLog.debugOut("error loading allProducts from server");
             }
-
         });
-
     }
 }
