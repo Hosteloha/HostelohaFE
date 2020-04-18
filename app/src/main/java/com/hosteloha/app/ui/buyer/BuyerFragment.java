@@ -42,7 +42,6 @@ public class BuyerFragment extends Fragment {
         @Override
         public void onItemClick(View itemView, int position) {
             HostelohaLog.debugOut(" main product view onItemClick  " + position);
-            mHostelohaService.testNotify();
             if (mNavController != null) {
                 Bundle bundle = new Bundle();
                 bundle.putInt("product_position", position);

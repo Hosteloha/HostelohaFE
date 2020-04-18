@@ -7,20 +7,29 @@
     app:layout_constraintVertical_bias="0.62">
 
     <LinearLayout
-        android:id="@+id/page1_ll_upload_photos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/page1_ib_upload_photos"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:layout_gravity="center"
             android:adjustViewBounds="true"
-            android:background="@drawable/ic_add_photo_alternate_24px"
-            android:scaleType="fitXY"
-            android:layout_gravity="center"/>
-    </LinearLayout>
+            android:background="@drawable/ic_add_photo_alternate"
+            android:scaleType="fitXY" />
 
+        <LinearLayout
+            android:id="@+id/page1_ll_upload_photos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+        </LinearLayout>
+    </LinearLayout>
 </HorizontalScrollView>

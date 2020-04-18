@@ -10,6 +10,7 @@ import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -44,6 +45,9 @@ import com.hosteloha.app.utils.Define;
 import com.hosteloha.app.utils.HostelohaUtils;
 import com.hosteloha.app.utils.ImageWindow;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -71,21 +75,20 @@ public class SellerFragment extends Fragment {
     private Activity mActivity = getActivity();
     private String LOG_TAG = SellerFragment.class.getSimpleName();
 
-    EditText mProductTitleText, mProductSubTitleText, mProductSpecificTags, mProductDescriptionText, mCostPrice, mSelleingPrice;
-    Button mNextBtn;
-    Button mPrevBtn;
-    ImageButton mUploadPhotosBtn;
-    LinearLayout mLL_uploadPhotos;
+    private EditText mProductTitleText, mProductSubTitleText, mProductSpecificTags, mProductDescriptionText, mCostPrice, mSelleingPrice;
+    private Button mNextBtn, mPrevBtn;
+    private ImageButton mUploadPhotosBtn;
+    private LinearLayout mLL_uploadPhotos;
 
-    AutoCompleteTextView mProductCategoriesDropDown, mProductConditionDropDown;
-    ChipGroup mProductTagsChipGroup, mProductCategoriesChipGroup;
+    private AutoCompleteTextView mProductCategoriesDropDown, mProductConditionDropDown;
+    private ChipGroup mProductTagsChipGroup, mProductCategoriesChipGroup;
 
-    ViewPager mViewPager;
-    View mView_Page1, mView_Page2, mView_Page3;
+    private ViewPager mViewPager;
+    private View mView_Page1, mView_Page2, mView_Page3;
     private CustomPageAdapter pageadapter;
     private ProgressDialog mProgress;
     private String mLOG_TAG = SellerFragment.class.getSimpleName();
-    View.OnClickListener mOnClickListener = new View.OnClickListener() {
+    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
@@ -350,6 +353,14 @@ public class SellerFragment extends Fragment {
         return root;
     }
 
+    /**
+     * To validate the field of the data between different form fields.
+     * So that the user doesn't upload incorrect or other publicly bad language
+     *
+     * @param mViewType
+     * @param inputFieldPosition
+     * @return
+     */
     private boolean validateDataBeforeUpload(Object mViewType, int inputFieldPosition) {
         if (mViewType != null) {
             if (mViewType instanceof EditText) {
@@ -359,7 +370,7 @@ public class SellerFragment extends Fragment {
             }
 
             if (mViewType instanceof Chip) {
-
+                // TODO :: Check if is
             }
         }
         HostelohaUtils.showSnackBarNotification(mActivity, "FIELD INVALID :: " + inputFieldPosition);
@@ -399,10 +410,11 @@ public class SellerFragment extends Fragment {
             }
         } else {
             // Category not chosen
+            // TODO:: to add the product in default category. (CATEGORY :: OTHERS)
         }
 
         /**
-         * Yet to configure for these fields, since data is not correct.
+         * TODO :: Yet to configure for these fields, since data is not correct.
          */
         mProductObject.setUsers_id(61);
         mProductObject.setCondition_id(1);
@@ -490,9 +502,7 @@ public class SellerFragment extends Fragment {
                 }
             }
         });
-
         builder.show();
-
     }
 
     private void pickImageFromGallery() {
@@ -505,36 +515,23 @@ public class SellerFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, requestCode, data);
-        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_ACTION_GET_CONTENT) {
-            if (data.getData() != null) {
-                final ImageWindow imgView = new ImageWindow(new ContextThemeWrapper(getContext(), R.style.image_window_style), null, 0);
-//                imgView.setLayoutParams(mUploadPhotosBtn.getLayoutParams());
-//
-                imgView.getImageView().setImageURI(data.getData());
-                imgView.getImageView().setScaleType(ImageView.ScaleType.CENTER_CROP);
-                imgView.setOnCloseListener(new ImageWindow.OnCloseListener() {
-                    @Override
-                    public void onCloseClick(final View imageWindow) {
-                        imageWindow.animate().scaleY(0).scaleX(0).setDuration(500).setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                ((ViewGroup) imgView.getParent()).removeView(imgView);
-                            }
-                        }).start();
-                    }
-                });
-                mLL_uploadPhotos.addView(imgView);
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_ACTION_GET_CONTENT && data != null
+                && data.getData() != null) {
+            Uri fileURI = data.getData();
+            if (fileURI != null) {
+                addViewToUploadPhotosViewer(fileURI);
             } else {
                 ClipData clipData = data.getClipData();
-                for (int i = 0; i < clipData.getItemCount(); i++) {
-                    ImageView imgView = new ImageView(getContext());
-                    imgView.setLayoutParams(mUploadPhotosBtn.getLayoutParams());
-                    imgView.setImageURI(clipData.getItemAt(i).getUri());
-                    imgView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-                    mLL_uploadPhotos.addView(imgView);
+                if (clipData != null) {
+                    int clipCount = clipData.getItemCount();
+                    for (int i = 0; i < clipCount; i++) {
+                        fileURI = clipData.getItemAt(i).getUri();
+                        addViewToUploadPhotosViewer(fileURI);
+                    }
                 }
             }
-        } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_ACTION_IMAGE_CAPTURE) {
+        } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_ACTION_IMAGE_CAPTURE && data != null) {
+            //TODO :: Store image in the directory and send the URI to the firebase (@Contact :: Suhaas)
             Bundle bundle = data.getExtras();
             Bitmap bitmap = (Bitmap) bundle.get("data");
             ImageView imgView = new ImageView(getContext());
@@ -545,18 +542,44 @@ public class SellerFragment extends Fragment {
         }
     }
 
-    private void sendPost(ProductObject productObject) {
+    private void addViewToUploadPhotosViewer(Uri fileURI) {
+        if (fileURI != null) {
+            final ImageWindow imgView = new ImageWindow(new ContextThemeWrapper(getContext(), R.style.image_window_style), null, 0);
+//                imgView.setLayoutParams(mUploadPhotosBtn.getLayoutParams());
+            imgView.getImageView().setImageURI(fileURI);
+            // Storing the image path so that we can upload while upload file to FireBase
+            imgView.setTag(fileURI);
+            imgView.setOnCloseListener(new ImageWindow.OnCloseListener() {
+                @Override
+                public void onCloseClick(final View imageWindow) {
+                    imageWindow.animate().scaleY(0).scaleX(0).setDuration(200).setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            ((ViewGroup) imgView.getParent()).removeView(imgView);
+                        }
+                    }).start();
+                }
+            });
+            mLL_uploadPhotos.addView(imgView);
+        }
+    }
 
+    private void sendPost(ProductObject productObject) {
         ApiUtil.getServiceClass().uploadProduct(productObject, HostelohaUtils.AUTHENTICATION_TOKEN).enqueue(new Callback<ProductObject>() {
             @Override
             public void onResponse(Call<ProductObject> call, Response<ProductObject> response) {
                 mProgress.dismiss();
                 if (response.isSuccessful()) {
                     ProductObject productObject = response.body();
-                    String dialogMessage = " Product :: " + productObject.getProductId() + " with title " + productObject.getSubtitle()
-                            + " is uploaded";
-                    showDialogPopUpProductUploaded(dialogMessage);
-
+                    if (productObject != null) {
+                        int productID = productObject.getProductId();
+                        String productTitle = productObject.getTitle();
+                        String dialogMessage = "Hurrayy!!! Your product " + productTitle + " - " + productID
+                                + " is uploaded";
+                        showDialogPopUpProductUploaded(dialogMessage);
+                        // To upload images with the product id
+                        uploadPhotosInBackGround(productID);
+                    }
                 } else {
                     String mPopMessage = null;
                     try {
@@ -567,10 +590,7 @@ public class SellerFragment extends Fragment {
 
                     HostelohaUtils.showSnackBarNotification(getActivity(), mPopMessage);
                 }
-
-
             }
-
 
             @Override
             public void onFailure(Call<ProductObject> call, Throwable t) {
@@ -579,8 +599,30 @@ public class SellerFragment extends Fragment {
         });
     }
 
-    private void showDialogPopUpProductUploaded(String message) {
+    /**
+     * To get the file paths and upload
+     *
+     * @param productID
+     */
+    private void uploadPhotosInBackGround(int productID) {
+        List<Uri> filesURI = new ArrayList<>();
+        for (int i = 0; i < mLL_uploadPhotos.getChildCount(); i++) {
+            View view = mLL_uploadPhotos.getChildAt(i);
+            Uri fileURI = (Uri) view.getTag();
+            HostelohaLog.debugOut("File fileURI :: " + fileURI);
+            filesURI.add(fileURI);
+        }
 
+        // Upload the list
+        if (mHostelohaService != null) {
+            mHostelohaService.uploadFileToFireBaseStorage(filesURI, productID);
+        } else {
+            HostelohaLog.debugOut(" uploadPhotosInBackGround :: service NULL ");
+        }
+
+    }
+
+    private void showDialogPopUpProductUploaded(String message) {
         new MaterialAlertDialogBuilder(getActivity(), R.style.AlertDialogTheme)
                 .setTitle("Product Uploaded")
                 .setMessage(message)
@@ -607,7 +649,7 @@ public class SellerFragment extends Fragment {
 
     }
 
-    ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
+    private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 

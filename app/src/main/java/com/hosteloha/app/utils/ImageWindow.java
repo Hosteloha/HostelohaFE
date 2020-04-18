@@ -19,19 +19,16 @@ import android.widget.RelativeLayout;
 
 import com.hosteloha.R;
 
-/**
- * Created by poliveira on 18/02/2015.
- */
 public class ImageWindow extends RelativeLayout {
     public interface OnCloseListener {
         void onCloseClick(View imageWindow);
     }
 
-    private float mCloseButtonSize = 32; //google messenger approx 27
+    private float mCloseButtonSize = 64; //google messenger approx 27
     private float mCloseButtonMargin = 5; //google messenger approx 27
-    private int mCloseColor = 0xffff7b57; //google messenger approx 27
+    private int mCloseColor = 0xffffffff; //google messenger approx 27
     private float mCornerRadius = 7; //google messenger approx 27
-    private int mCloseIcon = R.drawable.close_button_drawable;
+    private int mCloseIcon = R.drawable.ic_cancel;
     private ImageView mImageView;
     private float mTopLeftMargin = 10f;
 
@@ -65,7 +62,7 @@ public class ImageWindow extends RelativeLayout {
             if (attr == R.styleable.ImageWindow_close_color) {
                 mCloseColor = a.getColor(R.styleable.ImageWindow_close_color, 0xffff7b57); //orange
             } else if (attr == R.styleable.ImageWindow_close_icon) {
-                mCloseIcon = a.getResourceId(R.styleable.ImageWindow_close_icon, R.drawable.close_button_drawable);
+                mCloseIcon = a.getResourceId(R.styleable.ImageWindow_close_icon, R.drawable.ic_cancel);
             } else if (attr == R.styleable.ImageWindow_close_margin) {
                 mCloseButtonMargin = a.getDimension(R.styleable.ImageWindow_close_margin, 5f * density);
             } else if (attr == R.styleable.ImageWindow_close_size) {
@@ -82,7 +79,9 @@ public class ImageWindow extends RelativeLayout {
     private void init() {
 
         ImageView closeButton = new ImageView(getContext());
-        closeButton.setLayoutParams(new RelativeLayout.LayoutParams((int) (mCloseButtonSize), (int) (mCloseButtonSize)));
+        RelativeLayout.LayoutParams closeButtonLayoutParams = new
+                RelativeLayout.LayoutParams((int) (mCloseButtonSize), (int) (mCloseButtonSize));
+        closeButton.setLayoutParams(closeButtonLayoutParams);
         StateListDrawable drawable = new StateListDrawable();
         ShapeDrawable shape = new ShapeDrawable(new OvalShape());
         ShapeDrawable shapePressed = new ShapeDrawable(new OvalShape());
@@ -206,7 +205,9 @@ public class ImageWindow extends RelativeLayout {
             super.onDraw(canvas);
             canvas.drawPath(mRectanglePath, mEraser);
             //5 is the margin of the close circle
-            canvas.drawCircle((int) ((mCloseSize * 0.5) - ((LayoutParams) getLayoutParams()).leftMargin),
+            int leftMarginIs = ((LayoutParams) getLayoutParams()).leftMargin;
+            int WidthIs = getLayoutParams().width;
+            canvas.drawCircle((int) ((mCloseSize * 0.5) - leftMarginIs),
                     (int) ((mCloseSize * 0.5) - ((LayoutParams) getLayoutParams()).topMargin),
                     (int) (((mCloseSize * 0.5) + mCloseButtonMargin)), mEraser);
         }

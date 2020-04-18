@@ -1,16 +1,23 @@
 package com.hosteloha.app.utils;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.webkit.MimeTypeMap;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.hosteloha.R;
 import com.hosteloha.app.MainActivity;
 import com.hosteloha.app.log.HostelohaLog;
@@ -25,12 +32,17 @@ import java.util.Set;
 
 public class HostelohaUtils {
 
-    static SharedPreferences sharedPreferences = null;
-    static SharedPreferences.Editor prefsEditor;
-    public static String AUTHENTICATION_TOKEN = "";
-    static GoogleSignInClient mGoogleSignInClient = null;
+    // PRIVATE should be accessed using getters
+    private static SharedPreferences sharedPreferences = null;
+    private static SharedPreferences.Editor prefsEditor;
+    private static GoogleSignInClient mGoogleSignInClient = null;
+    //firebase objects
+    private static StorageReference mFireStorageReference = null;
+    private static DatabaseReference mFireDatabaseReference = null;
 
     static Map<String, Set<String>> mAllCategoriesMap = null;
+
+    public static String AUTHENTICATION_TOKEN = "";
 
     public static String getCurrentDateTime() {
         Date currentTime = Calendar.getInstance().getTime();
@@ -96,6 +108,30 @@ public class HostelohaUtils {
         return sharedPreferences;
     }
 
+    /**
+     * To store the product images.
+     *
+     * @return Firebase Storage Reference
+     */
+    public static StorageReference getFirebaseStorage() {
+        if (mFireStorageReference == null) {
+            mFireStorageReference = FirebaseStorage.getInstance().getReference();
+        }
+        return mFireStorageReference;
+    }
+
+    /**
+     * To store the image urls and product id's
+     *
+     * @return
+     */
+    public static DatabaseReference getFirebaseDatabase() {
+        if (mFireDatabaseReference == null) {
+            mFireDatabaseReference = FirebaseDatabase.getInstance().getReference(Define.DATABASE_PATH_UPLOADS);
+        }
+        return mFireDatabaseReference;
+    }
+
     public static void storeUserLoginInfo(Context context, boolean isLoggedIn, String authenticationToken) {
         sharedPreferences = getSharedPreferences(context);
         prefsEditor = sharedPreferences.edit();
@@ -142,5 +178,17 @@ public class HostelohaUtils {
             context.startService(new Intent(context, HostelohaService.class));
         }
         return service;
+    }
+
+    /**
+     * To get the file extension while storing data to the FireBase.
+     * @param uri
+     * @param context
+     * @return
+     */
+    public static String getFileExtension(Uri uri, Context context) {
+        ContentResolver cR = context.getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
     }
 }
