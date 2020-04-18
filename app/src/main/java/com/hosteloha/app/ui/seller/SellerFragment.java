@@ -10,6 +10,7 @@ import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -509,13 +510,11 @@ public class SellerFragment extends Fragment {
             if (data.getData() != null) {
                 final ImageWindow imgView = new ImageWindow(new ContextThemeWrapper(getContext(), R.style.image_window_style), null, 0);
 //                imgView.setLayoutParams(mUploadPhotosBtn.getLayoutParams());
-//
                 imgView.getImageView().setImageURI(data.getData());
-                imgView.getImageView().setScaleType(ImageView.ScaleType.CENTER_CROP);
                 imgView.setOnCloseListener(new ImageWindow.OnCloseListener() {
                     @Override
                     public void onCloseClick(final View imageWindow) {
-                        imageWindow.animate().scaleY(0).scaleX(0).setDuration(500).setListener(new AnimatorListenerAdapter() {
+                        imageWindow.animate().scaleY(0).scaleX(0).setDuration(200).setListener(new AnimatorListenerAdapter() {
                             @Override
                             public void onAnimationEnd(Animator animation) {
                                 ((ViewGroup) imgView.getParent()).removeView(imgView);
@@ -527,7 +526,7 @@ public class SellerFragment extends Fragment {
             } else {
                 ClipData clipData = data.getClipData();
                 for (int i = 0; i < clipData.getItemCount(); i++) {
-                    ImageView imgView = new ImageView(getContext());
+                    ImageView imgView = new ImageView(new ContextThemeWrapper(getContext(), R.style.image_window_style), null, 0);
                     imgView.setLayoutParams(mUploadPhotosBtn.getLayoutParams());
                     imgView.setImageURI(clipData.getItemAt(i).getUri());
                     imgView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
