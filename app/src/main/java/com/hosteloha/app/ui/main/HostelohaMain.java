@@ -11,21 +11,21 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.hosteloha.R;
-import com.hosteloha.app.service.HostelOhaService;
+import com.hosteloha.app.service.HostelohaService;
 import com.hosteloha.app.utils.Define;
 import com.hosteloha.app.utils.HostelohaUtils;
 
-public class HostelOhaMain extends Fragment {
+public class HostelohaMain extends Fragment {
 
-    private HostelOhaService mHostelOhaService = null;
+    private HostelohaService mHostelohaService = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mHostelOhaService = HostelohaUtils.getHostelOhaService(getContext());
-        if (mHostelOhaService != null)
-            mHostelOhaService.getSplashdata();
+        mHostelohaService = HostelohaUtils.getHostelohaService(getContext());
+        if (mHostelohaService != null)
+            mHostelohaService.getSplashData();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

@@ -1,6 +1,5 @@
 package com.hosteloha.app.ui.login;
 
-
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -37,9 +36,9 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.hosteloha.R;
 import com.hosteloha.app.beans.AuthenticationTokenJWT;
 import com.hosteloha.app.beans.UserAuthentication;
-import com.hosteloha.app.log.AppLog;
+import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.retroapi.ApiUtil;
-import com.hosteloha.app.service.HostelOhaService;
+import com.hosteloha.app.service.HostelohaService;
 import com.hosteloha.app.utils.Define;
 import com.hosteloha.app.utils.HostelohaUtils;
 import com.hosteloha.databinding.FragmentLoginMainBinding;
@@ -63,7 +62,7 @@ import retrofit2.Response;
  */
 public class MainLoginFragment extends Fragment {
 
-    private HostelOhaService mHostelOhaService = null;
+    private HostelohaService mHostelohaService = null;
 
     FragmentLoginMainBinding mFLMBinding;
     private ProgressDialog mProgressDialog;
@@ -84,11 +83,10 @@ public class MainLoginFragment extends Fragment {
     private String mVerificationId = null;
     PhoneAuthProvider.ForceResendingToken mForceResendingToken = null;
 
-
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d("Suhaas", " onReceive :: SMS RECEIVER :: " + intent.getAction());
+            HostelohaLog.debugOut("  onReceive :: SMS RECEIVER ::  " + intent.getAction());
 
             if (SmsRetriever.SMS_RETRIEVED_ACTION.equals(intent.getAction())) {
                 HostelohaUtils.showSnackBarNotification(getActivity(), "SMS :::received");
@@ -113,7 +111,7 @@ public class MainLoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        mHostelOhaService = HostelohaUtils.getHostelOhaService(getContext());
+        mHostelohaService = HostelohaUtils.getHostelohaService(getContext());
         mProgressDialog = new ProgressDialog(getActivity());
         mProgressDialog.setTitle("Processing...");
         mProgressDialog.setMessage("Please wait...");
@@ -138,14 +136,16 @@ public class MainLoginFragment extends Fragment {
         task.addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Log.d("Suhaas", " onSuccess :: TASK");
+                HostelohaLog.debugOut("  onSuccess :: TASK ::  SMS");
+
             }
         });
 
         task.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d("Suhaas", " onFailure :: TASK");
+                HostelohaLog.debugOut("  onSuccess :: TASK ::  SMS");
+
             }
         });
 
@@ -214,7 +214,7 @@ public class MainLoginFragment extends Fragment {
 
             @Override
             public void onVerificationFailed(FirebaseException e) {
-                AppLog.debugOut(" Exception " + e.getMessage() + " StackTrace" + e.getStackTrace());
+                HostelohaLog.debugOut(" Exception " + e.getMessage() + " StackTrace" + e.getStackTrace());
                 HostelohaUtils.showSnackBarNotification(getActivity(), " Verfication Failed ");
             }
 
@@ -394,11 +394,11 @@ public class MainLoginFragment extends Fragment {
                     dismissProgressDialog("Verfied Successfully");
                     AuthenticationTokenJWT mAuthenticationTokenJWT = response.body();
                     HostelohaUtils.setAuthenticationToken(mAuthenticationTokenJWT.getJwt());
-                    if (mHostelOhaService != null)
-                        mHostelOhaService.getSplashdata();
+                    if (mHostelohaService != null)
+                        mHostelohaService.getSplashData();
                     HostelohaUtils.storeUserLoginInfo(getContext(), true, HostelohaUtils.AUTHENTICATION_TOKEN);
                     navigateToHomeScreen(HostelohaUtils.getPreviousViewType(getContext()));
-                    AppLog.debugOut("user id :  " + mAuthenticationTokenJWT.getUserId() + "  JWT " + mAuthenticationTokenJWT.getJwt());
+                    HostelohaLog.debugOut("user id :  " + mAuthenticationTokenJWT.getUserId() + "  JWT " + mAuthenticationTokenJWT.getJwt());
                 } else {
                     String mPopMessage = null;
                     try {
@@ -419,7 +419,7 @@ public class MainLoginFragment extends Fragment {
             @Override
             public void onFailure(Call<AuthenticationTokenJWT> call, Throwable t) {
                 dismissProgressDialog("Host unreachable");
-                AppLog.debugOut("Unable to submit post to API.");
+                HostelohaLog.debugOut("Unable to submit post to API.");
             }
         });
 
