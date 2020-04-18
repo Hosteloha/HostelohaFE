@@ -1,9 +1,17 @@
 package com.hosteloha.app.service;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.IBinder;
 
+import com.hosteloha.R;
+import com.hosteloha.app.MainActivity;
 import com.hosteloha.app.beans.AuthenticationTokenJWT;
 import com.hosteloha.app.beans.ProductObject;
 import com.hosteloha.app.beans.UserAuthentication;
@@ -18,6 +26,7 @@ import java.util.Map;
 import java.util.Set;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -45,6 +54,51 @@ public class HostelohaService extends Service {
         getSplashData();
     }
 
+    public void testNotify() {
+        HostelohaLog.debugOut(" test Notify called :: ");
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        // The id of the channel.
+        String id = "my_channel_01";
+        // The user-visible name of the channel.
+        CharSequence name = getString(R.string.channel_name);
+        // The user-visible description of the channel.
+        String description = getString(R.string.channel_description);
+        int importance = 0;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            importance = NotificationManager.IMPORTANCE_LOW;
+        }
+        NotificationChannel mChannel = null;
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            mChannel = new NotificationChannel(id, name, importance);
+            // Configure the notification channel.
+            mChannel.setDescription(description);
+            mChannel.enableLights(true);
+            // Sets the notification light color for notifications posted to this
+            // channel, if the device supports this feature.
+            mChannel.setLightColor(Color.RED);
+            mChannel.enableVibration(true);
+            mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+            mNotificationManager.createNotificationChannel(mChannel);
+        }
+
+        Intent intent = new Intent(this, MainActivity.class);
+        PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        Notification notification = null;
+        notification = new NotificationCompat.Builder(HostelohaService.this, id)
+                .setContentTitle("New Message 102")
+                .setContentText("You've received new messages.")
+                .setSmallIcon(R.drawable.ic_menu_monetization_on)
+                .setContentIntent(pIntent)
+                .setAutoCancel(true)
+                .build();
+        // Issue the notification.
+        mNotificationManager.notify(0, notification);
+
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return START_STICKY;
@@ -61,20 +115,19 @@ public class HostelohaService extends Service {
         ApiUtil.getServiceClass().getAuthenticationToken(defaultUser).enqueue(new CallbackWithRetry<AuthenticationTokenJWT>() {
             @Override
             public void onResponse(Call<AuthenticationTokenJWT> call, Response<AuthenticationTokenJWT> response) {
+                HostelohaLog.debugOut("[REQ] getAuthenticationToken  =====> isSuccessful  : " + response.isSuccessful());
                 if (response.isSuccessful()) {
                     AuthenticationTokenJWT authenticationTokenJWT = response.body();
                     mDefaultUserJWT = "Bearer " + authenticationTokenJWT.getJwt();
                     getSplashData();
                     req_getAllProducts();
-                    HostelohaLog.debugOut("user id :  " + authenticationTokenJWT.getUserId() + "  JWT " + authenticationTokenJWT.getJwt());
-                } else {
-                    HostelohaLog.debugOut(" ===>  Default user response not Successful");
                 }
             }
 
             @Override
-            public void onFailure(Call<AuthenticationTokenJWT> call, Throwable t) {
-                HostelohaLog.debugOut(" ===> autenticateDefaultUser response Failed");
+            public void onFailure(Call<AuthenticationTokenJWT> call, Throwable throwable) {
+                super.onFailure(call, throwable);
+                HostelohaLog.debugOut("[REQ] getAuthenticationToken ===>  onFailure");
             }
         });
     }
@@ -87,7 +140,7 @@ public class HostelohaService extends Service {
         ApiUtil.getServiceClass().getCategoryMapList(mDefaultUserJWT).enqueue(new CallbackWithRetry<Map<String, Set<String>>>() {
             @Override
             public void onResponse(Call<Map<String, Set<String>>> call, Response<Map<String, Set<String>>> response) {
-                HostelohaLog.debugOut("  categoriesMap  " + response.isSuccessful());
+                HostelohaLog.debugOut("[REQ] getCategoryMapList  =====> isSuccessful  : " + response.isSuccessful());
                 if (response.isSuccessful()) {
                     Map<String, Set<String>> categoriesMap = response.body();
                     if (categoriesMap != null)
@@ -96,29 +149,29 @@ public class HostelohaService extends Service {
             }
 
             @Override
-            public void onFailure(Call<Map<String, Set<String>>> call, Throwable t) {
-                HostelohaLog.debugOut(" getSplashdata ===>  onFailure  ");
+            public void onFailure(Call<Map<String, Set<String>>> call, Throwable throwable) {
+                super.onFailure(call, throwable);
+                HostelohaLog.debugOut("[REQ] getCategoryMapList ===>  onFailure");
             }
         });
     }
 
     public void req_getAllProducts() {
-        ApiUtil.getServiceClass().getAllProcducts(mDefaultUserJWT).enqueue(new CallbackWithRetry<List<ProductObject>>() {
+        ApiUtil.getServiceClass().getAllProducts(mDefaultUserJWT).enqueue(new CallbackWithRetry<List<ProductObject>>() {
             @Override
             public void onResponse(Call<List<ProductObject>> call, Response<List<ProductObject>> response) {
-                HostelohaLog.debugOut(" getAllProducts  =====> ......isSuccessful  " + response.isSuccessful());
+                HostelohaLog.debugOut("[REQ] getAllProducts  =====> isSuccessful  : " + response.isSuccessful());
                 if (response.isSuccessful()) {
                     List<ProductObject> mArrayList = response.body();
-                    HostelohaLog.debugOut("response products list  count " + mArrayList.size());
-                    if (mArrayList != null) {
-                        AllProductsSubject.getAllProductsSubject().setProductsList(mArrayList);
-                    }
+                    HostelohaLog.debugOut("[REQ] products_list size ::  " + mArrayList.size());
+                    AllProductsSubject.getAllProductsSubject().setProductsList(mArrayList);
                 }
             }
 
             @Override
-            public void onFailure(Call<List<ProductObject>> call, Throwable t) {
-                HostelohaLog.debugOut("error loading allProducts from server");
+            public void onFailure(Call<List<ProductObject>> call, Throwable throwable) {
+                HostelohaLog.debugOut("[REQ] getAllProducts ===>  onFailure");
+                super.onFailure(call, throwable);
             }
         });
     }

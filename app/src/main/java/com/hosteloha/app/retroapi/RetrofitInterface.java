@@ -21,7 +21,7 @@ public interface RetrofitInterface {
     Call<AuthenticationTokenJWT> getAuthenticationToken(@Body UserAuthentication params);
 
     @GET("/products")
-    Call<List<ProductObject>> getAllProcducts(@Header("Authorization") String auth);
+    Call<List<ProductObject>> getAllProducts(@Header("Authorization") String auth);
 
     @POST("/add_product/")
     Call<ProductObject> uploadProduct(@Body ProductObject productObject, @Header("Authorization") String auth);

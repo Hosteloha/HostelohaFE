@@ -64,20 +64,7 @@
                         android:layout_height="wrap_content"
                         android:text="Add Photos" />
 
-                    <LinearLayout
-                        android:id="@+id/page1_ll_upload_photoes"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:orientation="horizontal">
-
-                        <ImageButton
-                            android:id="@+id/page1_ib_upload_photoes"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
-                            android:background="@drawable/ic_upload_photoes" />
-                    </LinearLayout>
-
+                    <include layout="@layout/product_images_scrollable" />
 
                     <include layout="@layout/product_categories_chiplayout" />
 

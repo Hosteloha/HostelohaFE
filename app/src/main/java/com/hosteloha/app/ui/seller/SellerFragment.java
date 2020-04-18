@@ -1,6 +1,8 @@
 package com.hosteloha.app.ui.seller;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -12,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +42,7 @@ import com.hosteloha.app.service.HostelohaService;
 import com.hosteloha.app.ui.seller.adapter.CustomPageAdapter;
 import com.hosteloha.app.utils.Define;
 import com.hosteloha.app.utils.HostelohaUtils;
+import com.hosteloha.app.utils.ImageWindow;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -70,8 +74,8 @@ public class SellerFragment extends Fragment {
     EditText mProductTitleText, mProductSubTitleText, mProductSpecificTags, mProductDescriptionText, mCostPrice, mSelleingPrice;
     Button mNextBtn;
     Button mPrevBtn;
-    ImageButton mUploadPhotoesBtn;
-    LinearLayout mLL_uploadPhotoes;
+    ImageButton mUploadPhotosBtn;
+    LinearLayout mLL_uploadPhotos;
 
     AutoCompleteTextView mProductCategoriesDropDown, mProductConditionDropDown;
     ChipGroup mProductTagsChipGroup, mProductCategoriesChipGroup;
@@ -113,7 +117,7 @@ public class SellerFragment extends Fragment {
                     if (mViewPager != null)
                         mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
                     break;
-                case R.id.page1_ib_upload_photoes:
+                case R.id.page1_ib_upload_photos:
                     showUploadPhotoesAlertDilogue();
                     break;
 
@@ -245,8 +249,8 @@ public class SellerFragment extends Fragment {
         //issue - #10 added below changes to remain 3 pages of view pager to be alive
         mViewPager.setOffscreenPageLimit(2);
 
-        mLL_uploadPhotoes = mView_Page1.findViewById(R.id.page1_ll_upload_photoes);
-        mUploadPhotoesBtn = mView_Page1.findViewById(R.id.page1_ib_upload_photoes);
+        mLL_uploadPhotos = mView_Page1.findViewById(R.id.page1_ll_upload_photos);
+        mUploadPhotosBtn = mView_Page1.findViewById(R.id.page1_ib_upload_photos);
         mProductTitleText = mView_Page1.findViewById(R.id.page1_et_title);
         mProductSubTitleText = mView_Page1.findViewById(R.id.page1_et_subtitle);
         mProductDescriptionText = mView_Page1.findViewById(R.id.page2_et_description);
@@ -298,7 +302,7 @@ public class SellerFragment extends Fragment {
 
         mPrevBtn.setOnClickListener(mOnClickListener);
         mNextBtn.setOnClickListener(mOnClickListener);
-        mUploadPhotoesBtn.setOnClickListener(mOnClickListener);
+        mUploadPhotosBtn.setOnClickListener(mOnClickListener);
 
 //        String[] PRODUCT_CATEGORIES = getContext().getResources().getStringArray(R.array.product_categories);
 
@@ -503,29 +507,41 @@ public class SellerFragment extends Fragment {
         super.onActivityResult(requestCode, requestCode, data);
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_ACTION_GET_CONTENT) {
             if (data.getData() != null) {
-                ImageView imgView = new ImageView(getContext());
-                imgView.setLayoutParams(mUploadPhotoesBtn.getLayoutParams());
-                imgView.setImageURI(data.getData());
-                imgView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-                mLL_uploadPhotoes.addView(imgView);
+                final ImageWindow imgView = new ImageWindow(new ContextThemeWrapper(getContext(), R.style.image_window_style), null, 0);
+//                imgView.setLayoutParams(mUploadPhotosBtn.getLayoutParams());
+//
+                imgView.getImageView().setImageURI(data.getData());
+                imgView.getImageView().setScaleType(ImageView.ScaleType.CENTER_CROP);
+                imgView.setOnCloseListener(new ImageWindow.OnCloseListener() {
+                    @Override
+                    public void onCloseClick(final View imageWindow) {
+                        imageWindow.animate().scaleY(0).scaleX(0).setDuration(500).setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                ((ViewGroup) imgView.getParent()).removeView(imgView);
+                            }
+                        }).start();
+                    }
+                });
+                mLL_uploadPhotos.addView(imgView);
             } else {
                 ClipData clipData = data.getClipData();
                 for (int i = 0; i < clipData.getItemCount(); i++) {
                     ImageView imgView = new ImageView(getContext());
-                    imgView.setLayoutParams(mUploadPhotoesBtn.getLayoutParams());
+                    imgView.setLayoutParams(mUploadPhotosBtn.getLayoutParams());
                     imgView.setImageURI(clipData.getItemAt(i).getUri());
                     imgView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-                    mLL_uploadPhotoes.addView(imgView);
+                    mLL_uploadPhotos.addView(imgView);
                 }
             }
         } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_ACTION_IMAGE_CAPTURE) {
             Bundle bundle = data.getExtras();
             Bitmap bitmap = (Bitmap) bundle.get("data");
             ImageView imgView = new ImageView(getContext());
-            imgView.setLayoutParams(mUploadPhotoesBtn.getLayoutParams());
+            imgView.setLayoutParams(mUploadPhotosBtn.getLayoutParams());
             imgView.setImageBitmap(bitmap);
             imgView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-            mLL_uploadPhotoes.addView(imgView);
+            mLL_uploadPhotos.addView(imgView);
         }
     }
 

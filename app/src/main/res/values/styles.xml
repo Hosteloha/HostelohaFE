@@ -95,4 +95,19 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">14sp</item>
     </style>
+
+    <style name="image_window_style">
+        <item name="android:layout_height">@dimen/custom_image_window</item>
+        <item name="android:layout_width">@dimen/custom_image_window</item>
+        <item name="android:maxWidth">@dimen/custom_image_window</item>
+        <item name="android:maxHeight">@dimen/custom_image_window</item>
+        <item name="close_margin">1dp</item>
+        <item name="close_size">27dp</item>
+        <item name="corner_radius">5dp</item>
+        <item name="image_margin">2dp</item>
+        <item name="android:padding">2dp</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_alignParentStart">true</item>
+    </style>
 </resources>
