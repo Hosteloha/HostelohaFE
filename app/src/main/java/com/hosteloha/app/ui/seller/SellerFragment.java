@@ -102,8 +102,9 @@ public class SellerFragment extends Fragment {
                                 .setIcon(android.R.drawable.ic_menu_info_details)
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int whichButton) {
-                                        mProgress.show();
-                                        sendPost(productObject);
+//                                        mProgress.show();
+//                                        sendPost(productObject);
+                                        uploadPhotosInBackGround(23);
                                     }
                                 })
                                 .setNegativeButton(android.R.string.no, null).show();
@@ -615,7 +616,7 @@ public class SellerFragment extends Fragment {
 
         // Upload the list
         if (mHostelohaService != null) {
-            mHostelohaService.uploadFileToFireBaseStorage(filesURI, productID);
+            mHostelohaService.uploadProductImagesToFire(filesURI, productID);
         } else {
             HostelohaLog.debugOut(" uploadPhotosInBackGround :: service NULL ");
         }

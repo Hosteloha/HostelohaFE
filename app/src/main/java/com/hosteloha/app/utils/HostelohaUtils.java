@@ -1,18 +1,18 @@
 package com.hosteloha.app.utils;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.webkit.MimeTypeMap;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -29,6 +29,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+
+import androidx.annotation.NonNull;
 
 public class HostelohaUtils {
 
@@ -125,9 +127,24 @@ public class HostelohaUtils {
      *
      * @return
      */
-    public static DatabaseReference getFirebaseDatabase() {
+    public static DatabaseReference getFirebaseDatabase(Activity activity) {
         if (mFireDatabaseReference == null) {
-            mFireDatabaseReference = FirebaseDatabase.getInstance().getReference(Define.DATABASE_PATH_UPLOADS);
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            if (mAuth.getCurrentUser() != null) {
+                mFireDatabaseReference = FirebaseDatabase.getInstance().getReference(Define.DATABASE_PATH_UPLOADS);
+            } else {
+                mAuth.signInAnonymously().addOnSuccessListener(activity, new OnSuccessListener<AuthResult>() {
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
+                        HostelohaLog.debugOut("signInAnonymously:SUCCESS");
+                    }
+                }).addOnFailureListener(activity, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        HostelohaLog.debugOut("signInAnonymously:FAILURE" + exception.getLocalizedMessage());
+                    }
+                });
+            }
         }
         return mFireDatabaseReference;
     }
@@ -178,17 +195,5 @@ public class HostelohaUtils {
             context.startService(new Intent(context, HostelohaService.class));
         }
         return service;
-    }
-
-    /**
-     * To get the file extension while storing data to the FireBase.
-     * @param uri
-     * @param context
-     * @return
-     */
-    public static String getFileExtension(Uri uri, Context context) {
-        ContentResolver cR = context.getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(cR.getType(uri));
     }
 }

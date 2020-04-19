@@ -17,6 +17,11 @@ public class Define {
     public static final String VIEW_SELLER = "VIEW_SELLER";
 
     public static final String STORAGE_PATH_UPLOADS = "uploads/";
-    public static final String DATABASE_PATH_UPLOADS = "uploads";
+    public static final String DATABASE_PATH_UPLOADS = "products";
+
+
+    // NOTIFICATION CHANNEL ID
+    public static final String NOTIFICATION_CHANNEL_FILE_ID = "CHANNEL_FILES";
+
 
 }
