@@ -12,7 +12,7 @@ import com.hosteloha.app.data.AllProductsSubject;
 import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.retroapi.ApiUtil;
 import com.hosteloha.app.retroapi.CallbackWithRetry;
-import com.hosteloha.app.utils.AppFileUploader;
+import com.hosteloha.app.utils.AppFireStorage;
 import com.hosteloha.app.utils.HostelohaUtils;
 
 import java.util.List;
@@ -132,6 +132,6 @@ public class HostelohaService extends Service {
      * @param productID    product ID, to link the file URI
      */
     public void uploadProductImagesToFire(List<Uri> filesURIList, int productID) {
-        AppFileUploader.uploadFileToFirebase(filesURIList, productID, getApplicationContext());
+        AppFireStorage.uploadFileToFirebase(filesURIList, productID, getApplicationContext());
     }
 }

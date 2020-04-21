@@ -49,20 +49,20 @@ public class AppNotificationManager {
      * @param filesStatus
      * @param completion
      */
-    public static void updateFileUploadNotification(Context context, AppFileUploader.fileUploadStatus fileUploadStatus, double fileProgress, String filesStatus, String completion) {
+    public static void updateFileUploadNotification(Context context, AppFireStorage.fileUploadStatus fileUploadStatus, double fileProgress, String filesStatus, String completion) {
         // If default notification builder is created.
         if (mNotificationBuilder_Files == null) {
             createFileNotificationBuilder(context);
         }
         // Update notification builder, based on file status
-        if (fileUploadStatus == AppFileUploader.fileUploadStatus.SUCCESS) {
+        if (fileUploadStatus == AppFireStorage.fileUploadStatus.SUCCESS) {
             mNotificationBuilder_Files.setContentTitle("Product images " + filesStatus + " uploaded")
                     .setProgress(100, 100, false)
                     .setContentText("success");
-        } else if (fileUploadStatus == AppFileUploader.fileUploadStatus.PROGRESS) {
+        } else if (fileUploadStatus == AppFireStorage.fileUploadStatus.PROGRESS) {
             mNotificationBuilder_Files.setContentText("Files:" + filesStatus + fileProgress + "%" + "-" + completion);
             mNotificationBuilder_Files.setProgress(100, (int) fileProgress, false);
-        } else if (fileUploadStatus == AppFileUploader.fileUploadStatus.FAILURE) {
+        } else if (fileUploadStatus == AppFireStorage.fileUploadStatus.FAILURE) {
             mNotificationBuilder_Files.setContentTitle("Product images upload")
                     .setProgress(100, 100, false)
                     .setContentText("failed");

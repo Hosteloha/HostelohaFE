@@ -8,11 +8,9 @@ import android.webkit.MimeTypeMap;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.hosteloha.app.beans.ProductImageUpload;
 import com.hosteloha.app.log.HostelohaLog;
 
 import java.util.List;
@@ -20,9 +18,9 @@ import java.util.List;
 import androidx.annotation.NonNull;
 
 /**
- * {@link AppFileUploader} is helpful manage the activities related to the Files Management.
+ * {@link AppFireStorage} is helpful manage the activities related to the Files Management.
  */
-public class AppFileUploader {
+public class AppFireStorage {
 
     /**
      * To get the file extension while storing data to the FireBase.
