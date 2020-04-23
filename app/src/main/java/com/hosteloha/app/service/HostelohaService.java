@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.IBinder;
 
+import com.google.android.gms.tasks.TaskCompletionSource;
 import com.hosteloha.app.beans.AuthenticationTokenJWT;
 import com.hosteloha.app.beans.ProductObject;
 import com.hosteloha.app.beans.UserAuthentication;
@@ -15,6 +16,7 @@ import com.hosteloha.app.retroapi.CallbackWithRetry;
 import com.hosteloha.app.utils.AppFireStorage;
 import com.hosteloha.app.utils.HostelohaUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -131,7 +133,11 @@ public class HostelohaService extends Service {
      * @param filesURIList list of file URI to upload.
      * @param productID    product ID, to link the file URI
      */
-    public void uploadProductImagesToFire(List<Uri> filesURIList, int productID) {
-        AppFireStorage.uploadFileToFirebase(filesURIList, productID, getApplicationContext());
+    public void uploadProductImagesToFire(final List<Uri> filesURIList, final int productID) {
+        ArrayList<String> generatedURlList = AppFireStorage.uploadFileToFirebase(filesURIList, productID, getApplicationContext());
+//        AppFireDataBase.addUrlList(String.valueOf(productID), generatedURlList);
+
+
+
     }
 }
