@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.hosteloha.app.log.HostelohaLog;
@@ -57,7 +58,9 @@ public class AppFireStorage {
         FAILURE
     }
 
+
     private static ArrayList<String> generatedURlList = new ArrayList<>();
+    private static int fileUploadSuccess = 0;
 
     /**
      * To upload the product gallery to the server.
@@ -67,11 +70,11 @@ public class AppFireStorage {
      * @param context
      * @return
      */
-    public static ArrayList<String> uploadFileToFirebase(List<Uri> filesURIList, int productID, final Context context) {
-        int totalFilesToUpload = filesURIList.size();
-        generatedURlList.clear();
+    public static ArrayList<String> uploadFileToFirebase(List<Uri> filesURIList, final int productID, final Context context) {
+        final int totalFilesToUpload = filesURIList.size();
         final List<UploadTask> tasks = new ArrayList<>();
         Task<Void> allTask = null;
+        fileUploadSuccess = 0;
         for (int i = 0; i < totalFilesToUpload; i++) {
             final String filesStatus = " [" + (i + 1) + "/" + totalFilesToUpload + "] ";
             Uri fileURI = filesURIList.get(i);
@@ -82,56 +85,51 @@ public class AppFireStorage {
                 HostelohaLog.debugOut("[FILES] START UPLOAD " + filesStatus + " :: " + fileName);
                 // Create if notification manager is null
                 StorageReference storageReference = HostelohaUtils.getFirebaseStorage().child(Define.STORAGE_PATH_UPLOADS + fileName);
-                tasks.add(storageReference.putFile(file));
 
-//                storageReference.putFile(file)
-//                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                            @Override
-//                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                                if (taskSnapshot.getMetadata() != null && taskSnapshot.getMetadata().getReference() != null) {
-//                                    Task<Uri> result = taskSnapshot.getStorage().getDownloadUrl();
-//                                    result.addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                                        @Override
-//                                        public void onSuccess(Uri uri) {
-//                                            String imageUrl = uri.toString();
-//                                            HostelohaLog.debugOut("uploadFileToFireBaseStorage onSuccess :: fileName : " + fileName + " :: " + imageUrl);
-//                                            AppNotificationManager.updateFileUploadNotification(context, fileUploadStatus.SUCCESS, 0, filesStatus, null);
-//                                            generatedURlList.add(imageUrl);
-//                                        }
-//                                    });
-//                                }
-//
-//                            }
-//                        })
-//                        .addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception exception) {
-//                                HostelohaLog.debugOut("uploadFileToFireBaseStorage onFailure :: " + exception.getLocalizedMessage());
+                UploadTask indiTask = storageReference.putFile(file);
+                tasks.add(indiTask);
+                indiTask
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                fileUploadSuccess = fileUploadSuccess + 1;
+//                                AppNotificationManager.updateFileUploadNotification(context, fileUploadStatus.SUCCESS, 0, filesStatus, null);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                HostelohaLog.debugOut("uploadFileToFireBaseStorage onFailure :: " + exception.getLocalizedMessage());
 //                                AppNotificationManager.updateFileUploadNotification(context, fileUploadStatus.FAILURE, 0, filesStatus, null);
-//                            }
-//                        })
-//                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-//                            @Override
-//                            public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-//                                double progress = getFileProgress(taskSnapshot);
-//                                long transferredBytesInKB = getFileSizeInKB(taskSnapshot.getBytesTransferred());
-//                                long totalBytesInKB = getFileSizeInKB(taskSnapshot.getTotalByteCount());
-//                                String completion = transferredBytesInKB + "/" + totalBytesInKB + "KB";
-//                                HostelohaLog.debugOut("uploadFileToFireBaseStorage onProgress :: " + progress + "-" + completion);
-//                                AppNotificationManager.updateFileUploadNotification(context, fileUploadStatus.PROGRESS, progress, filesStatus, completion);
-//                            }
-//                        });
+                            }
+                        })
+                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                                double progress = getFileProgress(taskSnapshot);
+                                long transferredBytesInKB = getFileSizeInKB(taskSnapshot.getBytesTransferred());
+                                long totalBytesInKB = getFileSizeInKB(taskSnapshot.getTotalByteCount());
+                                String completion = transferredBytesInKB + "/" + totalBytesInKB + "KB";
+                                HostelohaLog.debugOut("uploadFileToFireBaseStorage onProgress :: " + progress + "-" + completion);
+                                AppNotificationManager.updateIndeterminateProgress(context, fileUploadStatus.PROGRESS, totalFilesToUpload, (fileUploadSuccess + 1));
+                                //AppNotificationManager.updateFileUploadNotification(context, fileUploadStatus.PROGRESS, progress, filesStatus, completion);
+                            }
+                        });
             } else {
                 HostelohaLog.debugOut("uploadFileToFireBaseStorage URI NULL");
             }
         }
         HostelohaLog.debugOut("Total tasks added :: " + tasks.size());
+        generatedURlList.clear();
+        fileUploadSuccess = 0;
         allTask = Tasks.whenAll(tasks);
         // End of for loop
         allTask.addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 HostelohaLog.debugOut("onSuccess ALL TASKS FINISHED");
+                AppNotificationManager.updateIndeterminateProgress(context, fileUploadStatus.SUCCESS, totalFilesToUpload, fileUploadSuccess);
+                fileUploadSuccess = 0;
                 for (int i = 0; i < tasks.size(); i++) {
                     Task individualTask = tasks.get(i);
                     UploadTask.TaskSnapshot taskSnapshot = (UploadTask.TaskSnapshot) individualTask.getResult();
@@ -142,12 +140,18 @@ public class AppFireStorage {
                             @Override
                             public void onSuccess(Uri uri) {
                                 String imageUrl = uri.toString();
+                                generatedURlList.add(imageUrl);
                                 HostelohaLog.debugOut("uploadFileToFireBaseStorage onSuccess :: fileName : " + finalI + " :: " + imageUrl);
+                                HostelohaLog.debugOut("List Size-1 :: " + generatedURlList.size());
+                                if (generatedURlList.size() == tasks.size()) {
+                                    AppFireDataBase.addUrlList(String.valueOf(productID), generatedURlList);
+                                }
                             }
                         });
                     }
-
                 }
+                HostelohaLog.debugOut("List Size-2 :: " + generatedURlList.size());
+
             }
         });
         allTask.addOnFailureListener(new OnFailureListener() {

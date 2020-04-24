@@ -65,4 +65,9 @@
     <string name="channel_name">hosteloha_notification</string>
     <string name="channel_description">hosteloha_chanel_description</string>
 
+    <!-- Product -->
+    <string name="product_cp_value">&#160;₹%1$d&#160;</string>
+    <string name="product_sp_value">₹%1$d</string>
+
+    <string name="product_discount_value">%1$d%%</string>
 </resources>

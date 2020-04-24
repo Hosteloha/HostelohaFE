@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.IBinder;
 
-import com.google.android.gms.tasks.TaskCompletionSource;
 import com.hosteloha.app.beans.AuthenticationTokenJWT;
 import com.hosteloha.app.beans.ProductObject;
 import com.hosteloha.app.beans.UserAuthentication;
@@ -13,6 +12,7 @@ import com.hosteloha.app.data.AllProductsSubject;
 import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.retroapi.ApiUtil;
 import com.hosteloha.app.retroapi.CallbackWithRetry;
+import com.hosteloha.app.utils.AppFireDataBase;
 import com.hosteloha.app.utils.AppFireStorage;
 import com.hosteloha.app.utils.HostelohaUtils;
 
@@ -115,6 +115,20 @@ public class HostelohaService extends Service {
                 if (response.isSuccessful()) {
                     List<ProductObject> mArrayList = response.body();
                     HostelohaLog.debugOut("[REQ] products_list size ::  " + mArrayList.size());
+
+                    // Getting from firebase - just temporary code to set image gallery
+                    Map<String, ArrayList<String>> productImagesList = AppFireDataBase.getProductImagesMap();
+                    for (ProductObject product : mArrayList) {
+                        String productID = String.valueOf(product.getProductId());
+                        if (productImagesList.containsKey(productID)) {
+                            ArrayList<String> productImages = productImagesList.get(productID);
+                            product.setProduct_images(productImages);
+                        } else {
+                            //Default URL or glide will take care with placeholder
+                            product.setProduct_images(new ArrayList<String>());
+                        }
+                    }
+
                     AllProductsSubject.getAllProductsSubject().setProductsList(mArrayList);
                 }
             }
@@ -136,7 +150,6 @@ public class HostelohaService extends Service {
     public void uploadProductImagesToFire(final List<Uri> filesURIList, final int productID) {
         ArrayList<String> generatedURlList = AppFireStorage.uploadFileToFirebase(filesURIList, productID, getApplicationContext());
 //        AppFireDataBase.addUrlList(String.valueOf(productID), generatedURlList);
-
 
 
     }

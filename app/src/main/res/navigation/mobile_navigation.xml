@@ -68,7 +68,7 @@
             android:id="@+id/hostelOhaMain"
             android:name="com.hosteloha.app.ui.main.HostelohaMain"
             android:label="fragment_hostel_oha_main"
-            tools:layout="@layout/fragment_hostel_oha_main">
+            tools:layout="@layout/fragment_hosteloha_main">
             <action
                 android:id="@+id/action_hostelOhaMain_to_nav_buyer"
                 app:destination="@id/nav_buyer"

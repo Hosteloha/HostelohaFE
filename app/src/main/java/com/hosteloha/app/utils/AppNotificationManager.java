@@ -71,6 +71,26 @@ public class AppNotificationManager {
         getNotificationManager(context).notify(Define.NOTIFICATION_PRODUCT_IMAGE, mNotificationBuilder_Files.build());
     }
 
+
+    public static void updateIndeterminateProgress(Context context, AppFireStorage.fileUploadStatus fileUploadStatus, int totalFiles, int filesUploaded) {
+        // If default notification builder is created.
+        if (mNotificationBuilder_Files == null) {
+            createFileNotificationBuilder(context);
+        }
+        // Update notification builder, based on file status
+        if (fileUploadStatus == AppFireStorage.fileUploadStatus.SUCCESS) {
+            mNotificationBuilder_Files.setContentTitle("Product images ")
+                    .setProgress(100, 100, false)
+                    .setContentText("Files uploaded " + filesUploaded + " of " + totalFiles);
+        } else if (fileUploadStatus == AppFireStorage.fileUploadStatus.PROGRESS) {
+            mNotificationBuilder_Files.setContentTitle("Product images ")
+                    .setProgress(100, 0, true)
+                    .setContentText("Uploading " + filesUploaded + " of " + totalFiles);
+        }
+        // Notify the updated builder.
+        getNotificationManager(context).notify(Define.NOTIFICATION_PRODUCT_IMAGE, mNotificationBuilder_Files.build());
+    }
+
     private static void createFileNotificationBuilder(Context context) {
         String channelID = Define.NOTIFICATION_CHANNEL_FILE_ID;
         NotificationChannel mChannel = null;

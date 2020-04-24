@@ -7,9 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
+import com.bumptech.glide.Glide;
 import com.hosteloha.R;
 import com.hosteloha.app.beans.ProductObject;
 import com.hosteloha.app.data.AllProductsSubject;
@@ -17,10 +15,21 @@ import com.hosteloha.app.log.HostelohaLog;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder> {
 
     List<ProductObject> mAllProducts;
     private OnItemClickListener mItemClickListener;
+    private Context mContext;
+
+
+    public RecyclerAdapter(Context context, List arrayList) {
+        mContext = context;
+        mAllProducts = arrayList;
+        AllProductsSubject.getAllProductsSubject().attachObservers(observer);
+    }
 
     private AllProductsSubject.ProductsObserver observer = new AllProductsSubject.ProductsObserver() {
         @Override
@@ -50,17 +59,34 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder viewHolder, int position) {
+        ProductObject product = mAllProducts.get(position);
+        // Set only the first image, after wards we can put effects to change images with time.
+        List<String> thumbImages = product.getProduct_images();
+        String thumbImageURL = null;
+        if (thumbImages.size() > 0) {
+            thumbImageURL = thumbImages.get(0);
+        }
+        Glide.with(mContext).load(thumbImageURL).placeholder(R.drawable.ic_menu_gallery).into(viewHolder.mProductImage);
 
-        viewHolder.mProductTitle.setText(mAllProducts.get(position).getTitle());
-        viewHolder.mProductCost.setText("RS " + mAllProducts.get(position).getSellingPrice());
-        viewHolder.mActualCost.setText("RS " + mAllProducts.get(position).getCostPrice());
-        if (mAllProducts.get(position).getSellingPrice() < mAllProducts.get(position).getCostPrice() && mAllProducts.get(position).getCostPrice() != 0) {
+        //-------
+        viewHolder.mProductTitle.setText(product.getTitle());
 
-            int disocunt = 100 * (mAllProducts.get(position).getCostPrice() - mAllProducts.get(position).getSellingPrice()) / mAllProducts.get(position).getCostPrice();
-            if (disocunt != 0)
-                viewHolder.mDiscount.setText(disocunt + " %");
-            else
+        int productSellingPrice = product.getSellingPrice();
+        String formattedSP = mContext.getResources().getString(R.string.product_sp_value, productSellingPrice);
+        viewHolder.mProductCost.setText(formattedSP);
+
+        int productCostPrice = product.getCostPrice();
+        String formattedCP = mContext.getResources().getString(R.string.product_cp_value, productCostPrice);
+        viewHolder.mActualCost.setText(formattedCP);
+
+        if (product.getSellingPrice() < product.getCostPrice() && product.getCostPrice() != 0) {
+            int discount = 100 * (product.getCostPrice() - product.getSellingPrice()) / product.getCostPrice();
+            if (discount != 0) {
+                String formattedDiscount = mContext.getResources().getString(R.string.product_discount_value, discount);
+                viewHolder.mDiscount.setText(formattedDiscount);
+            } else {
                 viewHolder.mDiscount.setVisibility(View.GONE);
+            }
         } else {
             viewHolder.mDiscount.setVisibility(View.GONE);
             viewHolder.mActualCost.setVisibility(View.GONE);
@@ -109,8 +135,4 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         }
     }
 
-    public RecyclerAdapter(List arrayList) {
-        mAllProducts = arrayList;
-        AllProductsSubject.getAllProductsSubject().attachObservers(observer);
-    }
 }

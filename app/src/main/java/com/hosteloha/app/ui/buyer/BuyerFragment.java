@@ -5,6 +5,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hosteloha.R;
+import com.hosteloha.app.beans.ProductObject;
+import com.hosteloha.app.data.AllProductsSubject;
+import com.hosteloha.app.log.HostelohaLog;
+import com.hosteloha.app.service.HostelohaService;
+import com.hosteloha.app.ui.buyer.adapter.RecyclerAdapter;
+import com.hosteloha.app.utils.AppFireDataBase;
+import com.hosteloha.app.utils.Define;
+import com.hosteloha.app.utils.HostelohaUtils;
+import com.hosteloha.databinding.FragmentBuyerBinding;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
@@ -15,19 +30,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.hosteloha.R;
-import com.hosteloha.app.beans.ProductObject;
-import com.hosteloha.app.data.AllProductsSubject;
-import com.hosteloha.app.log.HostelohaLog;
-import com.hosteloha.app.service.HostelohaService;
-import com.hosteloha.app.ui.buyer.adapter.RecyclerAdapter;
-import com.hosteloha.app.utils.Define;
-import com.hosteloha.app.utils.HostelohaUtils;
-import com.hosteloha.databinding.FragmentBuyerBinding;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class BuyerFragment extends Fragment {
 
@@ -66,7 +68,9 @@ public class BuyerFragment extends Fragment {
             }
         });
 
-        mRecyclerAdapter = new RecyclerAdapter(AllProductsSubject.getAllProductsSubject().getProductsList());
+        List<ProductObject> productList = AllProductsSubject.getAllProductsSubject().getProductsList();
+
+        mRecyclerAdapter = new RecyclerAdapter(getContext(), productList);
         mRecyclerAdapter.setOnItemClickListener(mOnItemClickListener);
         mBuyerBinding.buyerRecyclerView.setAdapter(mRecyclerAdapter);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 2);

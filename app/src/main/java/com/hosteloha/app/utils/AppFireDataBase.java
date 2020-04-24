@@ -58,7 +58,7 @@ public class AppFireDataBase {
      * @param URlList
      */
     public static void addUrlList(String productID, ArrayList<String> URlList) {
-        HostelohaLog.debugOut(" addUrlList :: NEW URL list for PRODUCT :: " + productID);
+        HostelohaLog.debugOut(" addUrlList :: NEW URL list for PRODUCT :: " + productID +" URL's : "+URlList.size());
         Map<String, Object> productImagesUrl = new HashMap<>();
         productImagesUrl.put(productID, URlList);
         getProductsReference().updateChildren(productImagesUrl);
