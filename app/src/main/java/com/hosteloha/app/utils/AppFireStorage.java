@@ -151,7 +151,6 @@ public class AppFireStorage {
                     }
                 }
                 HostelohaLog.debugOut("List Size-2 :: " + generatedURlList.size());
-
             }
         });
         allTask.addOnFailureListener(new OnFailureListener() {

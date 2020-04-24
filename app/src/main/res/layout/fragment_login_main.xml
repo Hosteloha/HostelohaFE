@@ -25,8 +25,11 @@
             android:layout_width="84dp"
             android:layout_height="84dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="40dp"
-            android:src="@drawable/img_no_avatar" />
+            android:layout_marginTop="60dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_menu_account_circle"
+            android:tint="@color/white" />
 
         <TextView
             android:id="@+id/profile_name"
@@ -34,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/profile_image"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="16dp"
             android:fontFamily="sans-serif-thin"
             android:gravity="center"
             android:maxLines="1"

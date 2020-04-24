@@ -150,7 +150,5 @@ public class HostelohaService extends Service {
     public void uploadProductImagesToFire(final List<Uri> filesURIList, final int productID) {
         ArrayList<String> generatedURlList = AppFireStorage.uploadFileToFirebase(filesURIList, productID, getApplicationContext());
 //        AppFireDataBase.addUrlList(String.valueOf(productID), generatedURlList);
-
-
     }
 }

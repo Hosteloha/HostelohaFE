@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#424242</color>
+    <color name="colorPrimaryDark">#212121</color>
+    <color name="colorAccent">#424242</color>
+    <color name="colorAccentSecondary">#FFC107</color>
 
     <!--colors for modern ui-->
     <color name="whiteTextColor">#fff</color>
-    <color name="primaryTextColor">#00a5ff</color>
+    <color name="primaryTextColor">#424242</color>
     <color name="greyish">#aaa8a8</color>
     <color name="mine_shaft">#303030</color>
     <color name="white">#FFFFFF</color>
     <color name="grisaille">#57606f</color>
 
     <!-- New GUI colors -->
-    <color name="splash_color">#263238</color>
+    <color name="splash_color">#212121</color>
+    <color name="old_splash_color">#263238</color>
     <color name="close_color_image">#696969</color>
+    <color name="fab_icon_bg">#FFFFFF</color>
 </resources>
