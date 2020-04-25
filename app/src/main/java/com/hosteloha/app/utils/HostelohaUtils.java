@@ -9,8 +9,15 @@ import android.preference.PreferenceManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.hosteloha.R;
 import com.hosteloha.app.MainActivity;
 import com.hosteloha.app.log.HostelohaLog;
@@ -23,14 +30,21 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import androidx.annotation.NonNull;
+
 public class HostelohaUtils {
 
-    static SharedPreferences sharedPreferences = null;
-    static SharedPreferences.Editor prefsEditor;
-    public static String AUTHENTICATION_TOKEN = "";
-    static GoogleSignInClient mGoogleSignInClient = null;
+    // PRIVATE should be accessed using getters
+    private static SharedPreferences sharedPreferences = null;
+    private static SharedPreferences.Editor prefsEditor;
+    private static GoogleSignInClient mGoogleSignInClient = null;
+    //firebase objects
+    private static StorageReference mFireStorageReference = null;
+    private static DatabaseReference mFireDatabaseReference = null;
 
     static Map<String, Set<String>> mAllCategoriesMap = null;
+
+    public static String AUTHENTICATION_TOKEN = "";
 
     public static String getCurrentDateTime() {
         Date currentTime = Calendar.getInstance().getTime();
@@ -94,6 +108,45 @@ public class HostelohaUtils {
             sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         }
         return sharedPreferences;
+    }
+
+    /**
+     * To store the product images.
+     *
+     * @return Firebase Storage Reference
+     */
+    public static StorageReference getFirebaseStorage() {
+        if (mFireStorageReference == null) {
+            mFireStorageReference = FirebaseStorage.getInstance().getReference();
+        }
+        return mFireStorageReference;
+    }
+
+    /**
+     * To store the image urls and product id's
+     *
+     * @return
+     */
+    public static DatabaseReference getFirebaseDatabase(Activity activity) {
+        if (mFireDatabaseReference == null) {
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            if (mAuth.getCurrentUser() != null) {
+                mFireDatabaseReference = FirebaseDatabase.getInstance().getReference(Define.DATABASE_PATH_UPLOADS);
+            } else {
+                mAuth.signInAnonymously().addOnSuccessListener(activity, new OnSuccessListener<AuthResult>() {
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
+                        HostelohaLog.debugOut("signInAnonymously:SUCCESS");
+                    }
+                }).addOnFailureListener(activity, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        HostelohaLog.debugOut("signInAnonymously:FAILURE" + exception.getLocalizedMessage());
+                    }
+                });
+            }
+        }
+        return mFireDatabaseReference;
     }
 
     public static void storeUserLoginInfo(Context context, boolean isLoggedIn, String authenticationToken) {

@@ -3,6 +3,8 @@ package com.hosteloha.app.beans;
 import com.google.gson.annotations.SerializedName;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductObject {
     // Initialised with default values.
@@ -44,6 +46,8 @@ public class ProductObject {
     private Timestamp inserted_at;
     @SerializedName("updated_at")
     private Timestamp updated_at;
+    @SerializedName("product_images")
+    private List<String> product_images = new ArrayList<>();
 
     public ProductObject() {
         super();
@@ -75,7 +79,6 @@ public class ProductObject {
         this.costPrice = costPrice;
         this.inserted_at = inserted_at;
         this.updated_at = updated_at;
-
     }
 
     public String getMainCategory() {
@@ -222,12 +225,20 @@ public class ProductObject {
         this.costPrice = costPrice;
     }
 
+    public List<String> getProduct_images() {
+        return product_images;
+    }
+
+    public void setProduct_images(List<String> product_images) {
+        this.product_images = product_images;
+    }
+
     @Override
     public String toString() {
         return "ProductObject [productId=" + productId + ", subtitle=" + subtitle + ", description=" + description
                 + ", users_id=" + users_id + ", condition_id=" + condition_id + ", delivery_format_id="
                 + delivery_format_id + ", payment_option_id=" + payment_option_id + ", selling_format_id="
                 + selling_format_id + ", currency = " + currency + ", quantity=" + quantity
-                + ", sellingPrice=" + sellingPrice + ", costPrice = " + costPrice + ", inserted_at=" + inserted_at + ", updated_at=" + updated_at + "]";
+                + ", sellingPrice=" + sellingPrice + ", costPrice = " + costPrice + " images=(" + product_images + "), inserted_at=" + inserted_at + ", updated_at=" + updated_at + "]";
     }
 }

@@ -9,6 +9,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import com.hosteloha.R;
+import com.hosteloha.app.service.HostelohaService;
+import com.hosteloha.app.utils.HostelohaUtils;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,12 +27,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
-import com.hosteloha.R;
-import com.hosteloha.app.service.HostelohaService;
-import com.hosteloha.app.utils.HostelohaUtils;
-
 public class MainActivity extends AppCompatActivity {
 
     private String TAG = MainActivity.class.getSimpleName();
@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     private HostelohaService mHostelohaService = null;
 
     private boolean doubleBackToExitPressedOnce = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,11 +97,11 @@ public class MainActivity extends AppCompatActivity {
         switch (currentNightMode) {
             case Configuration.UI_MODE_NIGHT_NO:
                 // Night mode is not active, we're using the light theme
-                HostelohaUtils.showSnackBarNotification(this,"Light Theme enabled");
+                HostelohaUtils.showSnackBarNotification(this, "Light Theme enabled");
                 break;
             case Configuration.UI_MODE_NIGHT_YES:
                 // Night mode is active, we're using dark theme
-                HostelohaUtils.showSnackBarNotification(this,"Dark Theme enabled");
+                HostelohaUtils.showSnackBarNotification(this, "Dark Theme enabled");
                 break;
         }
     }

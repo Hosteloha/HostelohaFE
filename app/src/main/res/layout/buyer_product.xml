@@ -33,11 +33,12 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_menu_gallery"
             android:background="@drawable/imageview_border"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/product_title"
-            app:srcCompat="@android:drawable/ic_menu_report_image" />
+            app:layout_constraintTop_toBottomOf="@+id/product_title" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/share_Btn"
@@ -45,6 +46,7 @@
             android:layout_height="60dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:backgroundTint="@color/fab_icon_bg"
             android:clickable="true"
             app:layout_constraintEnd_toStartOf="@+id/favorite_btn"
             app:layout_constraintHorizontal_bias="0.5"
@@ -57,6 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/fab_icon_bg"
             android:clickable="true"
             app:layout_constraintBottom_toBottomOf="@+id/share_Btn"
             app:layout_constraintEnd_toEndOf="parent"

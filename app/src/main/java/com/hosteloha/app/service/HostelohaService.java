@@ -2,6 +2,7 @@ package com.hosteloha.app.service;
 
 import android.app.Service;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.IBinder;
 
 import com.hosteloha.app.beans.AuthenticationTokenJWT;
@@ -11,8 +12,11 @@ import com.hosteloha.app.data.AllProductsSubject;
 import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.retroapi.ApiUtil;
 import com.hosteloha.app.retroapi.CallbackWithRetry;
+import com.hosteloha.app.utils.AppFireDataBase;
+import com.hosteloha.app.utils.AppFireStorage;
 import com.hosteloha.app.utils.HostelohaUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -45,6 +49,7 @@ public class HostelohaService extends Service {
         getSplashData();
     }
 
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return START_STICKY;
@@ -61,20 +66,19 @@ public class HostelohaService extends Service {
         ApiUtil.getServiceClass().getAuthenticationToken(defaultUser).enqueue(new CallbackWithRetry<AuthenticationTokenJWT>() {
             @Override
             public void onResponse(Call<AuthenticationTokenJWT> call, Response<AuthenticationTokenJWT> response) {
+                HostelohaLog.debugOut("[REQ] getAuthenticationToken  =====> isSuccessful  : " + response.isSuccessful());
                 if (response.isSuccessful()) {
                     AuthenticationTokenJWT authenticationTokenJWT = response.body();
                     mDefaultUserJWT = "Bearer " + authenticationTokenJWT.getJwt();
                     getSplashData();
                     req_getAllProducts();
-                    HostelohaLog.debugOut("user id :  " + authenticationTokenJWT.getUserId() + "  JWT " + authenticationTokenJWT.getJwt());
-                } else {
-                    HostelohaLog.debugOut(" ===>  Default user response not Successful");
                 }
             }
 
             @Override
-            public void onFailure(Call<AuthenticationTokenJWT> call, Throwable t) {
-                HostelohaLog.debugOut(" ===> autenticateDefaultUser response Failed");
+            public void onFailure(Call<AuthenticationTokenJWT> call, Throwable throwable) {
+                super.onFailure(call, throwable);
+                HostelohaLog.debugOut("[REQ] getAuthenticationToken ===>  onFailure");
             }
         });
     }
@@ -87,7 +91,7 @@ public class HostelohaService extends Service {
         ApiUtil.getServiceClass().getCategoryMapList(mDefaultUserJWT).enqueue(new CallbackWithRetry<Map<String, Set<String>>>() {
             @Override
             public void onResponse(Call<Map<String, Set<String>>> call, Response<Map<String, Set<String>>> response) {
-                HostelohaLog.debugOut("  categoriesMap  " + response.isSuccessful());
+                HostelohaLog.debugOut("[REQ] getCategoryMapList  =====> isSuccessful  : " + response.isSuccessful());
                 if (response.isSuccessful()) {
                     Map<String, Set<String>> categoriesMap = response.body();
                     if (categoriesMap != null)
@@ -96,30 +100,55 @@ public class HostelohaService extends Service {
             }
 
             @Override
-            public void onFailure(Call<Map<String, Set<String>>> call, Throwable t) {
-                HostelohaLog.debugOut(" getSplashdata ===>  onFailure  ");
+            public void onFailure(Call<Map<String, Set<String>>> call, Throwable throwable) {
+                super.onFailure(call, throwable);
+                HostelohaLog.debugOut("[REQ] getCategoryMapList ===>  onFailure");
             }
         });
     }
 
     public void req_getAllProducts() {
-        ApiUtil.getServiceClass().getAllProcducts(mDefaultUserJWT).enqueue(new CallbackWithRetry<List<ProductObject>>() {
+        ApiUtil.getServiceClass().getAllProducts(mDefaultUserJWT).enqueue(new CallbackWithRetry<List<ProductObject>>() {
             @Override
             public void onResponse(Call<List<ProductObject>> call, Response<List<ProductObject>> response) {
-                HostelohaLog.debugOut(" getAllProducts  =====> ......isSuccessful  " + response.isSuccessful());
+                HostelohaLog.debugOut("[REQ] getAllProducts  =====> isSuccessful  : " + response.isSuccessful());
                 if (response.isSuccessful()) {
                     List<ProductObject> mArrayList = response.body();
-                    HostelohaLog.debugOut("response products list  count " + mArrayList.size());
-                    if (mArrayList != null) {
-                        AllProductsSubject.getAllProductsSubject().setProductsList(mArrayList);
+                    HostelohaLog.debugOut("[REQ] products_list size ::  " + mArrayList.size());
+
+                    // Getting from firebase - just temporary code to set image gallery
+                    Map<String, ArrayList<String>> productImagesList = AppFireDataBase.getProductImagesMap();
+                    for (ProductObject product : mArrayList) {
+                        String productID = String.valueOf(product.getProductId());
+                        if (productImagesList.containsKey(productID)) {
+                            ArrayList<String> productImages = productImagesList.get(productID);
+                            product.setProduct_images(productImages);
+                        } else {
+                            //Default URL or glide will take care with placeholder
+                            product.setProduct_images(new ArrayList<String>());
+                        }
                     }
+
+                    AllProductsSubject.getAllProductsSubject().setProductsList(mArrayList);
                 }
             }
 
             @Override
-            public void onFailure(Call<List<ProductObject>> call, Throwable t) {
-                HostelohaLog.debugOut("error loading allProducts from server");
+            public void onFailure(Call<List<ProductObject>> call, Throwable throwable) {
+                HostelohaLog.debugOut("[REQ] getAllProducts ===>  onFailure");
+                super.onFailure(call, throwable);
             }
         });
+    }
+
+    /**
+     * To upload the product gallery to the server.
+     *
+     * @param filesURIList list of file URI to upload.
+     * @param productID    product ID, to link the file URI
+     */
+    public void uploadProductImagesToFire(final List<Uri> filesURIList, final int productID) {
+        ArrayList<String> generatedURlList = AppFireStorage.uploadFileToFirebase(filesURIList, productID, getApplicationContext());
+//        AppFireDataBase.addUrlList(String.valueOf(productID), generatedURlList);
     }
 }
