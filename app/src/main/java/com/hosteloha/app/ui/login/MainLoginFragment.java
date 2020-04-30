@@ -377,11 +377,15 @@ public class MainLoginFragment extends Fragment {
     };
 
     private void navigateToHomeScreen(String viewType) {
-        boolean isPreviousViewBuyer = (viewType.equals(Define.VIEW_BUYER));
-        if (isPreviousViewBuyer) {
-            navController.navigate(R.id.action_mainLoginFragment_to_nav_buyer);
-        } else {
-            navController.navigate(R.id.action_mainLoginFragment_to_nav_seller);
+        if(Define.isPreviousViewCheckEnabled){
+            boolean isPreviousViewBuyer = (viewType.equals(Define.VIEW_BUYER));
+            if (isPreviousViewBuyer) {
+                navController.navigate(MainLoginFragmentDirections.actionMainLoginFragmentToNavBuyer());
+            } else {
+                navController.navigate(MainLoginFragmentDirections.actionMainLoginFragmentToNavSeller());
+            }
+        }else{
+            navController.navigate(MainLoginFragmentDirections.actionMainLoginFragmentToNavHome());
         }
     }
 

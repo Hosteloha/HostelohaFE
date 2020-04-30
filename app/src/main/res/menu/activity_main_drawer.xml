@@ -39,5 +39,4 @@
                 android:title="@string/menu_app_info" />
         </menu>
     </item>
-
 </menu>

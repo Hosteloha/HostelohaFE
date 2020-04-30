@@ -126,55 +126,25 @@
                 </androidx.cardview.widget.CardView>
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chip4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:layout_gravity="center_horizontal"
                     android:text="Me as a Buyer" />
 
-                <androidx.cardview.widget.CardView style="@style/scrollViewBasedCardDesign">
+                <include android:id="@+id/buyer_acc_items"
+                    layout="@layout/fragment_acc_inc_buyer_card"/>
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="20dp"
-                        android:background="?android:attr/selectableItemBackground">
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Me as a Seller" />
 
-                        <ImageView
-                            android:id="@+id/icon_watchlist"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_alignParentStart="true"
-                            android:layout_centerVertical="true"
-                            android:layout_gravity="start|center_vertical"
-                            android:adjustViewBounds="true"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/ic_keyboard_arrow_right_24px"
-                            android:tint="@color/colorPrimary" />
+                <include android:id="@+id/seller_acc_items"
+                    layout="@layout/fragment_acc_inc_seller_card"/>
 
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:layout_gravity="end|center_vertical"
-                            android:adjustViewBounds="true"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/ic_keyboard_arrow_right_24px"
-                            android:tint="@color/colorPrimary" />
-
-                        <TextView
-                            style="@style/modifiedEditText"
-                            android:singleLine="true"
-                            android:layout_toRightOf="@+id/icon_watchlist"
-                            android:text="Watch List"
-                            android:layout_marginStart="5dp"
-                            android:layout_centerVertical="true"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-                    </RelativeLayout>
-                </androidx.cardview.widget.CardView>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </LinearLayout>

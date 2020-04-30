@@ -6,14 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-
 import com.hosteloha.R;
 import com.hosteloha.app.service.HostelohaService;
 import com.hosteloha.app.utils.Define;
 import com.hosteloha.app.utils.HostelohaUtils;
+
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 public class HostelohaMain extends Fragment {
 
@@ -31,18 +31,19 @@ public class HostelohaMain extends Fragment {
             public void run() {
                 final NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
                 if (HostelohaUtils.getUserLoginInfo(getContext())) {
-
-                    String viewType = HostelohaUtils.getPreviousViewType(getContext());
-                    boolean isPreviousViewBuyer = (viewType.equals(Define.VIEW_BUYER));
-                    navController.navigate(R.id.action_hostelOhaMain_to_nav_home);
-
-//                    if (isPreviousViewBuyer) {
-//                        navController.navigate(R.id.action_hostelOhaMain_to_nav_buyer);
-//                    } else {
-//                        navController.navigate(R.id.action_hostelOhaMain_to_nav_seller);
-//                    }
+                    if (Define.isPreviousViewCheckEnabled) {
+                        String viewType = HostelohaUtils.getPreviousViewType(getContext());
+                        boolean isPreviousViewBuyer = (viewType.equals(Define.VIEW_BUYER));
+                        if (isPreviousViewBuyer) {
+                            navController.navigate(HostelohaMainDirections.actionHostelOhaMainToNavBuyer());
+                        } else {
+                            navController.navigate(HostelohaMainDirections.actionHostelOhaMainToNavSeller());
+                        }
+                    } else {
+                        navController.navigate(HostelohaMainDirections.actionHostelOhaMainToNavHome());
+                    }
                 } else {
-                    navController.navigate(R.id.action_hostelOhaMain_to_mainLoginFragment);
+                    navController.navigate(HostelohaMainDirections.actionHostelOhaMainToMainLoginFragment());
                 }
             }
         }, 1000);

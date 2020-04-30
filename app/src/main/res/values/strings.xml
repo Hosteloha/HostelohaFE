@@ -44,6 +44,14 @@
     <!-- Product -->
     <string name="product_discount_value">%1$d%%</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="fragment_purchases">My Purchases</string>
+    <string name="fragment_bids">My Bids</string>
+    <string name="fragment_watchlist">My Watchlist</string>
+    <string name="fragment_analytics">Seller Analytics</string>
+    <string name="fragment_edit_details">Account Details</string>
+    <string name="fragment_edit_address">Address Details</string>
+    <string name="fragment_reviews">My Reviews</string>
+    <string name="fragment_drafts">To be Published</string>
 
     <string-array name="product_categories">
         <item>Books</item>
