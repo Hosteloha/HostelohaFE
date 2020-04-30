@@ -60,6 +60,16 @@
         <item name="cardElevation">10dp</item>
     </style>
 
+    <style name="multipleViewBasedCardDesign">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="cardCornerRadius">10dp</item>
+        <item name="cardElevation">10dp</item>
+    </style>
+
     <style name="AlertDialogTheme">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -94,6 +104,16 @@
         <item name="rippleColor">@color/colorAccent</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">14sp</item>
+    </style>
+    t
+
+    <style name="customMaterialButton_Outlined" parent="Widget.MaterialComponents.Button.OutlinedButton.Icon">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="theme">@style/Theme.MaterialComponents</item>
+        <item name="rippleColor">@color/colorRippleColor</item>
+        <item name="strokeColor">@color/colorPrimary</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="image_window_style">

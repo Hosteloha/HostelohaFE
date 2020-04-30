@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean doubleBackToExitPressedOnce = false;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,9 +56,7 @@ public class MainActivity extends AppCompatActivity {
         final NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_seller, R.id.nav_buyer, R.id.nav_settings,
-                R.id.nav_payments, R.id.nav_account, R.id.nav_about)
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home)
                 .setDrawerLayout(drawer)
                 .build();
 
@@ -73,18 +72,20 @@ public class MainActivity extends AppCompatActivity {
                     drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                     toolbar.setVisibility(View.VISIBLE);
                     // To remove the items from the side bar navigation view
-                    navigationView.getMenu().findItem(R.id.nav_home).setVisible(false);
+//                    navigationView.getMenu().findItem(R.id.nav_home).setVisible(false);
 //                    navigationView.getMenu().findItem(R.id.nav_buyer).setVisible(false);
                     mAppBarConfiguration.getDrawerLayout().removeView(findViewById(R.id.nav_seller));
                 } else if (destination.getId() == R.id.nav_buyer) {
                     drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                     toolbar.setVisibility(View.VISIBLE);
                     // To remove the items from the side bar navigation view
-                    navigationView.getMenu().findItem(R.id.nav_home).setVisible(false);
+//                    navigationView.getMenu().findItem(R.id.nav_home).setVisible(false);
 //                    navigationView.getMenu().findItem(R.id.nav_seller).setVisible(false);
                 } else if (destination.getId() == R.id.nav_home) {
                     //Hiding the action when reaching the home screen since it cannot go back.
-                    getSupportActionBar().hide();
+                    drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                    toolbar.setVisibility(View.VISIBLE);
+//                    getSupportActionBar().hide();
                 }
             }
         });

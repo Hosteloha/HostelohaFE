@@ -176,7 +176,7 @@ public class SellerFragment extends Fragment {
         chip.setText(text);
         chip.setCloseIconVisible(true);
         chip.setTextAppearance(R.style.modifiedEditText);
-        chip.setChipIconTintResource(R.color.greyish);
+        chip.setChipIconTintResource(R.color.primary500);
         if (isHeirarchyEnabled) {
             if (chipGroup != null) {
                 if (chipGroup.getChildCount() == 0) {

@@ -34,11 +34,13 @@ public class HostelohaMain extends Fragment {
 
                     String viewType = HostelohaUtils.getPreviousViewType(getContext());
                     boolean isPreviousViewBuyer = (viewType.equals(Define.VIEW_BUYER));
-                    if (isPreviousViewBuyer) {
-                        navController.navigate(R.id.action_hostelOhaMain_to_nav_buyer);
-                    } else {
-                        navController.navigate(R.id.action_hostelOhaMain_to_nav_seller);
-                    }
+                    navController.navigate(R.id.action_hostelOhaMain_to_nav_home);
+
+//                    if (isPreviousViewBuyer) {
+//                        navController.navigate(R.id.action_hostelOhaMain_to_nav_buyer);
+//                    } else {
+//                        navController.navigate(R.id.action_hostelOhaMain_to_nav_seller);
+//                    }
                 } else {
                     navController.navigate(R.id.action_hostelOhaMain_to_mainLoginFragment);
                 }

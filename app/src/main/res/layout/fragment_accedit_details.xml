@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <androidx.cardview.widget.CardView style="@style/scrollViewBasedCardDesign">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:focusableInTouchMode="false"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <ImageView
+                        android:id="@+id/profile_image"
+                        android:layout_width="84dp"
+                        android:layout_height="84dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="20dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_menu_account_circle"
+                        android:tint="@color/colorPrimary" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            style="@style/modifiedEditText"
+                            android:hint="Name"
+                            android:singleLine="true"
+                            android:text="Tony Stark" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            style="@style/modifiedEditText"
+                            android:hint="Phone number"
+                            android:singleLine="true"
+                            android:enabled="false"
+                            android:text="+91 7708567657" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            style="@style/modifiedEditText"
+                            android:hint="Email"
+                            android:singleLine="true"
+                            android:text="tonystark@gmail.com" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/saveAccountDetails"
+                        style="@style/customMaterialButton_Outlined"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="Save Details"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+</layout>

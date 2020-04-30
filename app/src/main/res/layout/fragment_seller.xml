@@ -50,7 +50,7 @@
                 android:enabled="false"
                 android:padding="8dp"
                 android:text="Previous"
-                android:textColor="@color/whiteTextColor"
+                android:textColor="@color/primary50"
                 android:visibility="gone" />
 
             <Button
@@ -61,7 +61,7 @@
                 android:background="@drawable/centre_button"
                 android:padding="8dp"
                 android:text="Submit"
-                android:textColor="@color/whiteTextColor"/>
+                android:textColor="@color/primary50"/>
         </LinearLayout>
     </LinearLayout>
 

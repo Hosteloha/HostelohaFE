@@ -19,7 +19,7 @@
         android:paddingTop="16dp"
         android:contentDescription="@string/nav_header_desc"
         android:scaleType="fitXY"
-        android:tint="@color/white"
+        android:tint="@color/primary50"
         android:src="@drawable/ic_menu_account_circle" />
 
     <TextView
