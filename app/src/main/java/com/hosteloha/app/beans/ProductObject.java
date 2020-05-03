@@ -19,6 +19,8 @@ public class ProductObject {
     @SerializedName("category_id")
     private int category_id = 1;
     @SerializedName("category")
+    private CategorySet categorySet;
+    @SerializedName("category_name")
     private String mainCategory = "Beauty";
     @SerializedName("subcategory1")
     private String subCategory1 = "FaceCreams";
@@ -46,8 +48,8 @@ public class ProductObject {
     private Timestamp inserted_at;
     @SerializedName("updated_at")
     private Timestamp updated_at;
-    @SerializedName("product_images")
-    private List<String> product_images = new ArrayList<>();
+    @SerializedName("productimages")
+    private List<ImageUrl> product_images = new ArrayList<>();
 
     public ProductObject() {
         super();
@@ -226,11 +228,21 @@ public class ProductObject {
     }
 
     public List<String> getProduct_images() {
-        return product_images;
+        List<String> imageUrls = new ArrayList<>();
+        for (Object obj : product_images)
+            imageUrls.add(obj.toString());
+        return imageUrls;
     }
 
     public void setProduct_images(List<String> product_images) {
-        this.product_images = product_images;
+        if (product_images == null)
+            return;
+
+        ArrayList<ImageUrl> productImages = new ArrayList<>();
+        for (int i = 0; i < product_images.size(); i++) {
+            productImages.add(new ImageUrl(product_images.get(i)));
+        }
+        this.product_images = productImages;
     }
 
     @Override
@@ -239,6 +251,6 @@ public class ProductObject {
                 + ", users_id=" + users_id + ", condition_id=" + condition_id + ", delivery_format_id="
                 + delivery_format_id + ", payment_option_id=" + payment_option_id + ", selling_format_id="
                 + selling_format_id + ", currency = " + currency + ", quantity=" + quantity
-                + ", sellingPrice=" + sellingPrice + ", costPrice = " + costPrice + " images=(" + product_images + "), inserted_at=" + inserted_at + ", updated_at=" + updated_at + "]";
+                + ", sellingPrice=" + sellingPrice + ", costPrice = " + costPrice + " images=(" + getProduct_images() + "), CategorySet= " + categorySet.toString() + ", inserted_at=" + inserted_at + ", updated_at=" + updated_at + "]";
     }
 }
