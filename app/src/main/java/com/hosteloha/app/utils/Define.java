@@ -1,6 +1,9 @@
 package com.hosteloha.app.utils;
 
 public class Define {
+
+    // To enable disable the previous view check configuration
+    public static boolean isPreviousViewCheckEnabled = false;
     public static final int REQUEST_CODE_CAMERA_PERMISSION = 100;
     public static int REQUEST_CODE_READ_STORAGE_PERMISSION = REQUEST_CODE_CAMERA_PERMISSION + 1;
     public static int REQUEST_CODE_ACTION_IMAGE_CAPTURE = REQUEST_CODE_READ_STORAGE_PERMISSION + 1;

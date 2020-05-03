@@ -9,9 +9,7 @@
         android:id="@+id/nav_home"
         android:name="com.hosteloha.app.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home">
-
-    </fragment>
+        tools:layout="@layout/fragment_home"></fragment>
 
     <fragment
         android:id="@+id/nav_seller"
@@ -46,12 +44,6 @@
         tools:layout="@layout/fragment_payments" />
 
     <fragment
-        android:id="@+id/nav_account"
-        android:name="com.hosteloha.app.ui.account.AccountFragment"
-        android:label="@string/menu_user_account"
-        tools:layout="@layout/fragment_account" />
-
-    <fragment
         android:id="@+id/nav_about"
         android:name="com.hosteloha.app.ui.about.AboutFragment"
         android:label="@string/menu_app_info"
@@ -81,6 +73,15 @@
             <action
                 android:id="@+id/action_hostelOhaMain_to_nav_seller"
                 app:destination="@id/nav_seller"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_left"
+                app:popExitAnim="@anim/slide_out_right"
+                app:popUpTo="@+id/hostelOhaMain"
+                app:popUpToInclusive="true" />
+            <action
+                android:id="@+id/action_hostelOhaMain_to_nav_home"
+                app:destination="@id/nav_home"
                 app:enterAnim="@anim/slide_in_right"
                 app:exitAnim="@anim/slide_out_left"
                 app:popEnterAnim="@anim/slide_in_left"
@@ -127,6 +128,15 @@
                 app:popExitAnim="@anim/slide_out_right"
                 app:popUpTo="@+id/mainLoginFragment"
                 app:popUpToInclusive="true" />
+            <action
+                android:id="@+id/action_mainLoginFragment_to_nav_home"
+                app:destination="@id/nav_home"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_left"
+                app:popExitAnim="@anim/slide_out_right"
+                app:popUpTo="@+id/mainLoginFragment"
+                app:popUpToInclusive="true" />
         </fragment>
         <fragment
             android:id="@+id/signUpFragment"
@@ -144,5 +154,107 @@
                 app:popUpToInclusive="true" />
         </fragment>
     </navigation>
+    <fragment
+        android:id="@+id/accountViewDrafts"
+        android:name="com.hosteloha.app.ui.account.AccountViewDrafts"
+        android:label="@string/fragment_drafts"
+        tools:layout="@layout/fragment_accview_drafts" />
+    <fragment
+        android:id="@+id/accountViewReviews"
+        android:name="com.hosteloha.app.ui.account.AccountViewReviews"
+        android:label="@string/fragment_reviews"
+        tools:layout="@layout/fragment_accview_reviews" />
+    <fragment
+        android:id="@+id/accountEditAddress"
+        android:name="com.hosteloha.app.ui.account.AccountEditAddress"
+        android:label="@string/fragment_edit_address"
+        tools:layout="@layout/fragment_accedit_address" />
+    <fragment
+        android:id="@+id/accFragmentEditDetails"
+        android:name="com.hosteloha.app.ui.account.AccountEditDetails"
+        android:label="@string/fragment_edit_details"
+        tools:layout="@layout/fragment_accedit_details" />
+    <fragment
+        android:id="@+id/accountViewAnalytics"
+        android:name="com.hosteloha.app.ui.account.AccountViewAnalytics"
+        android:label="@string/fragment_analytics"
+        tools:layout="@layout/fragment_accview_analytics" />
+    <fragment
+        android:id="@+id/accountViewWatchList"
+        android:name="com.hosteloha.app.ui.account.AccountViewWatchList"
+        android:label="@string/fragment_watchlist"
+        tools:layout="@layout/fragment_accview_watchlist" />
+    <fragment
+        android:id="@+id/nav_account"
+        android:name="com.hosteloha.app.ui.account.AccountFragment"
+        android:label="@string/menu_user_account"
+        tools:layout="@layout/fragment_account">
+        <action
+            android:id="@+id/action_nav_account_to_accountEditDetails"
+            app:destination="@id/accFragmentEditDetails"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_nav_account_to_accountEditAddress"
+            app:destination="@id/accountEditAddress"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_nav_account_to_accountViewBids"
+            app:destination="@id/accountViewBids"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_nav_account_to_accountViewPurchases"
+            app:destination="@id/accountViewPurchases"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_nav_account_to_accountViewDrafts"
+            app:destination="@id/accountViewDrafts"
 
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_nav_account_to_accountViewReviews"
+            app:destination="@id/accountViewReviews"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_nav_account_to_accountViewAnalytics"
+            app:destination="@id/accountViewAnalytics"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_nav_account_to_accountViewWatchList"
+            app:destination="@id/accountViewWatchList"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/accountViewBids"
+        android:name="com.hosteloha.app.ui.account.AccountViewBids"
+        android:label="@string/fragment_bids"
+        tools:layout="@layout/fragment_accview_bids" />
+    <fragment
+        android:id="@+id/accountViewPurchases"
+        android:name="com.hosteloha.app.ui.account.AccountViewPurchases"
+        android:label="@string/fragment_purchases"
+        tools:layout="@layout/fragment_accview_purchases" />
 </navigation>

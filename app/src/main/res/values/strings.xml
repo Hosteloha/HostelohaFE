@@ -32,6 +32,27 @@
     <string name="snackbar_exit_button">EXIT</string>
 
     <!-- Static data -->
+    <string name="otp_sent_variable_phone">OTP Sent to %1$s</string>
+
+    <string name="channel_name">hosteloha_notification</string>
+
+    <!-- Authentication Page -->
+    <string name="channel_description">hosteloha_chanel_description</string>
+    <string name="product_cp_value">&#160;₹%1$d&#160;</string>
+    <string name="product_sp_value">₹%1$d</string>
+
+    <!-- Product -->
+    <string name="product_discount_value">%1$d%%</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="fragment_purchases">My Purchases</string>
+    <string name="fragment_bids">My Bids</string>
+    <string name="fragment_watchlist">My Watchlist</string>
+    <string name="fragment_analytics">Seller Analytics</string>
+    <string name="fragment_edit_details">Account Details</string>
+    <string name="fragment_edit_address">Address Details</string>
+    <string name="fragment_reviews">My Reviews</string>
+    <string name="fragment_drafts">To be Published</string>
+
     <string-array name="product_categories">
         <item>Books</item>
         <item>Business &amp; Industrial</item>
@@ -52,6 +73,7 @@
         <item>Computers/Tablets &amp; Networking</item>
     </string-array>
 
+    <!-- TODO: Remove or change this placeholder text -->
     <string-array name="product_condition">
         <item>Brand New</item>
         <item>Like New</item>
@@ -59,15 +81,4 @@
         <item>Good</item>
         <item>Acceptable</item>
     </string-array>
-
-    <!-- Authentication Page -->
-    <string name="otp_sent_variable_phone">OTP Sent to %1$s</string>
-    <string name="channel_name">hosteloha_notification</string>
-    <string name="channel_description">hosteloha_chanel_description</string>
-
-    <!-- Product -->
-    <string name="product_cp_value">&#160;₹%1$d&#160;</string>
-    <string name="product_sp_value">₹%1$d</string>
-
-    <string name="product_discount_value">%1$d%%</string>
 </resources>

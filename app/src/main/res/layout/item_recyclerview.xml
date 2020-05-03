@@ -24,7 +24,7 @@
             android:background="@drawable/ic_local_offer_24px"
             android:gravity="center"
             android:text="@string/product_discount_value"
-            android:textColor="@color/white"
+            android:textColor="@color/primary50"
             android:textSize="9sp"
             android:textStyle="bold" />
 
@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
                 android:text="50"
-                android:textColor="@color/mine_shaft" />
+                android:textColor="@color/primary700" />
 
 
         </LinearLayout>
