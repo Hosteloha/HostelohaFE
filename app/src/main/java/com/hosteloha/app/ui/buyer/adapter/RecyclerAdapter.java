@@ -7,19 +7,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.hosteloha.R;
 import com.hosteloha.app.beans.ProductObject;
-import com.hosteloha.app.data.AllProductsSubject;
+import com.hosteloha.app.list.data.AllProductsSubject;
 import com.hosteloha.app.log.HostelohaLog;
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder> {
 
+    private static final int FOOTER_VIEW = 1;
     List<ProductObject> mAllProducts;
     private OnItemClickListener mItemClickListener;
     private Context mContext;
@@ -48,6 +49,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
+        if (viewType == FOOTER_VIEW)
+            return null;
         Context context = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
 

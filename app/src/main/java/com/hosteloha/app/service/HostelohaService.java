@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.IBinder;
 
+import androidx.annotation.Nullable;
+
 import com.hosteloha.app.beans.AuthenticationTokenJWT;
 import com.hosteloha.app.beans.ProductObject;
 import com.hosteloha.app.beans.UserAuthentication;
-import com.hosteloha.app.data.AllProductsSubject;
+import com.hosteloha.app.list.data.AllProductsSubject;
 import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.retroapi.ApiUtil;
 import com.hosteloha.app.retroapi.CallbackWithRetry;
@@ -21,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import androidx.annotation.Nullable;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -115,6 +116,7 @@ public class HostelohaService extends Service {
                 if (response.isSuccessful()) {
                     List<ProductObject> mArrayList = response.body();
                     HostelohaLog.debugOut("[REQ] products_list size ::  " + mArrayList.size());
+                    HostelohaLog.debugOut("[REQ] products_list ---> " + mArrayList.get(0).toString());
 
                     // Getting from firebase - just temporary code to set image gallery
                     Map<String, ArrayList<String>> productImagesList = AppFireDataBase.getProductImagesMap();

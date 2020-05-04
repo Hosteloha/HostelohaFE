@@ -6,18 +6,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.hosteloha.R;
-import com.hosteloha.app.beans.ProductObject;
-import com.hosteloha.app.data.AllProductsSubject;
-import com.hosteloha.databinding.FragmentBuyerProductBinding;
-
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+
+import com.bumptech.glide.Glide;
+import com.hosteloha.R;
+import com.hosteloha.app.beans.ProductObject;
+import com.hosteloha.app.list.data.AllProductsSubject;
+import com.hosteloha.databinding.FragmentBuyerProductBinding;
+
+import java.util.List;
 
 
 public class BuyerProductFragment extends Fragment {
