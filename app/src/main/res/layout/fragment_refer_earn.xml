@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:padding="20dp"
+        tools:context=".app.ui.referral.ReferEarnFragment">
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/ic_user_community"
+            android:adjustViewBounds="true"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginBottom="20dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:text="Earn Hosto cash worth ₹50" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:text="@string/fragment_refer_description"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/shareNowButton"
+            style="@style/customMaterialButton_Outlined"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center"
+            android:text="Share"
+            app:icon="@drawable/ic_share_dt"
+            app:iconTint="@color/colorAccent" />
+    </LinearLayout>
+</layout>

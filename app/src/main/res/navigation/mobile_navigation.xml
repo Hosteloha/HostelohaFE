@@ -15,7 +15,7 @@
         android:id="@+id/nav_seller"
         android:name="com.hosteloha.app.ui.seller.SellerFragment"
         android:label="@string/menu_seller"
-        tools:layout="@layout/fragment_seller" />
+        tools:layout="@layout/fragment_seller"/>
 
     <fragment
         android:id="@+id/nav_buyer"
@@ -257,4 +257,9 @@
         android:name="com.hosteloha.app.ui.account.AccountViewPurchases"
         android:label="@string/fragment_purchases"
         tools:layout="@layout/fragment_accview_purchases" />
+    <fragment
+        android:id="@+id/nav_share"
+        android:name="com.hosteloha.app.ui.referral.ReferEarnFragment"
+        android:label="Refer &amp; Earn"
+        tools:layout="@layout/fragment_refer_earn" />
 </navigation>
