@@ -3,36 +3,68 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/group1"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_home"
+            android:icon="@drawable/ic_home_dt"
             android:title="@string/menu_home" />
 
         <item
             android:id="@+id/nav_seller"
-            android:icon="@drawable/ic_menu_monetization_on"
+            android:icon="@drawable/ic_monetization_on_dt"
             android:title="@string/menu_seller" />
         <item
             android:id="@+id/nav_buyer"
-            android:icon="@drawable/ic_menu_shopping_cart"
+            android:icon="@drawable/ic_shopping_cart_dt"
             android:title="@string/menu_buyer" />
-        <item
-            android:id="@+id/nav_settings"
-            android:icon="@drawable/ic_menu_build"
-            android:title="@string/menu_app_settings" />
-        <item
-            android:id="@+id/nav_payments"
-            android:icon="@drawable/ic_menu_payment"
-            android:title="@string/menu_payment_info" />
+
     </group>
 
-    <item android:title="@string/menu_more">
+    <group
+        android:id="@+id/group2"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_account"
+            android:icon="@drawable/ic_account_circle_dt"
+            android:title="@string/menu_user_account" />
+    </group>
+
+    <group
+        android:id="@+id/group3"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_rate"
+            android:icon="@drawable/ic_rating_dt"
+            android:title="@string/menu_rate" />
+        <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/ic_share_dt"
+            android:title="@string/menu_share" />
+        <item
+            android:id="@+id/nav_legal"
+            android:icon="@drawable/ic_menu_security_dt"
+            android:title="@string/menu_legal" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_exit_to_app_dt"
+            android:title="@string/menu_logout"/>
+    </group>
+
+    <!-- Unused MENU options-->
+    <item
+        android:title="@string/menu_more"
+        android:visible="false">
         <menu>
             <item
-                android:id="@+id/nav_account"
-                android:icon="@drawable/ic_menu_account_circle"
-                android:title="@string/menu_user_account" />
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_menu_build"
+                android:title="@string/menu_app_settings" />
+            <item
+                android:id="@+id/nav_payments"
+                android:icon="@drawable/ic_menu_payment"
+                android:title="@string/menu_payment_info" />
             <item
                 android:id="@+id/nav_about"
                 android:icon="@drawable/ic_menu_info"

@@ -6,7 +6,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/primary700"
+        android:background="@color/colorPrimary"
         tools:context="com.hosteloha.app.MainActivity">
 
         <TextView
