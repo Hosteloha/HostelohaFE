@@ -18,17 +18,19 @@ public class ComparatorUtils {
                 return -1;
         }
     };
+
     private static Comparator<ProductObject> mCostDescendingComparator = new Comparator<ProductObject>() {
         @Override
         public int compare(ProductObject compare1, ProductObject compare2) {
             if (compare1.getSellingPrice() == compare2.getSellingPrice())
                 return 0;
-            else if (compare1.getSellingPrice() > compare2.getSellingPrice())
+            else if (compare1.getSellingPrice() < compare2.getSellingPrice())
                 return 1;
             else
                 return -1;
         }
     };
+
     private static Comparator<ProductObject> mProductTitleComparator = new Comparator<ProductObject>() {
         @Override
         public int compare(ProductObject compare1, ProductObject compare2) {
@@ -41,6 +43,7 @@ public class ComparatorUtils {
                 return compare1.getTitle().compareToIgnoreCase(compare2.getTitle());
         }
     };
+
     private static Comparator<ProductObject> mProductComparator = new Comparator<ProductObject>() {
         @Override
         public int compare(ProductObject compare1, ProductObject compare2) {
@@ -55,6 +58,7 @@ public class ComparatorUtils {
 
     public static Comparator getComparator(SortingType sortingType) {
         Comparator tempComparator = mCostAscendingComparator;
+
         switch (sortingType) {
             case TITLE:
                 tempComparator = mProductTitleComparator;
@@ -62,7 +66,7 @@ public class ComparatorUtils {
             case LATEST:
                 //To Do
                 break;
-            case RELEVANCE:
+            case RELEVANT:
                 //To Do
                 break;
             case POPULARITY:
