@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.hosteloha">
-
+    <!-- Permission to upload instant product images using camera -->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_hosteloha_v2"
@@ -10,16 +10,6 @@
         android:roundIcon="@mipmap/ic_hosteloha_v2"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <service
-            android:name=".app.service.HostelohaService"
-            android:enabled="true"
-            android:exported="true"
-            android:persistent="true">
-            <intent-filter>
-                <action android:name="com.hosteloha.app.service.HostelOhaService" />
-            </intent-filter>
-        </service>
 
         <activity
             android:name=".app.MainActivity"
@@ -32,18 +22,23 @@
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-    </application>
-
-    <!--Permission to upload instant product images using camera -->
-    <uses-permission android:name="android.permission.CAMERA" />
-    <!--Permission to save and retrieve images -->
+        <service
+            android:name=".app.service.HostelohaService"
+            android:enabled="true"
+            android:exported="true"
+            android:persistent="true">
+            <intent-filter>
+                <action android:name="com.hosteloha.app.service.HostelOhaService" />
+            </intent-filter>
+        </service>
+    </application> <!-- Permission to save and retrieve images -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <!--Permission to hit the API. -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- Permission to hit the API. -->
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+
 </manifest>

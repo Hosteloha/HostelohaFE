@@ -35,7 +35,7 @@
                                 android:layout_width="377dp"
                                 android:layout_height="252dp"
                                 android:scaleType="fitCenter"
-                                android:src="@drawable/ic_menu_gallery" />
+                                android:src="@drawable/ic_image_dt" />
 
                             <com.google.android.material.floatingactionbutton.FloatingActionButton
                                 android:id="@+id/favorite_btn"

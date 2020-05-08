@@ -66,7 +66,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         if (thumbImages.size() > 0) {
             thumbImageURL = thumbImages.get(0);
         }
-        Glide.with(mContext).load(thumbImageURL).placeholder(R.drawable.ic_menu_gallery).into(viewHolder.mProductImage);
+        Glide.with(mContext).load(thumbImageURL).placeholder(R.drawable.ic_image_dt).into(viewHolder.mProductImage);
 
         //-------
         viewHolder.mProductTitle.setText(product.getTitle());

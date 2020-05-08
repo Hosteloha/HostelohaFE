@@ -18,6 +18,25 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
+        <EditText
+            android:id="@+id/search_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15dp"
+            android:textSize="14sp"
+            android:background="@drawable/style_search_edittext"
+            android:drawableLeft="@drawable/ic_search_white"
+            android:drawableTint="@color/primary500"
+            android:gravity="center"
+            android:hint="Search products"
+            android:singleLine="true"
+            android:textColor="@color/primary700"
+            android:textColorHint="@color/primary500"
+            android:visibility="gone"/>
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/content_main" />

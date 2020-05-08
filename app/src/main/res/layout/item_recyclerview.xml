@@ -46,7 +46,7 @@
             android:minHeight="100dp"
             android:minWidth="100dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_menu_gallery"
+            android:src="@drawable/ic_image_dt"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

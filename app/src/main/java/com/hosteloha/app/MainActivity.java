@@ -10,6 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
@@ -44,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar = null;
     private NavigationView navigationView = null;
     private NavController navController = null;
+    private MenuItem searchMenuItem;
+    private SearchView searchView;
+    private EditText searchBar = null;
 
 
     @Override
@@ -53,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         // Init resources
         drawer = findViewById(R.id.drawer_layout);
         toolbar = findViewById(R.id.toolbar);
+        searchBar = findViewById(R.id.search_bar);
         navigationView = findViewById(R.id.nav_view);
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         mHostelohaService = HostelohaUtils.getHostelohaService(getApplicationContext());
@@ -102,19 +108,70 @@ public class MainActivity extends AppCompatActivity {
     private NavController.OnDestinationChangedListener mOnDestinationChangedListener = new NavController.OnDestinationChangedListener() {
         @Override
         public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
-            if (destination.getId() == R.id.nav_home) {
+            int fragmentID = destination.getId();
+            if (fragmentID == R.id.nav_home) {
                 navigationView.getMenu().findItem(R.id.nav_home).setVisible(false);
                 //Hiding the action when reaching the home screen since it cannot go back.
                 drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                 toolbar.setVisibility(View.VISIBLE);
+                searchBar.setVisibility(View.VISIBLE);
 //                navigationView.setCheckedItem(R.id.nav_home);
 //                    getSupportActionBar().hide();
             } else {
                 // In other fragments, we close drawer so as to avoid unnecessary fragment back stack
                 drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                searchBar.setVisibility(View.GONE);
             }
+            toggleMenuBarOptions(fragmentID);
         }
     };
+
+    private void toggleMenuBarOptions(int fragmentID) {
+        if (mMenuBar != null) {
+            MenuItem itemSearch = mMenuBar.findItem(R.id.menu_search);
+            MenuItem itemNotification = mMenuBar.findItem(R.id.menu_notification);
+            MenuItem itemCart = mMenuBar.findItem(R.id.menu_cart);
+            MenuItem itemWatchlist = mMenuBar.findItem(R.id.menu_watchlist);
+
+            switch (fragmentID){
+                case R.id.nav_home:
+                    itemSearch.setVisible(false);
+                    itemNotification.setVisible(true);
+                    itemCart.setVisible(true);
+                    itemWatchlist.setVisible(true);
+                    break;
+                case R.id.nav_seller:
+                    // Only search visible
+                    itemSearch.setVisible(true);
+                    itemNotification.setVisible(false);
+                    itemWatchlist.setVisible(false);
+                    itemCart.setVisible(false);
+                    break;
+                case R.id.nav_buyer:
+                    // Only notification off
+                    itemNotification.setVisible(false);
+                    itemSearch.setVisible(true);
+                    itemCart.setVisible(true);
+                    itemWatchlist.setVisible(true);
+                    break;
+                case R.id.nav_account:
+                    // Only notification off
+                    itemNotification.setVisible(false);
+                    itemSearch.setVisible(true);
+                    itemCart.setVisible(true);
+                    // Since it is available in the list options
+                    itemWatchlist.setVisible(false);
+                    break;
+                default:
+                    // Not to show notification everytime.
+                    itemNotification.setVisible(false);
+                    itemWatchlist.setVisible(true);
+                    itemSearch.setVisible(true);
+                    itemCart.setVisible(true);
+                    break;
+            }
+        }
+    }
 
     @Override
     public void onConfigurationChanged(@NonNull Configuration configuration) {
@@ -132,10 +189,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private Menu mMenuBar = null;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        mMenuBar = menu;
+        getMenuInflater().inflate(R.menu.main, mMenuBar);
         return true;
     }
 
@@ -191,12 +251,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_logout:
-                HostelohaUtils.logOutUser(this);
-                return true;
+            case R.id.menu_search:
+                break;
+            case R.id.menu_notification:
+                break;
+            case R.id.menu_watchlist:
+                break;
+            case R.id.menu_cart:
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

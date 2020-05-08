@@ -51,7 +51,7 @@
     <fragment
         android:id="@+id/buyerProductFragment"
         android:name="com.hosteloha.app.ui.buyer.BuyerProductFragment"
-        android:label="fragment_buyer_product"
+        android:label="Item"
         tools:layout="@layout/fragment_buyer_product" />
     <navigation
         android:id="@+id/navigation"

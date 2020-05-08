@@ -24,6 +24,7 @@
     <string name="menu_seller">Seller</string>
     <string name="menu_buyer">Buyer</string>
     <string name="menu_user_account"> My Account</string>
+    <string name="menu_user_notifications"> My Notifications</string>
     <string name="menu_payment_info">Payment</string>
     <string name="menu_app_settings">Setting</string>
     <string name="menu_app_info">About</string>
