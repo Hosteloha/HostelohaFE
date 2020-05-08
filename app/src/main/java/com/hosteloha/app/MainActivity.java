@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
             MenuItem itemCart = mMenuBar.findItem(R.id.menu_cart);
             MenuItem itemWatchlist = mMenuBar.findItem(R.id.menu_watchlist);
 
-            switch (fragmentID){
+            switch (fragmentID) {
                 case R.id.nav_home:
                     itemSearch.setVisible(false);
                     itemNotification.setVisible(true);
@@ -172,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 
     @Override
     public void onConfigurationChanged(@NonNull Configuration configuration) {

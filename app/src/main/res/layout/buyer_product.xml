@@ -66,7 +66,7 @@
                             android:id="@+id/subTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="About this Item"/>
+                            android:text="About this Item" />
 
                         <TextView
                             android:id="@+id/textView3"
@@ -95,7 +95,7 @@
                             android:id="@+id/textView7"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Product Description :"/>
+                            android:text="Product Description :" />
 
                         <TextView
                             android:id="@+id/description"
