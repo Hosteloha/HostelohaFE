@@ -61,11 +61,33 @@ public class BuyerProductFragment extends Fragment {
         Glide.with(this).load(thumbImageURL).placeholder(R.drawable.ic_image_dt).into(imageView);
         mBuyerProductBinding.include.productTitle.setText(mProductObject.getTitle());
         mBuyerProductBinding.include.subTitle.setText(mProductObject.getSubtitle());
-        mBuyerProductBinding.include.costPrice.setText(mProductObject.getSellingPrice() + "");
+        // Copied from list
+        int productSellingPrice = mProductObject.getSellingPrice();
+        String formattedSP = this.getResources().getString(R.string.product_sp_value, productSellingPrice);
+        mBuyerProductBinding.include.costPrice.setText(formattedSP);
+
+        int productCostPrice = mProductObject.getCostPrice();
+        String formattedCP = this.getResources().getString(R.string.product_cp_value, productCostPrice);
+        mBuyerProductBinding.include.mActualCost.setText(formattedCP);
+
+        if (mProductObject.getSellingPrice() < mProductObject.getCostPrice() && mProductObject.getCostPrice() != 0) {
+            int discount = 100 * (mProductObject.getCostPrice() - mProductObject.getSellingPrice()) / mProductObject.getCostPrice();
+            if (discount != 0) {
+                String formattedDiscount = this.getResources().getString(R.string.product_discount_value, discount);
+                mBuyerProductBinding.include.productDiscount.setText(formattedDiscount);
+            } else {
+                mBuyerProductBinding.include.productDiscount.setVisibility(View.GONE);
+            }
+        } else {
+            mBuyerProductBinding.include.productDiscount.setVisibility(View.GONE);
+            mBuyerProductBinding.include.mActualCost.setVisibility(View.GONE);
+        }
+        //COpy OVer
+//        mBuyerProductBinding.include.costPrice.setText(mProductObject.getSellingPrice() + "");
         mBuyerProductBinding.include.description.setText(mProductObject.getDescription());
         mBuyerProductBinding.include.productCondition.setText(mProductObject.getCondition_id() + "");
         mBuyerProductBinding.include.productTitle.setText(mProductObject.getTitle());
-        mBuyerProductBinding.include.productSpecifics.setVisibility(View.GONE);
+        mBuyerProductBinding.include.productSpecifics.setVisibility(View.VISIBLE);
 
 
     }
