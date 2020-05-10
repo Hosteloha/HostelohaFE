@@ -1,9 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/action_logout"
-        android:orderInCategory="100"
-        android:title="@string/menu_logout"
-        app:showAsAction="never" />
+    <group android:id="@+id/group_search_notify">
+        <item
+            android:id="@+id/menu_search"
+            android:title="Search products"
+            android:icon="@drawable/ic_search_white"
+            android:tooltipText="Search products"
+            app:showAsAction="collapseActionView|ifRoom"
+            android:visible="false" />
+        <item
+            android:id="@+id/menu_watchlist"
+            android:title="watchlist"
+            android:icon="@drawable/ic_watchlist_white"
+            app:showAsAction="collapseActionView|ifRoom" />
+        <item
+            android:id="@+id/menu_notification"
+            android:title="notifications"
+            android:icon="@drawable/ic_notifications_white"
+            app:showAsAction="collapseActionView|ifRoom" />
+        <item
+            android:id="@+id/menu_cart"
+            android:title="cart"
+            android:icon="@drawable/ic_shopping_bag_white"
+            app:showAsAction="collapseActionView|ifRoom" />
+    </group>
 </menu>

@@ -16,6 +16,7 @@
     <color name="colorPrimary">@color/primary800</color>
     <color name="colorPrimaryDark">@color/primary900</color>
     <color name="colorAccent">@color/primary800</color>
+    <color name="discountColor500">#4CAF50</color>
 
     <!-- Component colors -->
     <color name="colorAccentSecondary">#FFC107</color>
@@ -26,4 +27,10 @@
     <color name="close_color_image">@color/primary600</color>
     <color name="fab_icon_bg">#FFFFFF</color>
     <color name="centreColorMineShaft">#303030</color>
+
+    <!--Transparency codes-->
+    <!--    100% — FF, 95% — F2, 90% — E6, 85% — D9, 80% — CC, 75% — BF,
+        70% — B3, 65% — A6, 60% — 99, 55% — 8C, 50% — 80, 45% — 73,
+        40% — 66, 35% — 59, 30% — 4D, 25% — 40, 20% — 33, 15% — 26,
+        10% — 1A, 5% — 0D, 0% — 00-->
 </resources>
