@@ -19,7 +19,7 @@
             android:layout_height="100dp"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
-            android:background="@drawable/ic_add_photo_alternate"
+            android:background="@drawable/ic_add_photo_alternate_dt"
             android:scaleType="fitXY" />
 
         <LinearLayout

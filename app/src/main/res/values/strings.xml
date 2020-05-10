@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Hosteloha</string>
+    <string name="app_nick_name">Hosto</string>
     <string name="app_domain">https://hosteloha.com/</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -17,11 +18,15 @@
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_tools">Tools</string>
-    <string name="menu_share">Share</string>
+    <string name="menu_share">Refer &amp; Earn</string>
+    <string name="menu_legal">Legal</string>
+    <string name="menu_rate">Rate our App</string>
     <string name="menu_send">Send</string>
     <string name="menu_seller">Seller</string>
     <string name="menu_buyer">Buyer</string>
-    <string name="menu_user_account">Account</string>
+    <string name="menu_user_account"> My Account</string>
+    <string name="menu_user_notifications"> My Notifications</string>
+
     <string name="menu_payment_info">Payment</string>
     <string name="menu_app_settings">Setting</string>
     <string name="menu_app_info">About</string>
@@ -43,7 +48,8 @@
 
     <!-- Product -->
     <string name="product_discount_value">%1$d%%</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment"> Hello  Blank Fragment</string>
+    <string name="fragment_refer_description"> Hi Tony, Invite your friends to have a amazing Hostelohic experience and earn instant wallet cash of ₹50, when they do their first transaction</string>
     <string name="fragment_purchases">My Purchases</string>
     <string name="fragment_bids">My Bids</string>
     <string name="fragment_watchlist">My Watchlist</string>
@@ -54,6 +60,7 @@
     <string name="fragment_drafts">To be Published</string>
     <string name="menu_filter">Filter Type</string>
     <string name="menu_sort">Sorting Type</string>
+    <string name="app_version">Version %1$s</string>
 
     <string-array name="product_categories">
         <item>Books</item>

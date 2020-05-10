@@ -1,175 +1,259 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/product_grid_item"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:orientation="vertical"
-            app:layout_constraintGuide_begin="16dp"
-            app:layout_constraintStart_toStartOf="parent" />
+        <LinearLayout
+            android:id="@+id/product_grid_item"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/product_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Product Title"
-            android:textSize="15sp"
-            app:layout_constraintStart_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toTopOf="parent" />
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="true"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <ImageView
-            android:id="@+id/product_images"
-            android:layout_width="377dp"
-            android:layout_height="252dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_menu_gallery"
-            android:background="@drawable/imageview_border"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/product_title" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/share_Btn"
-            android:layout_width="58dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/fab_icon_bg"
-            android:clickable="true"
-            app:layout_constraintEnd_toStartOf="@+id/favorite_btn"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toBottomOf="@+id/product_images"
-            app:srcCompat="@drawable/ic_menu_share" />
+                    <androidx.cardview.widget.CardView style="@style/imageCarouselViewBasedCardDesign">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/favorite_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:backgroundTint="@color/fab_icon_bg"
-            android:clickable="true"
-            app:layout_constraintBottom_toBottomOf="@+id/share_Btn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/share_Btn"
-            app:layout_constraintTop_toTopOf="@+id/share_Btn"
-            app:srcCompat="@drawable/ic_favorite_border" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/barrier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="bottom"
-            app:constraint_referenced_ids="favorite_btn,share_Btn"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="302dp" />
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cost : "
-            app:layout_constraintStart_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toBottomOf="@+id/barrier" />
+                                <ImageView
+                                    android:id="@+id/product_images"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="252dp"
+                                    android:scaleType="fitCenter"
+                                    android:src="@drawable/ic_image_dt" />
 
-        <TextView
-            android:id="@+id/costPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="Rs 1,456"
-            app:layout_constraintStart_toEndOf="@+id/textView3"
-            app:layout_constraintTop_toBottomOf="@+id/share_Btn"
-            app:layout_constraintTop_toTopOf="@+id/textView3" />
 
-        <TextView
-            android:id="@+id/subTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:text="About this Item"
-            android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+                                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                                    android:id="@+id/favorite_btn"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="end|top"
+                                    android:layout_margin="10dp"
+                                    android:adjustViewBounds="true"
+                                    android:backgroundTint="@color/fab_icon_bg"
+                                    android:clickable="true"
+                                    android:tint="#D63838"
+                                    android:scaleType="fitXY"
+                                    app:srcCompat="@drawable/ic_favorite_black_24dp" />
 
-        <TextView
-            android:id="@+id/textView7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Product Description :"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toBottomOf="@+id/subTitle" />
 
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="This is product Description. where you will find the majour details of product"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintStart_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+                                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                                    android:id="@+id/share_Btn"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="10dp"
+                                    android:layout_gravity="end|bottom"
+                                    android:backgroundTint="@color/fab_icon_bg"
+                                    android:clickable="true"
+                                    android:scaleType="fitXY"
+                                    android:adjustViewBounds="true"
+                                    app:srcCompat="@drawable/ic_share_dt" />
 
-        <TextView
-            android:id="@+id/textView10"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Product Condition :"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toBottomOf="@+id/description" />
+                            </FrameLayout>
 
-        <TextView
-            android:id="@+id/productCondition"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="Condition of the product is very good. It is bought 3 months back. No majour scratches on the product. Woking fine."
-            app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/textView10"
-            app:layout_constraintTop_toBottomOf="@+id/textView10" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp">
 
-        <TextView
-            android:id="@+id/textView12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Product Specific Information:"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toBottomOf="@+id/productCondition" />
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/productSpecifics"
-            android:layout_width="175dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:text="ram : 4GB dgfdfghdfhdfhfdh\n "
-            app:layout_constraintStart_toStartOf="@+id/textView12"
-            app:layout_constraintTop_toBottomOf="@+id/textView12" />
+                                    <com.google.android.material.chip.ChipGroup
+                                        android:id="@+id/cg"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="20dp"
+                                        android:layout_marginBottom="5dp"
+                                        android:textColor="@android:color/black"
+                                        android:textStyle="bold"
+                                        android:textSize="12sp"
+                                        app:singleSelection="false"
+                                        app:chipSpacingVertical="5dp"
+                                        app:chipSpacingHorizontal="5dp"
+                                        app:singleLine="false">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                                        <com.google.android.material.chip.Chip
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="#handmade" />
+
+                                        <com.google.android.material.chip.Chip
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="#3 Months used" />
+
+                                        <com.google.android.material.chip.Chip
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="#Old Bills available" />
+
+                                        <com.google.android.material.chip.Chip
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="#Door Step delivery" />
+
+                                        <com.google.android.material.chip.Chip
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="#In-Warranty" />
+                                    </com.google.android.material.chip.ChipGroup>
+
+
+                                </FrameLayout>
+
+                                <TextView
+                                    android:id="@+id/product_title"
+                                    style="@style/TextAppearance.AppCompat.Title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Product Title" />
+
+                                <TextView
+                                    android:id="@+id/subTitle"
+                                    style="@style/TextAppearance.AppCompat.Body1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Product Caption" />
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/costPrice"
+                                        style="@style/TextAppearance.AppCompat.Headline"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/product_sp_value" />
+
+                                    <TextView
+                                        android:id="@+id/mActualCost"
+                                        style="@style/TextAppearance.AppCompat.Caption"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:foreground="@drawable/textview_strike_trough"
+                                        android:text="@string/product_cp_value"
+                                        android:textSize="10sp" />
+
+                                    <TextView
+                                        android:id="@+id/product_discount"
+                                        style="@style/TextAppearance.AppCompat.Body2"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/discountColor500"
+                                        android:textStyle="bold"
+                                        android:text="@string/product_discount_value" />
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+
+                    <androidx.cardview.widget.CardView style="@style/productViewBasedCardDesign">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textView7"
+                                style="@style/TextAppearance.AppCompat.Body2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Description " />
+
+                            <TextView
+                                android:id="@+id/description"
+                                style="@style/TextAppearance.AppCompat.Small"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="This is product Description. where you will find the majour details of product" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+
+                    <androidx.cardview.widget.CardView style="@style/productViewBasedCardDesign">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textView10"
+                                style="@style/TextAppearance.AppCompat.Body2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Condition" />
+
+                            <TextView
+                                android:id="@+id/productCondition"
+                                style="@style/TextAppearance.AppCompat.Small"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Condition of the product is very good. It is bought 3 months back. No majour scratches on the product. Woking fine." />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView style="@style/productViewBasedCardDesign">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textView12"
+                                style="@style/TextAppearance.AppCompat.Body2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Highlights" />
+
+                            <TextView
+                                android:id="@+id/productSpecifics"
+                                style="@style/TextAppearance.AppCompat.Small"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="• Color : Red\n• Size : Medium" />
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+        </LinearLayout>
+
+    </FrameLayout>
 </layout>
