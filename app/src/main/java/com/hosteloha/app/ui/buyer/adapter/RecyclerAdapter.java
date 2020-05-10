@@ -20,15 +20,16 @@ import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder> {
 
-    private static final int FOOTER_VIEW = 1;
     List<ProductObject> mAllProducts;
     private OnItemClickListener mItemClickListener;
     private Context mContext;
+    private RecyclerView mRecyclerView;
 
 
-    public RecyclerAdapter(Context context, List arrayList) {
+    public RecyclerAdapter(Context context, List arrayList, RecyclerView recyclerView) {
         mContext = context;
         mAllProducts = arrayList;
+        mRecyclerView = recyclerView;
         AllProductsSubject.getAllProductsSubject().attachObservers(observer);
     }
 
@@ -41,16 +42,20 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
     };
 
     public void setArrayList(List<ProductObject> arrayList) {
+        mAllProducts.clear();
         mAllProducts = arrayList;
-        notifyDataSetChanged();
+        mRecyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                notifyDataSetChanged();
+            }
+        });
     }
 
     @NonNull
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        if (viewType == FOOTER_VIEW)
-            return null;
         Context context = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
 
@@ -106,7 +111,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View itemView, int position);
+        void onItemClick(View itemView, int productId);
     }
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -132,8 +137,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            if (position != RecyclerView.NO_POSITION && mItemClickListener != null) {
-                mItemClickListener.onItemClick(itemView, position);
+            if (position != RecyclerView.NO_POSITION && mItemClickListener != null && mAllProducts != null && position <= mAllProducts.size()) {
+                mItemClickListener.onItemClick(itemView, mAllProducts.get(position).getProductId());
             }
         }
     }

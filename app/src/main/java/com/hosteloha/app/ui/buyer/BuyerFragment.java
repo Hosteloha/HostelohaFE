@@ -40,11 +40,11 @@ public class BuyerFragment extends Fragment {
     private List<ProductObject> mArrayList = new ArrayList<ProductObject>();
     private RecyclerAdapter.OnItemClickListener mOnItemClickListener = new RecyclerAdapter.OnItemClickListener() {
         @Override
-        public void onItemClick(View itemView, int position) {
-            HostelohaLog.debugOut(" main product view onItemClick  " + position);
+        public void onItemClick(View itemView, int productId) {
+            HostelohaLog.debugOut(" main product view onItemClick  " + productId);
             if (mNavController != null) {
                 Bundle bundle = new Bundle();
-                bundle.putInt("product_position", position);
+                bundle.putInt("product_id", productId);
                 mNavController.navigate(R.id.action_nav_buyer_to_buyerProductFragment, bundle);
             }
         }
@@ -68,7 +68,7 @@ public class BuyerFragment extends Fragment {
 
         List<ProductObject> productList = AllProductsSubject.getAllProductsSubject().getProductsList();
 
-        mRecyclerAdapter = new RecyclerAdapter(getContext(), productList);
+        mRecyclerAdapter = new RecyclerAdapter(getContext(), productList, mBuyerBinding.buyerRecyclerView);
         mRecyclerAdapter.setOnItemClickListener(mOnItemClickListener);
         mBuyerBinding.buyerRecyclerView.setAdapter(mRecyclerAdapter);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 2);

@@ -1,5 +1,6 @@
 package com.hosteloha.app;
 
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,14 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
-import com.hosteloha.R;
-import com.hosteloha.app.service.HostelohaService;
-import com.hosteloha.app.utils.HostelohaUtils;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -26,6 +22,13 @@ import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import com.hosteloha.R;
+import com.hosteloha.app.define.SortingType;
+import com.hosteloha.app.service.HostelohaService;
+import com.hosteloha.app.utils.HostelohaUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -171,6 +174,28 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_logout:
                 HostelohaUtils.logOutUser(this);
+                return true;
+            case R.id.action_product_sort:
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Choose Sorting Type :");
+
+                final String[] sortingType = {SortingType.DEFAULT.toString(), SortingType.PRICE_ASCENDING.toString(), SortingType.PRICE_DESCENDING.toString()};
+                builder.setItems(sortingType, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (mHostelohaService == null)
+                            mHostelohaService = HostelohaUtils.getHostelohaService(MainActivity.this);
+
+                        if (mHostelohaService != null)
+                            mHostelohaService.setSortingType(SortingType.valueOf(sortingType[which]));
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                return true;
+            case R.id.action_product_filter:
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -46,6 +46,7 @@ public class ProductListHelper {
         boolean isUpdated = false;
         if (isListChanged(productsList)) {
             isUpdated = true;
+            mProductsList.clear();
             Iterator iterator = productsList.listIterator();
             while (iterator.hasNext()) {
                 ProductObject productObject = ((ProductObject) iterator.next()).cloneProductObject();
@@ -89,13 +90,10 @@ public class ProductListHelper {
     }
 
     public void sort() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Collections.sort(mProductsList, ComparatorUtils.getComparator(mSortingType));
-                mIsSorted = true;
-            }
-        }).start();
+        mIsSorted = false;
+        if (mSortingType != SortingType.DEFAULT)
+            Collections.sort(mProductsList, ComparatorUtils.getComparator(mSortingType));
+        mIsSorted = true;
     }
 
 }
