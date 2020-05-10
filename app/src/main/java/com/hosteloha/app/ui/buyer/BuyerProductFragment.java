@@ -6,18 +6,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.hosteloha.R;
-import com.hosteloha.app.beans.ProductObject;
-import com.hosteloha.app.data.AllProductsSubject;
-import com.hosteloha.databinding.FragmentBuyerProductBinding;
-
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+
+import com.bumptech.glide.Glide;
+import com.hosteloha.R;
+import com.hosteloha.app.beans.ProductObject;
+import com.hosteloha.app.service.HostelohaService;
+import com.hosteloha.app.utils.HostelohaUtils;
+import com.hosteloha.databinding.FragmentBuyerProductBinding;
+
+import java.util.List;
 
 
 public class BuyerProductFragment extends Fragment {
@@ -25,14 +26,16 @@ public class BuyerProductFragment extends Fragment {
     FragmentBuyerProductBinding mBuyerProductBinding;
     int mProductPosition = -1;
     ProductObject mProductObject;
+    HostelohaService mService;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mProductPosition = getArguments().getInt("product_position");
-        if (AllProductsSubject.getAllProductsSubject().getProductsList() != null && AllProductsSubject.getAllProductsSubject().getProductsList().size() >= mProductPosition)
-            mProductObject = AllProductsSubject.getAllProductsSubject().getProductsList().get(mProductPosition);
+        mService = HostelohaUtils.getHostelohaService(getContext());
+        mProductPosition = getArguments().getInt("product_id");
+        if (mService != null)
+            mProductObject = mService.getProductObject(mProductPosition);
 
     }
 

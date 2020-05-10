@@ -7,27 +7,29 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.hosteloha.R;
 import com.hosteloha.app.beans.ProductObject;
-import com.hosteloha.app.data.AllProductsSubject;
+import com.hosteloha.app.list.data.AllProductsSubject;
 import com.hosteloha.app.log.HostelohaLog;
 
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder> {
 
     List<ProductObject> mAllProducts;
     private OnItemClickListener mItemClickListener;
     private Context mContext;
+    private RecyclerView mRecyclerView;
 
 
-    public RecyclerAdapter(Context context, List arrayList) {
+    public RecyclerAdapter(Context context, List arrayList, RecyclerView recyclerView) {
         mContext = context;
         mAllProducts = arrayList;
+        mRecyclerView = recyclerView;
         AllProductsSubject.getAllProductsSubject().attachObservers(observer);
     }
 
@@ -40,8 +42,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
     };
 
     public void setArrayList(List<ProductObject> arrayList) {
+        mAllProducts.clear();
         mAllProducts = arrayList;
-        notifyDataSetChanged();
+        mRecyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                notifyDataSetChanged();
+            }
+        });
     }
 
     @NonNull
@@ -103,7 +111,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View itemView, int position);
+        void onItemClick(View itemView, int productId);
     }
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -129,8 +137,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            if (position != RecyclerView.NO_POSITION && mItemClickListener != null) {
-                mItemClickListener.onItemClick(itemView, position);
+            if (position != RecyclerView.NO_POSITION && mItemClickListener != null && mAllProducts != null && position <= mAllProducts.size()) {
+                mItemClickListener.onItemClick(itemView, mAllProducts.get(position).getProductId());
             }
         }
     }

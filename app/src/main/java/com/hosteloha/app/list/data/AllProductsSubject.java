@@ -1,4 +1,4 @@
-package com.hosteloha.app.data;
+package com.hosteloha.app.list.data;
 
 import com.hosteloha.app.beans.ProductObject;
 

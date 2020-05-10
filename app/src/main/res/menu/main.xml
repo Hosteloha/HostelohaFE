@@ -24,5 +24,20 @@
             android:title="cart"
             android:icon="@drawable/ic_shopping_bag_white"
             app:showAsAction="collapseActionView|ifRoom" />
+        <item
+            android:id="@+id/action_logout"
+            android:orderInCategory="100"
+            android:title="@string/menu_logout"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/action_product_filter"
+            android:orderInCategory="100"
+            android:title="@string/menu_filter"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/action_product_sort"
+            android:orderInCategory="100"
+            android:title="@string/menu_sort"
+            app:showAsAction="never" />
     </group>
 </menu>

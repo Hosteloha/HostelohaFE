@@ -5,10 +5,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.IBinder;
 
+import androidx.annotation.Nullable;
+
 import com.hosteloha.app.beans.AuthenticationTokenJWT;
 import com.hosteloha.app.beans.ProductObject;
 import com.hosteloha.app.beans.UserAuthentication;
-import com.hosteloha.app.data.AllProductsSubject;
+import com.hosteloha.app.define.SortingType;
+import com.hosteloha.app.list.ListMaker;
 import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.retroapi.ApiUtil;
 import com.hosteloha.app.retroapi.CallbackWithRetry;
@@ -21,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import androidx.annotation.Nullable;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -29,6 +31,7 @@ public class HostelohaService extends Service {
 
     private static HostelohaService mHostelohaService = null;
     private String mDefaultUserJWT = null;
+    private ListMaker mListMaker;
 
     public static HostelohaService getService() {
         return mHostelohaService;
@@ -45,6 +48,7 @@ public class HostelohaService extends Service {
         super.onCreate();
         mHostelohaService = this;
         HostelohaLog.debugOut("  service onCreate");
+        mListMaker = new ListMaker();
         req_authenticateDefaultUser();
         getSplashData();
     }
@@ -61,6 +65,19 @@ public class HostelohaService extends Service {
         HostelohaLog.debugOut("  service onDestroy");
     }
 
+
+    public ProductObject getProductObject(int productId) {
+        ProductObject obj = null;
+        if (mListMaker != null)
+            obj = mListMaker.getProductObject(productId);
+        return obj;
+    }
+
+    public void setSortingType(SortingType sortingType) {
+        if (mListMaker != null)
+            mListMaker.setSortingType(sortingType);
+    }
+    
     private void req_authenticateDefaultUser() {
         UserAuthentication defaultUser = new UserAuthentication("testuser@gmail.com", "password");
         ApiUtil.getServiceClass().getAuthenticationToken(defaultUser).enqueue(new CallbackWithRetry<AuthenticationTokenJWT>() {
@@ -113,8 +130,9 @@ public class HostelohaService extends Service {
             public void onResponse(Call<List<ProductObject>> call, Response<List<ProductObject>> response) {
                 HostelohaLog.debugOut("[REQ] getAllProducts  =====> isSuccessful  : " + response.isSuccessful());
                 if (response.isSuccessful()) {
-                    List<ProductObject> mArrayList = response.body();
+                    ArrayList<ProductObject> mArrayList = (ArrayList<ProductObject>) response.body();
                     HostelohaLog.debugOut("[REQ] products_list size ::  " + mArrayList.size());
+                    HostelohaLog.debugOut("[REQ] products_list ---> " + mArrayList.get(0).toString());
 
                     // Getting from firebase - just temporary code to set image gallery
                     Map<String, ArrayList<String>> productImagesList = AppFireDataBase.getProductImagesMap();
@@ -129,8 +147,11 @@ public class HostelohaService extends Service {
                         }
                     }
 
-                    AllProductsSubject.getAllProductsSubject().setProductsList(mArrayList);
+//                    AllProductsSubject.getAllProductsSubject().setProductsList(mArrayList);
+                    if (mListMaker != null)
+                        mListMaker.setMainProductList(mArrayList);
                 }
+
             }
 
             @Override
@@ -151,4 +172,5 @@ public class HostelohaService extends Service {
         ArrayList<String> generatedURlList = AppFireStorage.uploadFileToFirebase(filesURIList, productID, getApplicationContext());
 //        AppFireDataBase.addUrlList(String.valueOf(productID), generatedURlList);
     }
+
 }

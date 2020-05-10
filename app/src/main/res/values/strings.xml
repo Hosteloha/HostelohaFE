@@ -58,6 +58,8 @@
     <string name="fragment_edit_address">Address Details</string>
     <string name="fragment_reviews">My Reviews</string>
     <string name="fragment_drafts">To be Published</string>
+    <string name="menu_filter">Filter Type</string>
+    <string name="menu_sort">Sorting Type</string>
     <string name="app_version">Version %1$s</string>
 
     <string-array name="product_categories">

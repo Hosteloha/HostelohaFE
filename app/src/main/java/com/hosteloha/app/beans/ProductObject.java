@@ -245,6 +245,34 @@ public class ProductObject {
         this.product_images = productImages;
     }
 
+
+    public ProductObject cloneProductObject() {
+        ProductObject productObject = new ProductObject();
+        productObject.productId = productId;
+        productObject.title = title;
+        productObject.subtitle = subtitle;
+        productObject.description = description;
+        productObject.category_id = category_id;
+        productObject.categorySet = categorySet;
+        productObject.mainCategory = mainCategory;
+        productObject.subCategory1 = subCategory1;
+        productObject.subCategory2 = subCategory2;
+        productObject.users_id = users_id;
+        productObject.condition_id = condition_id;
+        productObject.delivery_format_id = delivery_format_id;
+        productObject.payment_option_id = payment_option_id;
+        productObject.selling_format_id = selling_format_id;
+        productObject.currency = currency;
+        productObject.quantity = quantity;
+        productObject.costPrice = costPrice;
+        productObject.sellingPrice = sellingPrice;
+        productObject.inserted_at = inserted_at;
+        productObject.updated_at = updated_at;
+        productObject.product_images = product_images;
+
+        return productObject;
+    }
+
     @Override
     public String toString() {
         return "ProductObject [productId=" + productId + ", subtitle=" + subtitle + ", description=" + description
