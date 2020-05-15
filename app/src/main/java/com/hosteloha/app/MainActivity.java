@@ -1,7 +1,9 @@
 package com.hosteloha.app;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
@@ -15,8 +17,17 @@ import android.widget.EditText;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.hosteloha.BuildConfig;
+import com.hosteloha.R;
+import com.hosteloha.app.define.SortingType;
 import com.hosteloha.app.log.HostelohaLog;
+import com.hosteloha.app.service.HostelohaService;
+import com.hosteloha.app.ui.account.AccountEditAddress;
+import com.hosteloha.app.utils.AppLocation;
+import com.hosteloha.app.utils.HostelohaUtils;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -29,13 +40,6 @@ import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
-import com.hosteloha.R;
-import com.hosteloha.app.define.SortingType;
-import com.hosteloha.app.service.HostelohaService;
-import com.hosteloha.app.utils.HostelohaUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -346,6 +350,28 @@ public class MainActivity extends AppCompatActivity {
             HostelohaUtils.showSnackBarNotification(MainActivity.this,
                     "PlayStore is not installed");
             HostelohaLog.debugOut("Playstore not installed");
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        HostelohaLog.debugOut(" onRequestPermissionsResult : " + requestCode);
+        if (requestCode == AppLocation.REQUEST_CHECK_LOCATION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                AccountEditAddress.onLocationPermissionGranted();
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        HostelohaLog.debugOut(" onActivityResult : " + requestCode);
+        if (requestCode == AppLocation.REQUEST_CHECK_LOCATION) {
+            if (resultCode == Activity.RESULT_OK) {
+                AccountEditAddress.onLocationPermissionGranted();
+            }
         }
     }
 }

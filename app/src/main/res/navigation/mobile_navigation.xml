@@ -9,7 +9,16 @@
         android:id="@+id/nav_home"
         android:name="com.hosteloha.app.ui.home.HomeFragment"
         android:label="@string/app_name"
-        tools:layout="@layout/fragment_home"></fragment>
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/action_nav_home_to_accountEditAddress"
+            app:destination="@id/accountEditAddress"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
 
     <fragment
         android:id="@+id/nav_seller"

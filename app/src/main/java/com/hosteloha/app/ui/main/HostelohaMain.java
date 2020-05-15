@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.hosteloha.R;
 import com.hosteloha.app.service.HostelohaService;
+import com.hosteloha.app.utils.AppSharedPrefs;
 import com.hosteloha.app.utils.Define;
 import com.hosteloha.app.utils.HostelohaUtils;
 
@@ -30,9 +31,9 @@ public class HostelohaMain extends Fragment {
             @Override
             public void run() {
                 final NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-                if (HostelohaUtils.getUserLoginInfo(getContext())) {
+                if (AppSharedPrefs.getUserLoginInfo(getContext())) {
                     if (Define.isPreviousViewCheckEnabled) {
-                        String viewType = HostelohaUtils.getPreviousViewType(getContext());
+                        String viewType = AppSharedPrefs.getPreviousViewType(getContext());
                         boolean isPreviousViewBuyer = (viewType.equals(Define.VIEW_BUYER));
                         if (isPreviousViewBuyer) {
                             navController.navigate(HostelohaMainDirections.actionHostelOhaMainToNavBuyer());

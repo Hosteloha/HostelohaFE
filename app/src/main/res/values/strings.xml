@@ -36,6 +36,11 @@
     <string name="snackbar_exit_message">Hosteloha misses you</string>
     <string name="snackbar_exit_button">EXIT</string>
 
+    <!--Dialog Button's-->
+    <string name="button_cancel">cancel</string>
+    <string name="button_decline">decline</string>
+    <string name="button_accept">accept</string>
+
     <!-- Static data -->
     <string name="otp_sent_variable_phone">OTP Sent to %1$s</string>
 

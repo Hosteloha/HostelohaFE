@@ -3,8 +3,6 @@ package com.hosteloha.app.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -31,14 +29,9 @@ import java.util.Map;
 import java.util.Set;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 public class HostelohaUtils {
 
-    // PRIVATE should be accessed using getters
-    private static SharedPreferences sharedPreferences = null;
-    private static SharedPreferences.Editor prefsEditor;
     private static GoogleSignInClient mGoogleSignInClient = null;
     //firebase objects
     private static StorageReference mFireStorageReference = null;
@@ -58,8 +51,7 @@ public class HostelohaUtils {
      */
     public static void logOutUser(Activity activity) {
         //Clear shared Prefs
-        sharedPreferences = getSharedPreferences(activity);
-        sharedPreferences.edit().clear().apply();
+        AppSharedPrefs.clearSharedPrefsOnLogout(activity);
 
         if (mGoogleSignInClient != null) {
             mGoogleSignInClient.revokeAccess();
@@ -105,13 +97,6 @@ public class HostelohaUtils {
         return mGoogleSignInClient;
     }
 
-    public static SharedPreferences getSharedPreferences(Context context) {
-        if (sharedPreferences == null) {
-            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        }
-        return sharedPreferences;
-    }
-
     /**
      * To store the product images.
      *
@@ -151,36 +136,6 @@ public class HostelohaUtils {
         return mFireDatabaseReference;
     }
 
-    public static void storeUserLoginInfo(Context context, boolean isLoggedIn, String authenticationToken) {
-        sharedPreferences = getSharedPreferences(context);
-        prefsEditor = sharedPreferences.edit();
-        prefsEditor.putBoolean(Define.KEY_USER_LOGIN_STATUS, isLoggedIn);
-        prefsEditor.putString(Define.KEY_USER_AUTH_TOKEN, authenticationToken);
-        prefsEditor.apply();
-    }
-
-    public static boolean getUserLoginInfo(Context context) {
-        sharedPreferences = getSharedPreferences(context);
-        prefsEditor = sharedPreferences.edit();
-        boolean isUserLoggedIn = sharedPreferences.getBoolean(Define.KEY_USER_LOGIN_STATUS, false);
-        if (isUserLoggedIn) {
-            HostelohaUtils.AUTHENTICATION_TOKEN = sharedPreferences.getString(Define.KEY_USER_AUTH_TOKEN, null);
-        }
-        return isUserLoggedIn;
-    }
-
-    public static void storeCurrentViewTypeInPrefs(Context context, String viewType) {
-        sharedPreferences = getSharedPreferences(context);
-        prefsEditor = sharedPreferences.edit();
-        prefsEditor.putString(Define.KEY_CURRENT_VIEW_TYPE, viewType);
-        prefsEditor.apply();
-    }
-
-    public static String getPreviousViewType(Context context) {
-        sharedPreferences = getSharedPreferences(context);
-        String viewType = sharedPreferences.getString(Define.KEY_CURRENT_VIEW_TYPE, Define.VIEW_BUYER);
-        return viewType;
-    }
 
     public static Map<String, Set<String>> getAllCategoriesMap() {
         return mAllCategoriesMap;
