@@ -11,10 +11,9 @@ android {
         applicationId "com.hosteloha"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 6
-        versionName "5.0.1"
+        versionCode 8
+        versionName "5.0.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        multiDexEnabled True
     }
     buildTypes {
         release {
@@ -32,12 +31,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-
-    implementation "javax.xml.bind:jaxb-api:2.3.1"
-    // these
-    implementation "com.sun.xml.bind:jaxb-core:2.2.11"
-    implementation "com.sun.xml.bind:jaxb-impl:2.2.11"
-    implementation "javax.activation:activation:1.1.1"
     /**
      * Android X artifacts
      */
@@ -72,4 +65,6 @@ dependencies {
     // Glide to use image caching
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    // Location
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
 }

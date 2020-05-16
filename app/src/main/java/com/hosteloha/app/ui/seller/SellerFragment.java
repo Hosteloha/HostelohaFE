@@ -41,6 +41,7 @@ import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.retroapi.ApiUtil;
 import com.hosteloha.app.service.HostelohaService;
 import com.hosteloha.app.ui.seller.adapter.CustomPageAdapter;
+import com.hosteloha.app.utils.AppSharedPrefs;
 import com.hosteloha.app.utils.Define;
 import com.hosteloha.app.utils.HostelohaUtils;
 import com.hosteloha.app.utils.ImageWindow;
@@ -137,7 +138,7 @@ public class SellerFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        HostelohaUtils.storeCurrentViewTypeInPrefs(getContext(), Define.VIEW_SELLER);
+        AppSharedPrefs.storeCurrentViewTypeInPrefs(getContext(), Define.VIEW_SELLER);
     }
 
     private void fetchSubCategory(String category) {
@@ -217,7 +218,7 @@ public class SellerFragment extends Fragment {
 
         mHostelohaService = HostelohaUtils.getHostelohaService(getContext());
 
-        HostelohaUtils.storeCurrentViewTypeInPrefs(mActivity, Define.VIEW_SELLER);
+        AppSharedPrefs.storeCurrentViewTypeInPrefs(mActivity, Define.VIEW_SELLER);
 
         sellerViewModel =
                 ViewModelProviders.of(this).get(SellerViewModel.class);

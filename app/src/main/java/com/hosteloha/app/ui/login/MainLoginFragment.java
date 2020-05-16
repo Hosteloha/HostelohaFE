@@ -39,6 +39,7 @@ import com.hosteloha.app.beans.UserAuthentication;
 import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.retroapi.ApiUtil;
 import com.hosteloha.app.service.HostelohaService;
+import com.hosteloha.app.utils.AppSharedPrefs;
 import com.hosteloha.app.utils.Define;
 import com.hosteloha.app.utils.HostelohaUtils;
 import com.hosteloha.databinding.FragmentLoginMainBinding;
@@ -343,7 +344,7 @@ public class MainLoginFragment extends Fragment {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
                                         HostelohaUtils.showSnackBarNotification(getActivity(), " OTP Success LOGIN");
-                                        navigateToHomeScreen(HostelohaUtils.getPreviousViewType(getContext()));
+                                        navigateToHomeScreen(AppSharedPrefs.getPreviousViewType(getContext()));
                                     } else {
                                         HostelohaUtils.showSnackBarNotification(getActivity(), "Incorrect OTP");
                                     }
@@ -400,8 +401,8 @@ public class MainLoginFragment extends Fragment {
                     HostelohaUtils.setAuthenticationToken(mAuthenticationTokenJWT.getJwt());
                     if (mHostelohaService != null)
                         mHostelohaService.getSplashData();
-                    HostelohaUtils.storeUserLoginInfo(getContext(), true, HostelohaUtils.AUTHENTICATION_TOKEN);
-                    navigateToHomeScreen(HostelohaUtils.getPreviousViewType(getContext()));
+                    AppSharedPrefs.storeUserLoginInfo(getContext(), true, HostelohaUtils.AUTHENTICATION_TOKEN);
+                    navigateToHomeScreen(AppSharedPrefs.getPreviousViewType(getContext()));
                     HostelohaLog.debugOut("user id :  " + mAuthenticationTokenJWT.getUserId() + "  JWT " + mAuthenticationTokenJWT.getJwt());
                 } else {
                     String mPopMessage = null;
@@ -503,7 +504,7 @@ public class MainLoginFragment extends Fragment {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             // Signed in successfully, show authenticated UI.
-            navigateToHomeScreen(HostelohaUtils.getPreviousViewType(getContext()));
+            navigateToHomeScreen(AppSharedPrefs.getPreviousViewType(getContext()));
             String userNameIs = account.getDisplayName();
             String userEmailIs = account.getEmail();
             HostelohaUtils.showSnackBarNotification(getActivity(), userNameIs + " - " + userEmailIs);

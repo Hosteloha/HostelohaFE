@@ -22,6 +22,7 @@ import com.hosteloha.app.list.data.AllProductsSubject;
 import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.service.HostelohaService;
 import com.hosteloha.app.ui.buyer.adapter.RecyclerAdapter;
+import com.hosteloha.app.utils.AppSharedPrefs;
 import com.hosteloha.app.utils.Define;
 import com.hosteloha.app.utils.HostelohaUtils;
 import com.hosteloha.databinding.FragmentBuyerBinding;
@@ -55,7 +56,7 @@ public class BuyerFragment extends Fragment {
         mBuyerBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_buyer, container, false);
 
 
-        HostelohaUtils.storeCurrentViewTypeInPrefs(getContext(), Define.VIEW_BUYER);
+        AppSharedPrefs.storeCurrentViewTypeInPrefs(getContext(), Define.VIEW_BUYER);
         buyerViewModel =
                 ViewModelProviders.of(this).get(BuyerViewModel.class);
         View root = inflater.inflate(R.layout.fragment_buyer, container, false);
@@ -85,7 +86,7 @@ public class BuyerFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        HostelohaUtils.storeCurrentViewTypeInPrefs(getContext(), Define.VIEW_BUYER);
+        AppSharedPrefs.storeCurrentViewTypeInPrefs(getContext(), Define.VIEW_BUYER);
     }
 
     @Override
