@@ -37,8 +37,8 @@ import androidx.lifecycle.MutableLiveData;
 
 public class AppLocation {
 
-    private Context mContext = null;
-    private Activity mActivity = null;
+    private static Context mContext = null;
+    private static Activity mActivity = null;
     public static final int REQUEST_CHECK_LOCATION = 44;
     FusedLocationProviderClient mFusedLocationClient = null;
 
@@ -46,17 +46,21 @@ public class AppLocation {
         mContext = context;
         mActivity = activity;
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(mContext);
+        HostelohaLog.debugOut(" Constructor - context : "+(mContext!=null) +", activity : "+(activity!=null));
     }
 
     private boolean checkPermissions() {
-        return ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        return ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestPermissions() {
         ActivityCompat.requestPermissions(
                 mActivity,
-                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CHECK_LOCATION
+                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CHECK_LOCATION
         );
     }
 
@@ -70,24 +74,30 @@ public class AppLocation {
     public void getLastLocation() {
         if (checkPermissions()) {
             if (isLocationEnabled()) {
-                mFusedLocationClient.getLastLocation().addOnCompleteListener(
-                        new OnCompleteListener<Location>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Location> task) {
-                                Location location = task.getResult();
-                                if (location == null) {
-                                    requestNewLocationData();
-                                } else {
-                                    double loc_lat = location.getLatitude();
-                                    double loc_long = location.getLongitude();
-                                    getLocationAddress(loc_lat,loc_long);
-                                    String lat_long = "location :  [Lat,Long] : " + loc_lat + "," + loc_long;
-                                    mAddressText.setValue(lat_long);
-                                    HostelohaLog.debugOut(lat_long);
+                if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED
+                        && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    mFusedLocationClient.getLastLocation().addOnCompleteListener(
+                            new OnCompleteListener<Location>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Location> task) {
+                                    Location location = task.getResult();
+                                    if (location == null) {
+                                        HostelohaLog.debugOut("Location is null");
+                                        requestNewLocationData();
+                                    } else {
+                                        double loc_lat = location.getLatitude();
+                                        double loc_long = location.getLongitude();
+                                        getLocationAddress(loc_lat, loc_long);
+                                        String lat_long = "location :  [Lat,Long] : " + loc_lat + "," + loc_long;
+                                        mAddressText.setValue(lat_long);
+                                        HostelohaLog.debugOut(lat_long);
+                                    }
                                 }
                             }
-                        }
-                );
+                    );
+                }
             } else {
                 Toast.makeText(mContext, "Turn on location", Toast.LENGTH_LONG).show();
                 showLocationSettingPermissionPopUp();
@@ -101,9 +111,14 @@ public class AppLocation {
 
     private void requestNewLocationData() {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(mContext);
-        mFusedLocationClient.requestLocationUpdates(
-                createLocationRequest(), mLocationCallback, Looper.myLooper()
-        );
+        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mFusedLocationClient.requestLocationUpdates(
+                    createLocationRequest(), mLocationCallback, Looper.myLooper()
+            );
+        }
     }
 
     protected LocationRequest createLocationRequest() {
@@ -121,7 +136,7 @@ public class AppLocation {
             Location mLastLocation = locationResult.getLastLocation();
             double loc_lat = mLastLocation.getLatitude();
             double loc_long = mLastLocation.getLongitude();
-            getLocationAddress(loc_lat,loc_long);
+            getLocationAddress(loc_lat, loc_long);
             String lat_long = "location :  [Lat,Long] : " + loc_lat + "," + loc_long;
             mAddressText.setValue(lat_long);
             HostelohaLog.debugOut(lat_long);
@@ -170,7 +185,7 @@ public class AppLocation {
 
     public void getLastKnownLocation(MutableLiveData<String> mText, MutableLiveData<List<Address>> addressList) {
         mAddressText = mText;
-        mAddressList =  addressList;
+        mAddressList = addressList;
         getLastLocation();
     }
 

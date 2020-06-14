@@ -70,8 +70,10 @@ public class AccountEditAddress extends Fragment {
                     String postalCode = addresses.get(0).getPostalCode();
                     mFgmtBinding.pincode.setText(postalCode);
                     String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
+                    String fullAddressLine = addresses.get(0).toString();
+                    mFgmtBinding.houseNum.setText(fullAddressLine);
                     HostelohaLog.debugOut(" address :: " + city + " , " + state +" known "+knownName
-                    +" Feature :: "+addresses.get(0).toString() + addresses.get(0) );
+                    +" Feature :: "+fullAddressLine);
                     // Feature is 18
                 }
             }

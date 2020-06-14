@@ -5,17 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.hosteloha.R;
 import com.hosteloha.app.beans.ProductObject;
 import com.hosteloha.app.list.data.AllProductsSubject;
@@ -29,6 +18,17 @@ import com.hosteloha.databinding.FragmentBuyerBinding;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class BuyerFragment extends Fragment {
 
@@ -57,8 +57,7 @@ public class BuyerFragment extends Fragment {
 
 
         AppSharedPrefs.storeCurrentViewTypeInPrefs(getContext(), Define.VIEW_BUYER);
-        buyerViewModel =
-                ViewModelProviders.of(this).get(BuyerViewModel.class);
+        buyerViewModel = new ViewModelProvider(this).get(BuyerViewModel.class);
         View root = inflater.inflate(R.layout.fragment_buyer, container, false);
         buyerViewModel.getText().observe(this, new Observer<String>() {
             @Override
