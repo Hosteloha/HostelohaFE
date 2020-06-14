@@ -224,7 +224,7 @@ public class SellerFragment extends Fragment {
                 ViewModelProviders.of(this).get(SellerViewModel.class);
         View root = inflater.inflate(R.layout.fragment_seller, container, false);
         final TextView textView = root.findViewById(R.id.text_seller);
-        sellerViewModel.getText().observe(this, new Observer<String>() {
+        sellerViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

@@ -23,7 +23,7 @@ public class PaymentsFragment extends Fragment {
         paymentsViewModel = new ViewModelProvider(this).get(PaymentsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_payments, container, false);
         final TextView textView = root.findViewById(R.id.text_payments);
-        paymentsViewModel.getText().observe(this, new Observer<String>() {
+        paymentsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

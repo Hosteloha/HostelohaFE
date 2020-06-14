@@ -59,7 +59,7 @@ public class BuyerFragment extends Fragment {
         AppSharedPrefs.storeCurrentViewTypeInPrefs(getContext(), Define.VIEW_BUYER);
         buyerViewModel = new ViewModelProvider(this).get(BuyerViewModel.class);
         View root = inflater.inflate(R.layout.fragment_buyer, container, false);
-        buyerViewModel.getText().observe(this, new Observer<String>() {
+        buyerViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 mBuyerBinding.textBuyer.setText(s);
