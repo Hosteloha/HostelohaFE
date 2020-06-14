@@ -7,13 +7,12 @@ import android.view.ViewGroup;
 
 import com.hosteloha.R;
 import com.hosteloha.app.log.HostelohaLog;
-import com.hosteloha.app.ui.account.AccountFragmentDirections;
 import com.hosteloha.databinding.FragmentHomeBinding;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -28,14 +27,15 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         mFgmtHomeBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-        homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         initListener();
         return mFgmtHomeBinding.getRoot();
     }
 
-    private void initListener(){
+    private void initListener() {
         mFgmtHomeBinding.btnChangeLocation.setOnClickListener(mOnClickListener);
     }
+
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {

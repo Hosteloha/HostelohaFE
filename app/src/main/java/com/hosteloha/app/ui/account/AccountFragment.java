@@ -11,7 +11,7 @@ import com.hosteloha.databinding.FragmentAccountBinding;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -25,8 +25,7 @@ public class AccountFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
         mFgmtAccBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_account, container, false);
-        accountViewModel =
-                ViewModelProviders.of(this).get(AccountViewModel.class);
+        accountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
         initListener();
         return mFgmtAccBinding.getRoot();
     }

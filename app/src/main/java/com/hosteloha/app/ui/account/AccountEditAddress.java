@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.hosteloha.R;
 import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.utils.AppLocation;
@@ -49,14 +48,14 @@ public class AccountEditAddress extends Fragment {
         accountViewModel =
                 ViewModelProviders.of(this, new AccountViewModel(mContext, getActivity())).get(AccountViewModel.class);
 
-        accountViewModel.getText().observe(this, new Observer<String>() {
+        accountViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 mFgmtBinding.fetchedAddress.setText(s);
             }
         });
 
-        accountViewModel.getAddressList().observe(this, new Observer<List<Address>>() {
+        accountViewModel.getAddressList().observe(getViewLifecycleOwner(), new Observer<List<Address>>() {
             @Override
             public void onChanged(List<Address> addresses) {
                 if (addresses.size() > 0) {
@@ -70,8 +69,10 @@ public class AccountEditAddress extends Fragment {
                     String postalCode = addresses.get(0).getPostalCode();
                     mFgmtBinding.pincode.setText(postalCode);
                     String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
-                    HostelohaLog.debugOut(" address :: " + city + " , " + state +" known "+knownName
-                    +" Feature :: "+addresses.get(0).toString() + addresses.get(0) );
+                    String fullAddressLine = addresses.get(0).toString();
+                    mFgmtBinding.houseNum.setText(fullAddressLine);
+                    HostelohaLog.debugOut(" address :: " + city + " , " + state + " known " + knownName
+                            + " Feature :: " + fullAddressLine);
                     // Feature is 18
                 }
             }
@@ -94,7 +95,7 @@ public class AccountEditAddress extends Fragment {
         AccountViewModel.requestLocationData();
     }
 
-    private void DialogNoAddressFound(){
+    private void DialogNoAddressFound() {
 
     }
 }

@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 public class AboutFragment extends Fragment {
 
@@ -20,11 +20,10 @@ public class AboutFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        aboutViewModel =
-                ViewModelProviders.of(this).get(AboutViewModel.class);
+        aboutViewModel = new ViewModelProvider(this).get(AboutViewModel.class);
         View root = inflater.inflate(R.layout.fragment_about, container, false);
         final TextView textView = root.findViewById(R.id.text_about);
-        aboutViewModel.getText().observe(this, new Observer<String>() {
+        aboutViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
