@@ -8,11 +8,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.hosteloha.R;
 import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.utils.AppLocation;
+import com.hosteloha.app.utils.Define;
 import com.hosteloha.databinding.FragmentAcceditAddressBinding;
 
+import java.util.Arrays;
 import java.util.List;
 
 import androidx.annotation.Nullable;
@@ -78,6 +86,7 @@ public class AccountEditAddress extends Fragment {
             }
         });
         mFgmtBinding.btnUseLocation.setOnClickListener(mOnClickListener);
+        initializePlacesFragment();
         return mFgmtBinding.getRoot();
     }
 
@@ -97,5 +106,32 @@ public class AccountEditAddress extends Fragment {
 
     private void DialogNoAddressFound() {
 
+    }
+
+    private void initializePlacesFragment() {
+        // Initialize the SDK
+        if(!Places.isInitialized()){
+            Places.initialize(getContext(), Define.PLACES_API_KEY);
+        }
+        // Create a new Places client instance
+        PlacesClient placesClient = Places.createClient(getContext());
+        // Initialize the AutocompleteSupportFragment.
+        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                HostelohaLog.debugOut("Place: " + place.getName() + ", " + place.getId());
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                HostelohaLog.debugOut("An error occurred: " + status);
+            }
+        });
     }
 }

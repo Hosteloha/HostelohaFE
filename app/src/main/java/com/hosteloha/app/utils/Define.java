@@ -24,6 +24,7 @@ public class Define {
 
     // NOTIFICATION CHANNEL ID
     public static final String NOTIFICATION_CHANNEL_FILE_ID = "CHANNEL_FILES";
-
-
+    // Places API Key
+    //TODO :: Secure API Key
+    public static final String PLACES_API_KEY = "AIzaSyDHMur-FuEJmrdHtx9IXHeP42L4UxvT2zA";
 }
