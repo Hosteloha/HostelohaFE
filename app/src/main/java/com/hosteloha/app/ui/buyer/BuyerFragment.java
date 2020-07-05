@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 
 import com.hosteloha.R;
 import com.hosteloha.app.beans.ProductObject;
-import com.hosteloha.app.list.data.AllProductsSubject;
 import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.service.HostelohaService;
 import com.hosteloha.app.ui.buyer.adapter.RecyclerAdapter;
@@ -24,7 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -57,28 +56,33 @@ public class BuyerFragment extends Fragment {
 
 
         AppSharedPrefs.storeCurrentViewTypeInPrefs(getContext(), Define.VIEW_BUYER);
-        buyerViewModel = new ViewModelProvider(this).get(BuyerViewModel.class);
+        buyerViewModel = ViewModelProviders.of(getActivity()).get(BuyerViewModel.class);
         View root = inflater.inflate(R.layout.fragment_buyer, container, false);
-        buyerViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                mBuyerBinding.textBuyer.setText(s);
-            }
-        });
 
-        List<ProductObject> productList = AllProductsSubject.getAllProductsSubject().getProductsList();
-
+        List<ProductObject> productList = new ArrayList<ProductObject>();
         mRecyclerAdapter = new RecyclerAdapter(getContext(), productList, mBuyerBinding.buyerRecyclerView);
         mRecyclerAdapter.setOnItemClickListener(mOnItemClickListener);
         mBuyerBinding.buyerRecyclerView.setAdapter(mRecyclerAdapter);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
         mBuyerBinding.buyerRecyclerView.setLayoutManager(layoutManager);
 
-
+        buyerViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                mBuyerBinding.textBuyer.setText(s);
+            }
+        });
+        buyerViewModel.getAllProducts().observe(getViewLifecycleOwner(), new Observer<List<ProductObject>>() {
+            @Override
+            public void onChanged(List<ProductObject> productObjects) {
+                mRecyclerAdapter.setArrayList(productObjects);
+            }
+        });
         mHostelohaService = HostelohaUtils.getHostelohaService(getContext());
-        if (mHostelohaService != null) {
-            mHostelohaService.req_getAllProducts();
+        if (buyerViewModel != null) {
+            buyerViewModel.req_getAllProducts();
         }
+
         return mBuyerBinding.getRoot();
     }
 

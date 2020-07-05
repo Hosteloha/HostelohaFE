@@ -6,37 +6,34 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-
 import com.bumptech.glide.Glide;
 import com.hosteloha.R;
 import com.hosteloha.app.beans.ProductObject;
 import com.hosteloha.app.service.HostelohaService;
-import com.hosteloha.app.utils.HostelohaUtils;
 import com.hosteloha.databinding.FragmentBuyerProductBinding;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 
 public class BuyerProductFragment extends Fragment {
 
     FragmentBuyerProductBinding mBuyerProductBinding;
-    int mProductPosition = -1;
+    int mProductID = -1;
     ProductObject mProductObject;
     HostelohaService mService;
+    private BuyerViewModel buyerViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mService = HostelohaUtils.getHostelohaService(getContext());
-        mProductPosition = getArguments().getInt("product_id");
-        if (mService != null)
-            mProductObject = mService.getProductObject(mProductPosition);
-
+        mProductID = getArguments().getInt("product_id");
     }
 
     @Override
@@ -44,6 +41,8 @@ public class BuyerProductFragment extends Fragment {
                              Bundle savedInstanceState) {
         mBuyerProductBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_buyer_product, container, false);
 
+        buyerViewModel = ViewModelProviders.of(getActivity()).get(BuyerViewModel.class);
+        mProductObject = buyerViewModel.getProductObject(mProductID);
         return mBuyerProductBinding.getRoot();
 
     }

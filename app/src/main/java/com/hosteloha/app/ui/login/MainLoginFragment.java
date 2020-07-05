@@ -427,7 +427,6 @@ public class MainLoginFragment extends Fragment {
                 HostelohaLog.debugOut("Unable to submit post to API.");
             }
         });
-
     }
 
     private void showOtherViews(int isVisible) {
