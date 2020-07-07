@@ -7,16 +7,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.hosteloha.R;
 import com.hosteloha.app.beans.ProductObject;
-import com.hosteloha.app.list.data.AllProductsSubject;
-import com.hosteloha.app.log.HostelohaLog;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder> {
 
@@ -30,16 +28,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         mContext = context;
         mAllProducts = arrayList;
         mRecyclerView = recyclerView;
-        AllProductsSubject.getAllProductsSubject().attachObservers(observer);
     }
-
-    private AllProductsSubject.ProductsObserver observer = new AllProductsSubject.ProductsObserver() {
-        @Override
-        public void onProductsChanged(List<ProductObject> arrylist) {
-            HostelohaLog.debugOut(" arrylist size : " + arrylist.size());
-            setArrayList(arrylist);
-        }
-    };
 
     public void setArrayList(List<ProductObject> arrayList) {
         mAllProducts.clear();

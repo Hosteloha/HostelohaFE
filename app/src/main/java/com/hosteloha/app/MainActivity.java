@@ -25,6 +25,7 @@ import com.hosteloha.app.define.SortingType;
 import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.service.HostelohaService;
 import com.hosteloha.app.ui.account.AccountEditAddress;
+import com.hosteloha.app.ui.buyer.BuyerViewModel;
 import com.hosteloha.app.utils.AppLocation;
 import com.hosteloha.app.utils.HostelohaUtils;
 
@@ -35,6 +36,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
@@ -86,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
         // Set App version
         setAppVersion();
         navController.addOnDestinationChangedListener(mOnDestinationChangedListener);
+        // Initialising BuyerViewModel with Activity Context.
+        ViewModelProviders.of(this).get(BuyerViewModel.class);
     }
 
     private NavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new NavigationView.OnNavigationItemSelectedListener() {
@@ -273,8 +277,6 @@ public class MainActivity extends AppCompatActivity {
                         if (mHostelohaService == null)
                             mHostelohaService = HostelohaUtils.getHostelohaService(MainActivity.this);
 
-                        if (mHostelohaService != null)
-                            mHostelohaService.setSortingType(SortingType.valueOf(sortingType[which]));
                     }
                 });
                 AlertDialog dialog = builder.create();
