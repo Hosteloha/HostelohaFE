@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
@@ -110,21 +111,23 @@ public class AccountEditAddress extends Fragment {
 
     private void initializePlacesFragment() {
         // Initialize the SDK
-        if(!Places.isInitialized()){
+        if (!Places.isInitialized()) {
             Places.initialize(getContext(), Define.PLACES_API_KEY);
         }
         // Create a new Places client instance
         PlacesClient placesClient = Places.createClient(getContext());
         // Initialize the AutocompleteSupportFragment.
-        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
-
-        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getChildFragmentManager().
+                findFragmentById(R.id.autocomplete_fragment);
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS))
+                .setCountries("IN");
 
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
                 // TODO: Get info about the selected place.
-                HostelohaLog.debugOut("Place: " + place.getName() + ", " + place.getId());
+                HostelohaLog.debugOut("Place: " + place.getName() + ", " + place.getId()
+                +" Address :: "+place.getAddress());
             }
 
             @Override
