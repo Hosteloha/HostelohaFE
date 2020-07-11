@@ -5,17 +5,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.IBinder;
 
-import androidx.annotation.Nullable;
-
 import com.hosteloha.app.beans.AuthenticationTokenJWT;
-import com.hosteloha.app.beans.ProductObject;
 import com.hosteloha.app.beans.UserAuthentication;
-import com.hosteloha.app.define.SortingType;
-import com.hosteloha.app.list.ListMaker;
 import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.retroapi.ApiUtil;
 import com.hosteloha.app.retroapi.CallbackWithRetry;
-import com.hosteloha.app.utils.AppFireDataBase;
 import com.hosteloha.app.utils.AppFireStorage;
 import com.hosteloha.app.utils.HostelohaUtils;
 
@@ -24,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import androidx.annotation.Nullable;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -31,7 +26,6 @@ public class HostelohaService extends Service {
 
     private static HostelohaService mHostelohaService = null;
     private String mDefaultUserJWT = null;
-    private ListMaker mListMaker;
 
     public static HostelohaService getService() {
         return mHostelohaService;
@@ -48,7 +42,6 @@ public class HostelohaService extends Service {
         super.onCreate();
         mHostelohaService = this;
         HostelohaLog.debugOut("  service onCreate");
-        mListMaker = new ListMaker();
         req_authenticateDefaultUser();
         getSplashData();
     }
@@ -64,19 +57,6 @@ public class HostelohaService extends Service {
         super.onDestroy();
         HostelohaLog.debugOut("  service onDestroy");
     }
-
-
-    public ProductObject getProductObject(int productId) {
-        ProductObject obj = null;
-        if (mListMaker != null)
-            obj = mListMaker.getProductObject(productId);
-        return obj;
-    }
-
-    public void setSortingType(SortingType sortingType) {
-        if (mListMaker != null)
-            mListMaker.setSortingType(sortingType);
-    }
     
     private void req_authenticateDefaultUser() {
         UserAuthentication defaultUser = new UserAuthentication("testuser@gmail.com", "password");
@@ -88,7 +68,6 @@ public class HostelohaService extends Service {
                     AuthenticationTokenJWT authenticationTokenJWT = response.body();
                     mDefaultUserJWT = "Bearer " + authenticationTokenJWT.getJwt();
                     getSplashData();
-                    req_getAllProducts();
                 }
             }
 
@@ -120,44 +99,6 @@ public class HostelohaService extends Service {
             public void onFailure(Call<Map<String, Set<String>>> call, Throwable throwable) {
                 super.onFailure(call, throwable);
                 HostelohaLog.debugOut("[REQ] getCategoryMapList ===>  onFailure");
-            }
-        });
-    }
-
-    public void req_getAllProducts() {
-        ApiUtil.getServiceClass().getAllProducts(mDefaultUserJWT).enqueue(new CallbackWithRetry<List<ProductObject>>() {
-            @Override
-            public void onResponse(Call<List<ProductObject>> call, Response<List<ProductObject>> response) {
-                HostelohaLog.debugOut("[REQ] getAllProducts  =====> isSuccessful  : " + response.isSuccessful());
-                if (response.isSuccessful()) {
-                    ArrayList<ProductObject> mArrayList = (ArrayList<ProductObject>) response.body();
-                    HostelohaLog.debugOut("[REQ] products_list size ::  " + mArrayList.size());
-                    HostelohaLog.debugOut("[REQ] products_list ---> " + mArrayList.get(0).toString());
-
-                    // Getting from firebase - just temporary code to set image gallery
-                    Map<String, ArrayList<String>> productImagesList = AppFireDataBase.getProductImagesMap();
-                    for (ProductObject product : mArrayList) {
-                        String productID = String.valueOf(product.getProductId());
-                        if (productImagesList.containsKey(productID)) {
-                            ArrayList<String> productImages = productImagesList.get(productID);
-                            product.setProduct_images(productImages);
-                        } else {
-                            //Default URL or glide will take care with placeholder
-                            product.setProduct_images(new ArrayList<String>());
-                        }
-                    }
-
-//                    AllProductsSubject.getAllProductsSubject().setProductsList(mArrayList);
-                    if (mListMaker != null)
-                        mListMaker.setMainProductList(mArrayList);
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<List<ProductObject>> call, Throwable throwable) {
-                HostelohaLog.debugOut("[REQ] getAllProducts ===>  onFailure");
-                super.onFailure(call, throwable);
             }
         });
     }
