@@ -25,8 +25,6 @@ public class HostelohaMain extends Fragment {
         super.onCreate(savedInstanceState);
 
         mHostelohaService = HostelohaUtils.getHostelohaService(getContext());
-        if (mHostelohaService != null)
-            mHostelohaService.getSplashData();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

@@ -2,6 +2,7 @@ package com.hosteloha.app.retroapi;
 
 import com.hosteloha.app.beans.AuthenticationTokenJWT;
 import com.hosteloha.app.beans.ProductObject;
+import com.hosteloha.app.beans.SellerProductObject;
 import com.hosteloha.app.beans.UserAuthentication;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public interface RetrofitInterface {
     Call<List<ProductObject>> getAllProducts(@Header("Authorization") String auth);
 
     @POST("/add_product/")
-    Call<ProductObject> uploadProduct(@Body ProductObject productObject, @Header("Authorization") String auth);
+    Call<ProductObject> uploadProduct(@Body SellerProductObject productObject, @Header("Authorization") String auth);
 
     @GET("/AllCategories")
     Call<String[]> getProductMainCategories(@Header("Authorization") String auth);

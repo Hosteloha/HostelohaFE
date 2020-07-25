@@ -25,8 +25,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 
 import androidx.annotation.NonNull;
 
@@ -37,9 +35,8 @@ public class HostelohaUtils {
     private static StorageReference mFireStorageReference = null;
     private static DatabaseReference mFireDatabaseReference = null;
 
-    static Map<String, Set<String>> mAllCategoriesMap = null;
-
     public static String AUTHENTICATION_TOKEN = "";
+    public static String DEFAULT_AUTHENTICATION_TOKEN = "";
 
     public static String getCurrentDateTime() {
         Date currentTime = Calendar.getInstance().getTime();
@@ -76,6 +73,18 @@ public class HostelohaUtils {
 
     public static void setAuthenticationToken(String token) {
         AUTHENTICATION_TOKEN = "Bearer " + token;
+    }
+
+    public static String getAuthenticationToken() {
+        return AUTHENTICATION_TOKEN;
+    }
+
+    public static String getDefaultAuthenticationToken() {
+        return DEFAULT_AUTHENTICATION_TOKEN;
+    }
+
+    public static void setDefaultAuthenticationToken(String token) {
+        DEFAULT_AUTHENTICATION_TOKEN = token;
     }
 
     public static void showSnackBarNotification(Activity mActivity, String message) {
@@ -134,15 +143,6 @@ public class HostelohaUtils {
             }
         }
         return mFireDatabaseReference;
-    }
-
-
-    public static Map<String, Set<String>> getAllCategoriesMap() {
-        return mAllCategoriesMap;
-    }
-
-    public static void setAllCategoriesMap(Map<String, Set<String>> allCategoriesMap) {
-        mAllCategoriesMap = allCategoriesMap;
     }
 
     public static HostelohaService getHostelohaService(Context context) {

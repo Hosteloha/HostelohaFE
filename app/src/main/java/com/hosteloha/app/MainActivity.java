@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         ViewModelProviders.of(this).get(BuyerViewModel.class);
     }
 
+
     private NavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new NavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -258,6 +259,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        InitialiseViewModels();
     }
 
     @Override
@@ -301,6 +303,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    // Method to initialise all fragment view  models
+    private void InitialiseViewModels() {
     }
 
     /**

@@ -1,8 +1,8 @@
 package com.hosteloha.app.beans;
 
-import androidx.annotation.NonNull;
-
 import com.google.gson.annotations.SerializedName;
+
+import androidx.annotation.NonNull;
 
 public class CategorySet {
 
@@ -12,6 +12,10 @@ public class CategorySet {
     private String subCategory1 = "FaceCreams";
     @SerializedName("sub_category2")
     private String subCategory2 = "Facewash";
+
+    public CategorySet() {
+        this("", "", "");
+    }
 
     public CategorySet(String mainCategory, String subCategory1, String subCategory2) {
         this.mainCategory = mainCategory;
