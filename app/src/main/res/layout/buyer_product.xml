@@ -53,7 +53,7 @@
                                     android:clickable="true"
                                     android:tint="#D63838"
                                     android:scaleType="fitXY"
-                                    app:srcCompat="@drawable/ic_favorite_black_24dp" />
+                                    app:srcCompat="@drawable/favorite_selector" />
 
 
                                 <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -19,11 +19,12 @@ public class AppSharedPrefs {
         return sharedPreferences;
     }
 
-    public static void storeUserLoginInfo(Context context, boolean isLoggedIn, String authenticationToken) {
+    public static void storeUserLoginInfo(Context context, boolean isLoggedIn, String authenticationToken, int userId) {
         sharedPreferences = getSharedPreferences(context);
         prefsEditor = sharedPreferences.edit();
         prefsEditor.putBoolean(Define.KEY_USER_LOGIN_STATUS, isLoggedIn);
         prefsEditor.putString(Define.KEY_USER_AUTH_TOKEN, authenticationToken);
+        prefsEditor.putInt(Define.KEY_USER_LOGIN_ID, userId);
         prefsEditor.apply();
     }
 
@@ -33,6 +34,7 @@ public class AppSharedPrefs {
         boolean isUserLoggedIn = sharedPreferences.getBoolean(Define.KEY_USER_LOGIN_STATUS, false);
         if (isUserLoggedIn) {
             HostelohaUtils.AUTHENTICATION_TOKEN = sharedPreferences.getString(Define.KEY_USER_AUTH_TOKEN, null);
+            HostelohaUtils.setUserId(sharedPreferences.getInt(Define.KEY_USER_LOGIN_ID, -1));
         }
         return isUserLoggedIn;
     }

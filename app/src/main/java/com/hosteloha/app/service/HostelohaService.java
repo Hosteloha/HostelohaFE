@@ -15,8 +15,6 @@ import com.hosteloha.app.utils.HostelohaUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import androidx.annotation.Nullable;
 import retrofit2.Call;
@@ -43,7 +41,6 @@ public class HostelohaService extends Service {
         mHostelohaService = this;
         HostelohaLog.debugOut("  service onCreate");
         req_authenticateDefaultUser();
-        getSplashData();
     }
 
 
@@ -67,7 +64,7 @@ public class HostelohaService extends Service {
                 if (response.isSuccessful()) {
                     AuthenticationTokenJWT authenticationTokenJWT = response.body();
                     mDefaultUserJWT = "Bearer " + authenticationTokenJWT.getJwt();
-                    getSplashData();
+                    HostelohaUtils.setDefaultAuthenticationToken(mDefaultUserJWT);
                 }
             }
 
@@ -79,29 +76,6 @@ public class HostelohaService extends Service {
         });
     }
 
-    public void getSplashData() {
-        req_getCategoryMapList();
-    }
-
-    public void req_getCategoryMapList() {
-        ApiUtil.getServiceClass().getCategoryMapList(mDefaultUserJWT).enqueue(new CallbackWithRetry<Map<String, Set<String>>>() {
-            @Override
-            public void onResponse(Call<Map<String, Set<String>>> call, Response<Map<String, Set<String>>> response) {
-                HostelohaLog.debugOut("[REQ] getCategoryMapList  =====> isSuccessful  : " + response.isSuccessful());
-                if (response.isSuccessful()) {
-                    Map<String, Set<String>> categoriesMap = response.body();
-                    if (categoriesMap != null)
-                        HostelohaUtils.setAllCategoriesMap(categoriesMap);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Map<String, Set<String>>> call, Throwable throwable) {
-                super.onFailure(call, throwable);
-                HostelohaLog.debugOut("[REQ] getCategoryMapList ===>  onFailure");
-            }
-        });
-    }
 
     /**
      * To upload the product gallery to the server.
