@@ -9,7 +9,9 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.hosteloha.R;
 import com.hosteloha.app.beans.ProductObject;
+import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.service.HostelohaService;
+import com.hosteloha.app.ui.account.AccountViewModel;
 import com.hosteloha.databinding.FragmentBuyerProductBinding;
 
 import java.util.List;
@@ -28,6 +30,8 @@ public class BuyerProductFragment extends Fragment {
     ProductObject mProductObject;
     HostelohaService mService;
     private BuyerViewModel buyerViewModel;
+    private List<ProductObject> wishList;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,7 @@ public class BuyerProductFragment extends Fragment {
         mBuyerProductBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_buyer_product, container, false);
 
         buyerViewModel = ViewModelProviders.of(getActivity()).get(BuyerViewModel.class);
+        ViewModelProviders.of(getActivity()).get(AccountViewModel.class).getUserWishList();
         mProductObject = buyerViewModel.getProductObject(mProductID);
         return mBuyerProductBinding.getRoot();
 
@@ -90,7 +95,26 @@ public class BuyerProductFragment extends Fragment {
         mBuyerProductBinding.include.productCondition.setText(mProductObject.getCondition_id() + "");
         mBuyerProductBinding.include.productTitle.setText(mProductObject.getTitle());
         mBuyerProductBinding.include.productSpecifics.setVisibility(View.VISIBLE);
-
+        if (AccountViewModel.getWishListProductsIDs() != null)
+            mBuyerProductBinding.include.favoriteBtn.setActivated(AccountViewModel.getWishListProductsIDs().contains(mProductID));
+        mBuyerProductBinding.include.favoriteBtn.setOnClickListener(mOnClickListener);
 
     }
+
+
+    View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            HostelohaLog.debugOut("===============>  View id :: " + view.getId());
+            switch (view.getId()) {
+                case R.id.favorite_btn:
+                    if (view.isActivated())
+                        buyerViewModel.removeWishList(mProductID);
+                    else
+                        buyerViewModel.addWishList(mProductID);
+                    view.setActivated(!view.isActivated());
+                    break;
+            }
+        }
+    };
 }

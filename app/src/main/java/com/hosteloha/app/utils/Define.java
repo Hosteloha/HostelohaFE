@@ -13,7 +13,7 @@ public class Define {
     public static final String KEY_USER_LOGIN_STATUS = "USER_LOGIN_STATUS";
     public static final String KEY_USER_AUTH_TOKEN = "USER_AUTH_TOKEN";
     public static final String KEY_USER_LOGIN_NAME = "USER_LOGIN_NAME";
-
+    public static final String KEY_USER_LOGIN_ID = "USER_LOGIN_ID";
 
     public static final String KEY_CURRENT_VIEW_TYPE = "CURRENT_VIEW_TYPE";
     public static final String VIEW_BUYER = "VIEW_BUYER";

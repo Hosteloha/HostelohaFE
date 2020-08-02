@@ -1,12 +1,12 @@
 package com.hosteloha.app.ui.buyer;
 
-import com.hosteloha.app.beans.AuthenticationTokenJWT;
 import com.hosteloha.app.beans.ProductObject;
-import com.hosteloha.app.beans.UserAuthentication;
+import com.hosteloha.app.beans.WishListRequest;
 import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.retroapi.ApiUtil;
 import com.hosteloha.app.retroapi.CallbackWithRetry;
 import com.hosteloha.app.utils.AppFireDataBase;
+import com.hosteloha.app.utils.HostelohaUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +16,7 @@ import java.util.Map;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -24,14 +25,11 @@ public class BuyerViewModel extends ViewModel {
     private MutableLiveData<String> mText;
     private MutableLiveData<List<ProductObject>> mProductsList;
     private Map<Integer, ProductObject> mProductMap = new HashMap<>();
-    private String mDefaultUserJWT = "";
 
     public BuyerViewModel() {
         mText = new MutableLiveData<>();
         mProductsList = new MutableLiveData<>();
         mText.setValue("This is buyer fragment");
-        if (mDefaultUserJWT == "")
-            req_authenticateDefaultUser();
     }
 
     public LiveData<String> getText() {
@@ -42,33 +40,9 @@ public class BuyerViewModel extends ViewModel {
         return mProductsList;
     }
 
-    private void req_authenticateDefaultUser() {
-        UserAuthentication defaultUser = new UserAuthentication("testuser@gmail.com", "password");
-        ApiUtil.getServiceClass().getAuthenticationToken(defaultUser).enqueue(new CallbackWithRetry<AuthenticationTokenJWT>() {
-            @Override
-            public void onResponse(Call<AuthenticationTokenJWT> call, Response<AuthenticationTokenJWT> response) {
-                HostelohaLog.debugOut("[REQ] getAuthenticationToken  =====> isSuccessful  : " + response.isSuccessful());
-                if (response.isSuccessful()) {
-                    AuthenticationTokenJWT authenticationTokenJWT = response.body();
-                    mDefaultUserJWT = "Bearer " + authenticationTokenJWT.getJwt();
-                    req_getAllProducts();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<AuthenticationTokenJWT> call, Throwable throwable) {
-                super.onFailure(call, throwable);
-                HostelohaLog.debugOut("[REQ] getAuthenticationToken ===>  onFailure");
-            }
-        });
-    }
-
     public void req_getAllProducts() {
-        if (mDefaultUserJWT == "") {
-            req_authenticateDefaultUser();
-            return;
-        }
-        ApiUtil.getServiceClass().getAllProducts(mDefaultUserJWT).enqueue(new CallbackWithRetry<List<ProductObject>>() {
+
+        ApiUtil.getServiceClass().getAllProducts(HostelohaUtils.getDefaultAuthenticationToken()).enqueue(new CallbackWithRetry<List<ProductObject>>() {
             @Override
             public void onResponse(Call<List<ProductObject>> call, Response<List<ProductObject>> response) {
                 HostelohaLog.debugOut("[REQ] getAllProducts  =====> isSuccessful  : " + response.isSuccessful());
@@ -116,5 +90,26 @@ public class BuyerViewModel extends ViewModel {
             }
         } else
             HostelohaLog.debugOut("  arrayList is null ");
+    }
+
+    public void addWishList(int productId) {
+        HostelohaLog.debugOut(" productId :: " + productId + "  userID :: " + HostelohaUtils.getUserId() + "  --- " + HostelohaUtils.getAuthenticationToken());
+        WishListRequest wishListRequest = new WishListRequest(HostelohaUtils.getUserId(), productId);
+        ApiUtil.getServiceClass().addToWishList(HostelohaUtils.getAuthenticationToken(), wishListRequest).enqueue(new CallbackWithRetry<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                HostelohaLog.debugOut("[REQ] addWishList  isSuccessful  :: " + response.isSuccessful());
+            }
+        });
+    }
+
+    public void removeWishList(int productId) {
+        HostelohaLog.debugOut(" productId :: " + productId + "  userID :: " + HostelohaUtils.getUserId());
+        ApiUtil.getServiceClass().removeFromWishlist(HostelohaUtils.getAuthenticationToken(), HostelohaUtils.getUserId(), productId).enqueue(new CallbackWithRetry<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                HostelohaLog.debugOut("[REQ] removeWishList  isSuccessful  :: " + response.isSuccessful());
+            }
+        });
     }
 }

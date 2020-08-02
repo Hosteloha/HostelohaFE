@@ -36,6 +36,7 @@ public class HostelohaUtils {
     private static DatabaseReference mFireDatabaseReference = null;
 
     public static String AUTHENTICATION_TOKEN = "";
+    public static int USER_ID = -1;
     public static String DEFAULT_AUTHENTICATION_TOKEN = "";
 
     public static String getCurrentDateTime() {
@@ -77,6 +78,14 @@ public class HostelohaUtils {
 
     public static String getAuthenticationToken() {
         return AUTHENTICATION_TOKEN;
+    }
+
+    public static int getUserId() {
+        return USER_ID;
+    }
+
+    public static void setUserId(int userId) {
+        USER_ID = userId;
     }
 
     public static String getDefaultAuthenticationToken() {

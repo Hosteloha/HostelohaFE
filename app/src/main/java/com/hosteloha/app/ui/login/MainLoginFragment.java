@@ -399,7 +399,8 @@ public class MainLoginFragment extends Fragment {
                     dismissProgressDialog("Verfied Successfully");
                     AuthenticationTokenJWT mAuthenticationTokenJWT = response.body();
                     HostelohaUtils.setAuthenticationToken(mAuthenticationTokenJWT.getJwt());
-                    AppSharedPrefs.storeUserLoginInfo(getContext(), true, HostelohaUtils.AUTHENTICATION_TOKEN);
+                    HostelohaUtils.setUserId(mAuthenticationTokenJWT.getUserId());
+                    AppSharedPrefs.storeUserLoginInfo(getContext(), true, HostelohaUtils.AUTHENTICATION_TOKEN, mAuthenticationTokenJWT.getUserId());
                     navigateToHomeScreen(AppSharedPrefs.getPreviousViewType(getContext()));
                     HostelohaLog.debugOut("user id :  " + mAuthenticationTokenJWT.getUserId() + "  JWT " + mAuthenticationTokenJWT.getJwt());
                 } else {
