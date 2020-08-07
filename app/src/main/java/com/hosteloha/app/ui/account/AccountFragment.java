@@ -39,6 +39,9 @@ public class AccountFragment extends Fragment {
         mFgmtAccBinding.buyerAccItems.layoutMyBids.setOnClickListener(mOnClickListener);
         mFgmtAccBinding.sellerAccItems.layoutProductDrafts.setOnClickListener(mOnClickListener);
         mFgmtAccBinding.sellerAccItems.layoutSellerAnalytics.setOnClickListener(mOnClickListener);
+        mFgmtAccBinding.userFollowersButton.setOnClickListener(mOnClickListener);
+        mFgmtAccBinding.userFollowingsButton.setOnClickListener(mOnClickListener);
+
     }
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -60,6 +63,10 @@ public class AccountFragment extends Fragment {
                 navController.navigate(AccountFragmentDirections.actionNavAccountToAccountViewDrafts());
             } else if (view.getId() == mFgmtAccBinding.sellerAccItems.layoutSellerAnalytics.getId()) {
                 navController.navigate(AccountFragmentDirections.actionNavAccountToAccountViewAnalytics());
+            } else if (view.getId() == mFgmtAccBinding.userFollowersButton.getId()) {
+                navController.navigate(AccountFragmentDirections.actionNavAccountToAccountViewFollowers());
+            } else if (view.getId() == mFgmtAccBinding.userFollowingsButton.getId()) {
+                navController.navigate(AccountFragmentDirections.actionNavAccountToAccountViewFollowings());
             }
         }
     };

@@ -457,7 +457,7 @@
                                         android:clickable="true"
                                         style="@style/TextAppearance.AppCompat.Small"
                                         android:textColor="@android:color/holo_blue_dark"
-                                        android:text="Seller other product's" />
+                                        android:text="Seller other product's >" />
 
 
                                     <LinearLayout
