@@ -137,6 +137,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnShowAllCat"
                     style="@style/customMaterialButton_TextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

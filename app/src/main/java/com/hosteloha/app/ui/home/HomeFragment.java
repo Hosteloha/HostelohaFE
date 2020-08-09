@@ -34,6 +34,8 @@ public class HomeFragment extends Fragment {
 
     private void initListener() {
         mFgmtHomeBinding.btnChangeLocation.setOnClickListener(mOnClickListener);
+        mFgmtHomeBinding.btnShowAllCat.setOnClickListener(mOnClickListener);
+
     }
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -41,6 +43,8 @@ public class HomeFragment extends Fragment {
         public void onClick(View view) {
             if (view.getId() == mFgmtHomeBinding.btnChangeLocation.getId()) {
                 navController.navigate(HomeFragmentDirections.actionNavHomeToAccountEditAddress());
+            } else if(view.getId() == mFgmtHomeBinding.btnShowAllCat.getId()) {
+                navController.navigate(HomeFragmentDirections.actionNavHomeToHomeAllCategories());
             }
         }
     };

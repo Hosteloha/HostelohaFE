@@ -1,25 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <HorizontalScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <GridLayout
+            android:id="@+id/GridLayout1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:alignmentMode="alignBounds"
+            android:columnCount="2"
+            android:padding="20dp"
+            android:rowOrderPreserved="false"
+            android:useDefaultMargins="true"
             android:orientation="horizontal">
 
             <LinearLayout
+                android:background="@drawable/imageview_border"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill_horizontal"
+                android:gravity="center"
                 android:layout_margin="5dp">
 
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_gravity="center_horizontal|top"
+                    android:layout_gravity="center"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_cat_electronics" />
 
@@ -32,15 +43,19 @@
             </LinearLayout>
 
             <LinearLayout
+                android:background="@drawable/imageview_border"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill_horizontal"
+                android:gravity="center"
                 android:layout_margin="5dp">
 
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_gravity="center_horizontal|top"
+                    android:layout_gravity="center"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_cat_books_colors" />
 
@@ -53,15 +68,19 @@
             </LinearLayout>
 
             <LinearLayout
+                android:background="@drawable/imageview_border"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill_horizontal"
+                android:gravity="center"
                 android:layout_margin="5dp">
 
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_gravity="center_horizontal|top"
+                    android:layout_gravity="center"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_cat_music2" />
 
@@ -74,15 +93,19 @@
             </LinearLayout>
 
             <LinearLayout
+                android:background="@drawable/imageview_border"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill_horizontal"
+                android:gravity="center"
                 android:layout_margin="5dp">
 
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_gravity="center_horizontal|top"
+                    android:layout_gravity="center"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_cat_fashion" />
 
@@ -95,15 +118,19 @@
             </LinearLayout>
 
             <LinearLayout
+                android:background="@drawable/imageview_border"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill_horizontal"
+                android:gravity="center"
                 android:layout_margin="5dp">
 
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_gravity="center_horizontal|top"
+                    android:layout_gravity="center"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_cat_beauty" />
 
@@ -117,15 +144,19 @@
 
 
             <LinearLayout
+                android:background="@drawable/imageview_border"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill_horizontal"
+                android:gravity="center"
                 android:layout_margin="5dp">
 
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_gravity="center_horizontal|top"
+                    android:layout_gravity="center"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_cat_projects" />
 
@@ -139,15 +170,19 @@
 
 
             <LinearLayout
+                android:background="@drawable/imageview_border"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill_horizontal"
+                android:gravity="center"
                 android:layout_margin="5dp">
 
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_gravity="center_horizontal|top"
+                    android:layout_gravity="center"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_cat_transport2" />
 
@@ -160,15 +195,19 @@
             </LinearLayout>
 
             <LinearLayout
+                android:background="@drawable/imageview_border"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill_horizontal"
+                android:gravity="center"
                 android:layout_margin="5dp">
 
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_gravity="center_horizontal|top"
+                    android:layout_gravity="center"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_cat_sports2" />
 
@@ -181,15 +220,19 @@
             </LinearLayout>
 
             <LinearLayout
+                android:background="@drawable/imageview_border"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill_horizontal"
+                android:gravity="center"
                 android:layout_margin="5dp">
 
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_gravity="center_horizontal|top"
+                    android:layout_gravity="center"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_cat_rent1" />
 
@@ -200,7 +243,6 @@
                     android:text="@string/category_rent"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small" />
             </LinearLayout>
-
-        </LinearLayout>
-    </HorizontalScrollView>
+        </GridLayout>
+    </androidx.core.widget.NestedScrollView>
 </layout>

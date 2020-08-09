@@ -60,6 +60,16 @@
         <item name="cardElevation">10dp</item>
     </style>
 
+    <style name="categoryIndividualCardDesign">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="cardCornerRadius">5dp</item>
+        <item name="cardElevation">5dp</item>
+    </style>
+
     <style name="productViewBasedCardDesign">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
@@ -90,6 +100,7 @@
         <item name="cardCornerRadius">10dp</item>
         <item name="cardElevation">10dp</item>
     </style>
+
 
     <style name="AlertDialogTheme">
         <item name="android:layout_width">wrap_content</item>
