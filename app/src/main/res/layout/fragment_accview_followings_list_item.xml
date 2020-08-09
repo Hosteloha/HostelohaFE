@@ -69,23 +69,21 @@
                         </LinearLayout>
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/editAccountDetails"
-                            style="@style/customMaterialButton_Filled"
+                            android:id="@+id/followButton"
+                            style="@style/customMaterialButton_TextButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentTop="true"
                             android:layout_below="@+id/seller_ratings"
                             android:layout_gravity="end|top"
-                            android:text="Unfollow"
+                            android:text="Following"
                             android:textAllCaps="false"
-                            android:textColor="@color/primary50"
                             android:textSize="12sp"
-                            app:backgroundTint="@color/primary700"
                             app:cornerRadius="10dp"
-                            app:icon="@drawable/ic_tick_dt"
-                            app:iconTint="@color/primary50" />
-
+                            android:textColor="@color/primary400"
+                            app:iconTint="@color/primary400"
+                            app:icon="@drawable/ic_tick_dt" />
                     </RelativeLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

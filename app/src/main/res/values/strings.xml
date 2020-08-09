@@ -70,6 +70,17 @@
     <string name="menu_sort">Sorting Type</string>
     <string name="app_version">Version %1$s</string>
 
+    <!-- Home Categories -->
+    <string name="category_books">Books</string>
+    <string name="category_electronics">Electronics</string>
+    <string name="category_music">Music</string>
+    <string name="category_fashion">Fashion</string>
+    <string name="category_beauty">Beauty</string>
+    <string name="category_project">Projects</string> -
+    <string name="category_vehicle">Vehicles</string> -
+    <string name="category_rent">Rent</string>
+
+    <!-- Showing array in seller category chooser -->
     <string-array name="product_categories">
         <item>Books</item>
         <item>Business &amp; Industrial</item>
