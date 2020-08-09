@@ -13,8 +13,8 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <!-- Below theme is for appBar Main, like side bar open -->
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="parent">
@@ -129,6 +129,15 @@
     t
 
     <style name="customMaterialButton_Outlined" parent="Widget.MaterialComponents.Button.OutlinedButton.Icon">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="theme">@style/Theme.MaterialComponents</item>
+        <item name="rippleColor">@color/colorRippleColor</item>
+        <item name="strokeColor">@color/colorPrimary</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="customMaterialButton_Filled" parent="Widget.MaterialComponents.Button.Icon">
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="theme">@style/Theme.MaterialComponents</item>
         <item name="rippleColor">@color/colorRippleColor</item>

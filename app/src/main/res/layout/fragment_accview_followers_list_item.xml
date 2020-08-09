@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/product_grid_item"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="true"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                    <androidx.cardview.widget.CardView style="@style/scrollViewBasedCardDesign">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="20dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:focusableInTouchMode="false"
+                                    android:orientation="vertical">
+
+                                    <ImageView
+                                        android:id="@+id/profile_image"
+                                        android:layout_width="84dp"
+                                        android:layout_height="84dp"
+                                        android:layout_alignParentStart="true"
+                                        android:layout_centerVertical="true"
+                                        android:layout_gravity="start|center_vertical"
+                                        android:layout_marginBottom="20dp"
+                                        android:adjustViewBounds="true"
+                                        android:scaleType="fitXY"
+                                        android:src="@drawable/ic_account_circle_dt"
+                                        android:tint="@color/colorPrimary" />
+
+                                    <LinearLayout
+                                        android:id="@+id/seller_ratings"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:layout_marginTop="5dp"
+                                        android:layout_below="@+id/profile_image">
+
+                                        <ImageView
+                                            android:layout_width="20dp"
+                                            android:layout_height="20dp"
+                                            android:scaleType="fitCenter"
+                                            android:adjustViewBounds="true"
+                                            android:src="@drawable/ic_rating_dt"
+                                            android:tint="@color/colorAccentSecondary" />
+
+                                        <TextView
+                                            style="@style/TextAppearance.AppCompat.Small"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="3.5 | 10 ratings | 56 followers" />
+                                    </LinearLayout>
+
+                                    <com.google.android.material.button.MaterialButton
+                                        android:id="@+id/editAccountDetails"
+                                        style="@style/customMaterialButton_Outlined"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentEnd="true"
+                                        android:layout_alignParentTop="true"
+                                        android:layout_below="@+id/seller_ratings"
+                                        android:layout_gravity="end|top"
+                                        android:text="Follow Back"
+                                        android:textAllCaps="false"
+                                        android:textSize="12sp"
+                                        app:cornerRadius="10dp"
+                                        app:icon="@drawable/ic_add_black"
+                                        app:iconTint="@color/colorAccent" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:singleLine="true"
+                                        android:layout_alignParentBottom="true"
+                                        android:layout_alignParentEnd="true"
+                                        android:gravity="end"
+                                        android:clickable="true"
+                                        style="@style/TextAppearance.AppCompat.Small"
+                                        android:textColor="@android:color/holo_blue_dark"
+                                        android:text="View user product's >" />
+
+
+                                    <LinearLayout
+                                        android:id="@+id/userDetails"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="20dp"
+                                        android:layout_toRightOf="@+id/profile_image"
+                                        android:layout_centerVertical="true"
+                                        android:layout_gravity="end|center_vertical"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/item_number"
+                                            style="@style/modifiedEditText"
+                                            android:singleLine="true"
+                                            android:text="Tony Stark" />
+
+                                        <TextView
+                                            android:id="@+id/content"
+                                            style="@style/modifiedEditText"
+                                            android:singleLine="true"
+                                            android:text="Active 2 days ago" />
+
+                                        <TextView
+                                            style="@style/modifiedEditText"
+                                            android:singleLine="true"
+                                            android:text="98 % positive feedback" />
+
+                                        <TextView
+                                            style="@style/modifiedEditText"
+                                            android:singleLine="true"
+                                            android:text="43 products sold" />
+
+
+                                    </LinearLayout>
+                                </RelativeLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+        </LinearLayout>
+
+    </FrameLayout>
+</layout>

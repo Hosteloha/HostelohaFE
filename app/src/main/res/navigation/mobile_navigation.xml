@@ -255,6 +255,12 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_nav_account_to_accountViewFollowers"
+            app:destination="@id/accountViewFollowers" />
+        <action
+            android:id="@+id/action_nav_account_to_accountViewFollowings"
+            app:destination="@id/accountViewFollowings" />
     </fragment>
     <fragment
         android:id="@+id/accountViewBids"
@@ -271,4 +277,14 @@
         android:name="com.hosteloha.app.ui.referral.ReferEarnFragment"
         android:label="Refer &amp; Earn"
         tools:layout="@layout/fragment_refer_earn" />
+    <fragment
+        android:id="@+id/accountViewFollowers"
+        android:name="com.hosteloha.app.ui.account.AccountViewFollowers"
+        android:label="Followers"
+        tools:layout="@layout/fragment_accview_followers_list" />
+    <fragment
+        android:id="@+id/accountViewFollowings"
+        android:name="com.hosteloha.app.ui.account.AccountViewFollowings"
+        android:label="Following"
+        tools:layout="@layout/fragment_accview_followings_list" />
 </navigation>

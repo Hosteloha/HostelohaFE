@@ -26,7 +26,6 @@
     <string name="menu_buyer">Buyer</string>
     <string name="menu_user_account"> My Account</string>
     <string name="menu_user_notifications"> My Notifications</string>
-
     <string name="menu_payment_info">Payment</string>
     <string name="menu_app_settings">Setting</string>
     <string name="menu_app_info">About</string>
@@ -50,6 +49,10 @@
     <string name="channel_description">hosteloha_chanel_description</string>
     <string name="product_cp_value">&#160;₹%1$d&#160;</string>
     <string name="product_sp_value">₹%1$d</string>
+
+    <!-- My Account -->
+    <string name="account_followers">%1$d followers</string>
+    <string name="account_following">%1$d following</string>
 
     <!-- Product -->
     <string name="product_discount_value">%1$d%%</string>
