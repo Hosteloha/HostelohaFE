@@ -15,7 +15,9 @@
             android:visibility="gone" />
 
 
-            <include layout="@layout/layout_all_categories" />
+            <include
+                android:id="@+id/allCat_item"
+                layout="@layout/layout_all_categories" />
 
     </FrameLayout>
 </layout>

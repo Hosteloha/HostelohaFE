@@ -11,15 +11,22 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/btn_electronics"
+                android:background="@drawable/imageview_border"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill_horizontal"
+                android:gravity="center"
+                android:clickable="true"
                 android:layout_margin="5dp">
 
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_gravity="center_horizontal|top"
+                    android:layout_gravity="center"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_cat_electronics" />
 
@@ -32,15 +39,22 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/btn_books"
+                android:background="@drawable/imageview_border"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill_horizontal"
+                android:gravity="center"
+                android:clickable="true"
                 android:layout_margin="5dp">
 
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_gravity="center_horizontal|top"
+                    android:layout_gravity="center"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_cat_books_colors" />
 
@@ -53,15 +67,22 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/btn_music"
+                android:background="@drawable/imageview_border"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill_horizontal"
+                android:gravity="center"
+                android:clickable="true"
                 android:layout_margin="5dp">
 
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_gravity="center_horizontal|top"
+                    android:layout_gravity="center"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_cat_music2" />
 
@@ -74,15 +95,22 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/btn_fashion"
+                android:background="@drawable/imageview_border"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill_horizontal"
+                android:gravity="center"
+                android:clickable="true"
                 android:layout_margin="5dp">
 
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_gravity="center_horizontal|top"
+                    android:layout_gravity="center"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_cat_fashion" />
 
@@ -95,15 +123,22 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/btn_beauty"
+                android:background="@drawable/imageview_border"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill_horizontal"
+                android:gravity="center"
+                android:clickable="true"
                 android:layout_margin="5dp">
 
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_gravity="center_horizontal|top"
+                    android:layout_gravity="center"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_cat_beauty" />
 
@@ -117,15 +152,22 @@
 
 
             <LinearLayout
+                android:id="@+id/btn_project"
+                android:background="@drawable/imageview_border"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill_horizontal"
+                android:gravity="center"
+                android:clickable="true"
                 android:layout_margin="5dp">
 
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_gravity="center_horizontal|top"
+                    android:layout_gravity="center"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_cat_projects" />
 
@@ -139,15 +181,22 @@
 
 
             <LinearLayout
+                android:id="@+id/btn_transport"
+                android:background="@drawable/imageview_border"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill_horizontal"
+                android:gravity="center"
+                android:clickable="true"
                 android:layout_margin="5dp">
 
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_gravity="center_horizontal|top"
+                    android:layout_gravity="center"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_cat_transport2" />
 
@@ -160,15 +209,22 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/btn_sports"
+                android:background="@drawable/imageview_border"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill_horizontal"
+                android:gravity="center"
+                android:clickable="true"
                 android:layout_margin="5dp">
 
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_gravity="center_horizontal|top"
+                    android:layout_gravity="center"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_cat_sports2" />
 
@@ -181,15 +237,22 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/btn_rentgear"
+                android:background="@drawable/imageview_border"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill_horizontal"
+                android:gravity="center"
+                android:clickable="true"
                 android:layout_margin="5dp">
 
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_gravity="center_horizontal|top"
+                    android:layout_gravity="center"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_cat_rent1" />
 

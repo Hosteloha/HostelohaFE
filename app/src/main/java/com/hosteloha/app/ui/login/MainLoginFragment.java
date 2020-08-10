@@ -381,7 +381,8 @@ public class MainLoginFragment extends Fragment {
         if(Define.isPreviousViewCheckEnabled){
             boolean isPreviousViewBuyer = (viewType.equals(Define.VIEW_BUYER));
             if (isPreviousViewBuyer) {
-                navController.navigate(MainLoginFragmentDirections.actionMainLoginFragmentToNavBuyer());
+                navController.navigate(MainLoginFragmentDirections.
+                        actionMainLoginFragmentToNavBuyer(Define.CAT_NONE));
             } else {
                 navController.navigate(MainLoginFragmentDirections.actionMainLoginFragmentToNavSeller());
             }

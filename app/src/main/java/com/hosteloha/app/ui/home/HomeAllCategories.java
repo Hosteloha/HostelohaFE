@@ -1,14 +1,18 @@
 package com.hosteloha.app.ui.home;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.hosteloha.R;
+import com.hosteloha.app.utils.Define;
+import com.hosteloha.databinding.FragmentHomeviewAllcategoriesBinding;
+
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,10 +21,13 @@ import com.hosteloha.R;
  */
 public class HomeAllCategories extends Fragment {
 
+    private FragmentHomeviewAllcategoriesBinding mFgmtAllCatBinding = null;
+    private static NavController navController = null;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -60,7 +67,56 @@ public class HomeAllCategories extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_homeview_allcategories, container, false);
+        mFgmtAllCatBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_homeview_allcategories, container, false);
+        initListener();
+        return mFgmtAllCatBinding.getRoot();
     }
+
+    private void initListener() {
+        mFgmtAllCatBinding.allCatItem.btnElectronics.setOnClickListener(mOnClickListener);
+        mFgmtAllCatBinding.allCatItem.btnBeauty.setOnClickListener(mOnClickListener);
+        mFgmtAllCatBinding.allCatItem.btnBooks.setOnClickListener(mOnClickListener);
+        mFgmtAllCatBinding.allCatItem.btnFashion.setOnClickListener(mOnClickListener);
+        mFgmtAllCatBinding.allCatItem.btnMusic.setOnClickListener(mOnClickListener);
+        mFgmtAllCatBinding.allCatItem.btnProject.setOnClickListener(mOnClickListener);
+        mFgmtAllCatBinding.allCatItem.btnRentgear.setOnClickListener(mOnClickListener);
+        mFgmtAllCatBinding.allCatItem.btnSports.setOnClickListener(mOnClickListener);
+        mFgmtAllCatBinding.allCatItem.btnTransport.setOnClickListener(mOnClickListener);
+    }
+
+    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (view.getId() == mFgmtAllCatBinding.allCatItem.btnElectronics.getId()) {
+                navController.navigate(HomeAllCategoriesDirections.
+                        actionHomeAllCategoriesToNavBuyer(Define.CAT_ELECTRONICS));
+            } else if (view.getId() == mFgmtAllCatBinding.allCatItem.btnBeauty.getId()) {
+                navController.navigate(HomeAllCategoriesDirections.
+                        actionHomeAllCategoriesToNavBuyer(Define.CAT_BEAUTY));
+            } else if (view.getId() == mFgmtAllCatBinding.allCatItem.btnBooks.getId()) {
+                navController.navigate(HomeAllCategoriesDirections.
+                        actionHomeAllCategoriesToNavBuyer(Define.CAT_BOOKS));
+            } else if (view.getId() == mFgmtAllCatBinding.allCatItem.btnFashion.getId()) {
+                navController.navigate(HomeAllCategoriesDirections.
+                        actionHomeAllCategoriesToNavBuyer(Define.CAT_FASHION));
+            } else if (view.getId() == mFgmtAllCatBinding.allCatItem.btnMusic.getId()) {
+                navController.navigate(HomeAllCategoriesDirections.
+                        actionHomeAllCategoriesToNavBuyer(Define.CAT_MUSIC));
+            } else if (view.getId() == mFgmtAllCatBinding.allCatItem.btnProject.getId()) {
+                navController.navigate(HomeAllCategoriesDirections.
+                        actionHomeAllCategoriesToNavBuyer(Define.CAT_PROJECT));
+            } else if (view.getId() == mFgmtAllCatBinding.allCatItem.btnRentgear.getId()) {
+                navController.navigate(HomeAllCategoriesDirections.
+                        actionHomeAllCategoriesToNavBuyer(Define.CAT_RENT));
+            } else if (view.getId() == mFgmtAllCatBinding.allCatItem.btnSports.getId()) {
+                navController.navigate(HomeAllCategoriesDirections.
+                        actionHomeAllCategoriesToNavBuyer(Define.CAT_SPORTS));
+            } else if (view.getId() == mFgmtAllCatBinding.allCatItem.btnTransport.getId()) {
+                navController.navigate(HomeAllCategoriesDirections.
+                        actionHomeAllCategoriesToNavBuyer(Define.CAT_TRANSPORT));
+            }
+        }
+    };
 }

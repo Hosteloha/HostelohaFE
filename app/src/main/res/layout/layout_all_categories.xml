@@ -18,13 +18,16 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/btn_electronics"
                 android:background="@drawable/imageview_border"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_columnWeight="1"
                 android:layout_gravity="fill_horizontal"
                 android:gravity="center"
+                android:clickable="true"
                 android:layout_margin="5dp">
 
                 <ImageView
@@ -43,13 +46,16 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/btn_books"
                 android:background="@drawable/imageview_border"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_columnWeight="1"
                 android:layout_gravity="fill_horizontal"
                 android:gravity="center"
+                android:clickable="true"
                 android:layout_margin="5dp">
 
                 <ImageView
@@ -68,13 +74,16 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/btn_music"
                 android:background="@drawable/imageview_border"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_columnWeight="1"
                 android:layout_gravity="fill_horizontal"
                 android:gravity="center"
+                android:clickable="true"
                 android:layout_margin="5dp">
 
                 <ImageView
@@ -93,13 +102,16 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/btn_fashion"
                 android:background="@drawable/imageview_border"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_columnWeight="1"
                 android:layout_gravity="fill_horizontal"
                 android:gravity="center"
+                android:clickable="true"
                 android:layout_margin="5dp">
 
                 <ImageView
@@ -118,13 +130,16 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/btn_beauty"
                 android:background="@drawable/imageview_border"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_columnWeight="1"
                 android:layout_gravity="fill_horizontal"
                 android:gravity="center"
+                android:clickable="true"
                 android:layout_margin="5dp">
 
                 <ImageView
@@ -144,13 +159,16 @@
 
 
             <LinearLayout
+                android:id="@+id/btn_project"
                 android:background="@drawable/imageview_border"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_columnWeight="1"
                 android:layout_gravity="fill_horizontal"
                 android:gravity="center"
+                android:clickable="true"
                 android:layout_margin="5dp">
 
                 <ImageView
@@ -170,13 +188,16 @@
 
 
             <LinearLayout
+                android:id="@+id/btn_transport"
                 android:background="@drawable/imageview_border"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_columnWeight="1"
                 android:layout_gravity="fill_horizontal"
                 android:gravity="center"
+                android:clickable="true"
                 android:layout_margin="5dp">
 
                 <ImageView
@@ -195,13 +216,16 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/btn_sports"
                 android:background="@drawable/imageview_border"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_columnWeight="1"
                 android:layout_gravity="fill_horizontal"
                 android:gravity="center"
+                android:clickable="true"
                 android:layout_margin="5dp">
 
                 <ImageView
@@ -220,13 +244,16 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/btn_rentgear"
                 android:background="@drawable/imageview_border"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_columnWeight="1"
                 android:layout_gravity="fill_horizontal"
                 android:gravity="center"
+                android:clickable="true"
                 android:layout_margin="5dp">
 
                 <ImageView
