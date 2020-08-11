@@ -10,5 +10,5 @@
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
         tools:context=".app.ui.account.AccountViewWatchList"
-        tools:listitem="@layout/fragment_watchlist_item" />
+        tools:listitem="@layout/fragment_accview_watchlist_item" />
 </layout>
