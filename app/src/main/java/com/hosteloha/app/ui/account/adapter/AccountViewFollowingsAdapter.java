@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.hosteloha.R;
+import com.hosteloha.app.beans.UserFollowers;
+import com.hosteloha.app.beans.UserFollowings;
 import com.hosteloha.app.ui.account.dummy.DummyContent.DummyItem;
 
 import java.util.List;
@@ -18,9 +20,9 @@ import java.util.List;
  */
 public class AccountViewFollowingsAdapter extends RecyclerView.Adapter<AccountViewFollowingsAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<UserFollowings> mValues;
 
-    public AccountViewFollowingsAdapter(List<DummyItem> items) {
+    public AccountViewFollowingsAdapter(List<UserFollowings> items) {
         mValues = items;
     }
 
@@ -34,8 +36,8 @@ public class AccountViewFollowingsAdapter extends RecyclerView.Adapter<AccountVi
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mIdView.setText(mValues.get(position).getsellerID());
+        holder.mContentView.setText(mValues.get(position).getFollower_id());
     }
 
     @Override
@@ -47,7 +49,7 @@ public class AccountViewFollowingsAdapter extends RecyclerView.Adapter<AccountVi
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        public UserFollowings mItem;
 
         public ViewHolder(View view) {
             super(view);

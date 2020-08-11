@@ -60,6 +60,16 @@
         <item name="cardElevation">10dp</item>
     </style>
 
+    <style name="categoryIndividualCardDesign">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="cardCornerRadius">5dp</item>
+        <item name="cardElevation">5dp</item>
+    </style>
+
     <style name="productViewBasedCardDesign">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
@@ -90,6 +100,7 @@
         <item name="cardCornerRadius">10dp</item>
         <item name="cardElevation">10dp</item>
     </style>
+
 
     <style name="AlertDialogTheme">
         <item name="android:layout_width">wrap_content</item>
@@ -144,6 +155,16 @@
         <item name="strokeColor">@color/colorPrimary</item>
         <item name="strokeWidth">1dp</item>
         <item name="android:gravity">center</item>
+    </style>
+
+    <style name="customMaterialButton_TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/btn_text</item>
+        <item name="theme">@style/Theme.MaterialComponents</item>
+        <item name="rippleColor">@color/colorRippleColor</item>
+        <item name="android:textSize">12sp</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+        <item name="iconTint">@color/btn_text</item>
     </style>
 
     <style name="image_window_style">

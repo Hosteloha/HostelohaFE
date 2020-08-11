@@ -165,9 +165,11 @@
 
                                     <com.google.android.material.button.MaterialButton
                                         android:id="@+id/userFollowersButton"
-                                        style="@style/customMaterialButton_Outlined"
+                                        style="@style/customMaterialButton_TextButton"
                                         android:layout_width="wrap_content"
                                         android:layout_height="20dp"
+                                        android:layout_gravity="end|top"
+                                        android:text="@string/account_followers"
                                         android:layout_marginStart="10dp"
                                         android:includeFontPadding="false"
                                         android:insetBottom="0dp"
@@ -177,11 +179,8 @@
                                         android:paddingRight="5dp"
                                         android:paddingTop="0dp"
                                         android:paddingBottom="0dp"
-                                        android:singleLine="true"
-                                        android:text="@string/account_followers"
-                                        android:textColor="@color/primary500"
-                                        android:textAllCaps="false"
-                                        android:textSize="12sp" />
+                                        android:singleLine="true" />
+
 
                                     <View
                                         android:layout_height="match_parent"
@@ -192,25 +191,20 @@
 
                                     <com.google.android.material.button.MaterialButton
                                         android:id="@+id/userFollowingsButton"
-                                        style="@style/customMaterialButton_Outlined"
+                                        style="@style/customMaterialButton_TextButton"
                                         android:layout_width="wrap_content"
                                         android:layout_height="20dp"
+                                        android:layout_gravity="end|top"
+                                        android:text="@string/account_following"
                                         android:includeFontPadding="false"
                                         android:insetBottom="0dp"
-                                        android:insetLeft="0dp"
-                                        android:insetRight="0dp"
                                         android:insetTop="0dp"
                                         android:lineSpacingExtra="0dp"
-                                        android:singleLine="true"
                                         android:paddingLeft="5dp"
                                         android:paddingRight="5dp"
                                         android:paddingTop="0dp"
                                         android:paddingBottom="0dp"
-                                        android:text="@string/account_following"
-                                        android:textColor="@color/primary500"
-                                        android:textAllCaps="false"
-                                        android:textSize="12sp" />
-
+                                        android:singleLine="true" />
                                 </LinearLayout>
                             </LinearLayout>
 

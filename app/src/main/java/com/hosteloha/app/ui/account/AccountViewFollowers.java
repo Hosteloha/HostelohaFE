@@ -3,7 +3,11 @@ package com.hosteloha.app.ui.account;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,14 +17,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.hosteloha.R;
+import com.hosteloha.app.beans.UserFollowers;
+import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.ui.account.adapter.AccountViewFollowersAdapter;
 import com.hosteloha.app.ui.account.dummy.DummyContent;
+
+import java.util.List;
 
 /**
  * A fragment representing a list of Items.
  */
 public class AccountViewFollowers extends Fragment {
 
+    private AccountViewModel accountViewModel;
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
@@ -52,22 +61,43 @@ public class AccountViewFollowers extends Fragment {
         }
     }
 
+    public View view = null;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_accview_followers_list, container, false);
+        view = inflater.inflate(R.layout.fragment_accview_followers_list, container, false);
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new AccountViewFollowersAdapter(DummyContent.ITEMS));
-        }
+        accountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
+        registerObservers();
+
         return view;
+    }
+
+    public void registerObservers(){
+        accountViewModel.getUserFollowersLive().observe(getViewLifecycleOwner(), new Observer<List<UserFollowers>>() {
+            @Override
+            public void onChanged(List<UserFollowers> userFollowers) {
+                HostelohaLog.debugOut(" observer :: "+userFollowers.size());
+                // Set the adapter
+                if (view instanceof RecyclerView) {
+                    Context context = view.getContext();
+                    RecyclerView recyclerView = (RecyclerView) view;
+                    if (mColumnCount <= 1) {
+                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                    } else {
+                        recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+                    }
+                    recyclerView.setAdapter(new AccountViewFollowersAdapter(userFollowers));
+                }
+            }
+        });
+    }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if(accountViewModel!=null){
+            accountViewModel.getUserFollowersData();
+        }
     }
 }

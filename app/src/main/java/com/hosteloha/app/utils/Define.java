@@ -27,4 +27,17 @@ public class Define {
     // Places API Key
     //TODO :: Secure API Key
     public static final String PLACES_API_KEY = "AIzaSyDHMur-FuEJmrdHtx9IXHeP42L4UxvT2zA";
+
+    //TODO :: Finalize category names since, we are not using integers
+    public static final String CAT_NONE = "NONE";
+    public static final String CAT_BEAUTY = "Beauty";
+    public static final String CAT_ELECTRONICS = "Electronics";
+    public static final String CAT_FASHION = "Fashion";
+    public static final String CAT_BOOKS = "Books";
+    public static final String CAT_MUSIC = "Entertainment"; // Just for test
+    public static final String CAT_PROJECT = "Home & Kitchen"; // Just for test
+    public static final String CAT_RENT = "Beauty";
+    public static final String CAT_TRANSPORT = "Transport";
+    public static final String CAT_SPORTS = "Sports";
+
 }

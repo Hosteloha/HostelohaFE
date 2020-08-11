@@ -17,20 +17,34 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_nav_home_to_homeAllCategories"
+            app:destination="@id/homeAllCategories"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_buyer"
+            app:destination="@id/nav_buyer" />
     </fragment>
 
     <fragment
         android:id="@+id/nav_seller"
         android:name="com.hosteloha.app.ui.seller.SellerFragment"
         android:label="@string/menu_seller"
-        tools:layout="@layout/fragment_seller"/>
+        tools:layout="@layout/fragment_seller" />
 
     <fragment
         android:id="@+id/nav_buyer"
         android:name="com.hosteloha.app.ui.buyer.BuyerFragment"
         android:label="@string/menu_buyer"
         tools:layout="@layout/fragment_buyer">
+        <argument
+            android:name="category_id"
+            app:argType="string"
+            android:defaultValue="NONE" />
         <action
             android:id="@+id/action_nav_buyer_to_buyerProductFragment"
             app:destination="@id/buyerProductFragment"
@@ -287,4 +301,12 @@
         android:name="com.hosteloha.app.ui.account.AccountViewFollowings"
         android:label="Following"
         tools:layout="@layout/fragment_accview_followings_list" />
+    <fragment
+        android:id="@+id/homeAllCategories"
+        android:name="com.hosteloha.app.ui.home.HomeAllCategories"
+        android:label="Categories">
+        <action
+            android:id="@+id/action_homeAllCategories_to_nav_buyer"
+            app:destination="@id/nav_buyer" />
+    </fragment>
 </navigation>

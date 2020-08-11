@@ -28,6 +28,8 @@
     <color name="fab_icon_bg">#FFFFFF</color>
     <color name="centreColorMineShaft">#303030</color>
 
+    <!-- Buttons -->
+    <color name="btn_text">#007aff</color>
     <!--Transparency codes-->
     <!--    100% — FF, 95% — F2, 90% — E6, 85% — D9, 80% — CC, 75% — BF,
         70% — B3, 65% — A6, 60% — 99, 55% — 8C, 50% — 80, 45% — 73,
