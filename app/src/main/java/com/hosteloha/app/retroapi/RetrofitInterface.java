@@ -1,9 +1,12 @@
 package com.hosteloha.app.retroapi;
 
+import com.hosteloha.app.beans.AddFollowerRequest;
 import com.hosteloha.app.beans.AuthenticationTokenJWT;
 import com.hosteloha.app.beans.ProductObject;
 import com.hosteloha.app.beans.SellerProductObject;
 import com.hosteloha.app.beans.UserAuthentication;
+import com.hosteloha.app.beans.UserFollowers;
+import com.hosteloha.app.beans.UserFollowings;
 import com.hosteloha.app.beans.WishListRequest;
 
 import java.util.List;
@@ -58,5 +61,14 @@ public interface RetrofitInterface {
 
     @GET("/delivery_format")
     Call<ResponseBody> getProductDeliveryFormats(@Header("Authorization") String auth);
+
+    @POST("/addFollower")
+    Call<ResponseBody> addFollower(@Header("Authorization") String auth, @Body AddFollowerRequest addFollowerRequest);
+
+    @GET("/sellerFollowers/{userid}")
+    Call<List<UserFollowers>> getUserFollowers(@Header("Authorization") String auth, @Path("userid") int userId);
+
+    @GET("/sellerFollowings/{userid}")
+    Call<List<UserFollowings>> getUserFollowings(@Header("Authorization") String auth, @Path("userid") int userId);
 
 }

@@ -103,6 +103,4 @@ public class BuyerFragment extends Fragment {
             HostelohaLog.debugOut(" Clicked category ::   " + categoryID);
         }
     }
-
-
 }

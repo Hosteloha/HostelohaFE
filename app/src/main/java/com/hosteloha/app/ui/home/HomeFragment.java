@@ -50,28 +50,39 @@ public class HomeFragment extends Fragment {
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            HomeFragmentDirections.ActionNavHomeToNavBuyer navAction =
+                    HomeFragmentDirections.actionNavHomeToNavBuyer();
             if (view.getId() == mFgmtHomeBinding.btnChangeLocation.getId()) {
                 navController.navigate(HomeFragmentDirections.actionNavHomeToAccountEditAddress());
             } else if (view.getId() == mFgmtHomeBinding.btnShowAllCat.getId()) {
                 navController.navigate(HomeFragmentDirections.actionNavHomeToHomeAllCategories());
             } else if (view.getId() == mFgmtHomeBinding.layoutHomeCategories.btnElectronics.getId()) {
-                navController.navigate(HomeFragmentDirections.actionNavHomeToNavBuyer(Define.CAT_ELECTRONICS));
+                navAction.setCategoryId(Define.CAT_ELECTRONICS);
+                navController.navigate(navAction);
             } else if (view.getId() == mFgmtHomeBinding.layoutHomeCategories.btnBeauty.getId()) {
-                navController.navigate(HomeFragmentDirections.actionNavHomeToNavBuyer(Define.CAT_BEAUTY));
+                navAction.setCategoryId(Define.CAT_BEAUTY);
+                navController.navigate(navAction);
             } else if (view.getId() == mFgmtHomeBinding.layoutHomeCategories.btnBooks.getId()) {
-                navController.navigate(HomeFragmentDirections.actionNavHomeToNavBuyer(Define.CAT_BOOKS));
+                navAction.setCategoryId(Define.CAT_BOOKS);
+                navController.navigate(navAction);
             } else if (view.getId() == mFgmtHomeBinding.layoutHomeCategories.btnFashion.getId()) {
-                navController.navigate(HomeFragmentDirections.actionNavHomeToNavBuyer(Define.CAT_FASHION));
+                navAction.setCategoryId(Define.CAT_FASHION);
+                navController.navigate(navAction);
             } else if (view.getId() == mFgmtHomeBinding.layoutHomeCategories.btnMusic.getId()) {
-                navController.navigate(HomeFragmentDirections.actionNavHomeToNavBuyer(Define.CAT_MUSIC));
+                navAction.setCategoryId(Define.CAT_MUSIC);
+                navController.navigate(navAction);
             } else if (view.getId() == mFgmtHomeBinding.layoutHomeCategories.btnProject.getId()) {
-                navController.navigate(HomeFragmentDirections.actionNavHomeToNavBuyer(Define.CAT_PROJECT));
+                navAction.setCategoryId(Define.CAT_PROJECT);
+                navController.navigate(navAction);
             } else if (view.getId() == mFgmtHomeBinding.layoutHomeCategories.btnRentgear.getId()) {
-                navController.navigate(HomeFragmentDirections.actionNavHomeToNavBuyer(Define.CAT_RENT));
+                navAction.setCategoryId(Define.CAT_RENT);
+                navController.navigate(navAction);
             } else if (view.getId() == mFgmtHomeBinding.layoutHomeCategories.btnSports.getId()) {
-                navController.navigate(HomeFragmentDirections.actionNavHomeToNavBuyer(Define.CAT_SPORTS));
+                navAction.setCategoryId(Define.CAT_SPORTS);
+                navController.navigate(navAction);
             } else if (view.getId() == mFgmtHomeBinding.layoutHomeCategories.btnTransport.getId()) {
-                navController.navigate(HomeFragmentDirections.actionNavHomeToNavBuyer(Define.CAT_TRANSPORT));
+                navAction.setCategoryId(Define.CAT_TRANSPORT);
+                navController.navigate(navAction);
             }
         }
     };

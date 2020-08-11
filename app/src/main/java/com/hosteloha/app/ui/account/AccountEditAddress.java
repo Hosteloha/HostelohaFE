@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
@@ -57,6 +56,14 @@ public class AccountEditAddress extends Fragment {
         accountViewModel =
                 ViewModelProviders.of(this, new AccountViewModel(mContext, getActivity())).get(AccountViewModel.class);
 
+        registerObservers();
+
+        mFgmtBinding.btnUseLocation.setOnClickListener(mOnClickListener);
+        initializePlacesFragment();
+        return mFgmtBinding.getRoot();
+    }
+
+    public void registerObservers() {
         accountViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
@@ -86,9 +93,6 @@ public class AccountEditAddress extends Fragment {
                 }
             }
         });
-        mFgmtBinding.btnUseLocation.setOnClickListener(mOnClickListener);
-        initializePlacesFragment();
-        return mFgmtBinding.getRoot();
     }
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -127,7 +131,7 @@ public class AccountEditAddress extends Fragment {
             public void onPlaceSelected(Place place) {
                 // TODO: Get info about the selected place.
                 HostelohaLog.debugOut("Place: " + place.getName() + ", " + place.getId()
-                +" Address :: "+place.getAddress());
+                        + " Address :: " + place.getAddress());
             }
 
             @Override

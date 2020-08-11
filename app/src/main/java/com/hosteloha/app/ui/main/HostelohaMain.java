@@ -35,7 +35,7 @@ public class HostelohaMain extends Fragment {
                         boolean isPreviousViewBuyer = (viewType.equals(Define.VIEW_BUYER));
                         if (isPreviousViewBuyer) {
                             navController.navigate(HostelohaMainDirections.
-                                    actionHostelOhaMainToNavBuyer(Define.CAT_NONE));
+                                    actionHostelOhaMainToNavBuyer().setCategoryId(Define.CAT_NONE));
                         } else {
                             navController.navigate(HostelohaMainDirections.actionHostelOhaMainToNavSeller());
                         }
