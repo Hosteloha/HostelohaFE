@@ -19,8 +19,10 @@ import android.view.ViewGroup;
 import com.hosteloha.R;
 import com.hosteloha.app.beans.UserFollowers;
 import com.hosteloha.app.beans.UserFollowings;
+import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.ui.account.adapter.AccountViewFollowingsAdapter;
 import com.hosteloha.app.ui.account.dummy.DummyContent;
+import com.hosteloha.app.utils.AppProgressBar;
 
 import java.util.List;
 
@@ -68,7 +70,7 @@ public class AccountViewFollowings extends Fragment {
         view = inflater.inflate(R.layout.fragment_accview_followings_list, container, false);
         accountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
         registerObservers();
-
+        AppProgressBar.showDefaultProgress(getActivity());
         return view;
     }
 
@@ -76,6 +78,12 @@ public class AccountViewFollowings extends Fragment {
         accountViewModel.getUserFollowingLive().observe(getViewLifecycleOwner(), new Observer<List<UserFollowings>>() {
             @Override
             public void onChanged(List<UserFollowings> userFollowings) {
+                HostelohaLog.debugOut(" observer :: " + userFollowings.size());
+                if(userFollowings.isEmpty()){
+                    AppProgressBar.hideWithSnackBarMessage(getActivity(),"Not following anyone");
+                }else{
+                    AppProgressBar.hide();
+                }
                 // Set the adapter
                 if (view instanceof RecyclerView) {
                     Context context = view.getContext();
@@ -95,6 +103,7 @@ public class AccountViewFollowings extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if(accountViewModel!=null){
+            accountViewModel.getUserFollowersData();
             accountViewModel.getUserFollowingsData();
         }
     }

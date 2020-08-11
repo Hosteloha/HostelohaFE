@@ -3,6 +3,7 @@ package com.hosteloha.app.ui.account;
 import android.app.Activity;
 import android.content.Context;
 import android.location.Address;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.hosteloha.app.beans.AddFollowerRequest;
@@ -134,13 +135,25 @@ public class AccountViewModel extends ViewModel implements ViewModelProvider.Fac
     }
 
     public void addUserFollowers(int sellerID) {
-        HostelohaLog.debugOut(" addUserFollowers :: sellerToBeFollowed" + sellerID + "  userID :: " + HostelohaUtils.getUserId() + "  --- " + HostelohaUtils.getAuthenticationToken());
-        AddFollowerRequest addFollowerRequest = new AddFollowerRequest(sellerID, HostelohaUtils.getUserId());
+        HostelohaLog.debugOut(" addUserFollowers :: sellerToBeFollowed " + sellerID + "  userID :: " + HostelohaUtils.getUserId() );
+        AddFollowerRequest addFollowerRequest = new AddFollowerRequest(HostelohaUtils.getUserId(), sellerID );
         ApiUtil.getServiceClass().addFollower(HostelohaUtils.getAuthenticationToken(), addFollowerRequest).enqueue(new CallbackWithRetry<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 HostelohaLog.debugOut("[REQ] addUserFollowers  isSuccessful  :: " + response.isSuccessful());
+                HostelohaUtils.showSnackBarNotification(mActivity, " Add follower : "+(response.isSuccessful()));
 
+            }
+        });
+    }
+
+    public void removeUserFollower(int sellerID, int followerID){
+        HostelohaLog.debugOut(" removeUserFollower :: sellerID :: " + sellerID + "  followerID :: " + followerID);
+        ApiUtil.getServiceClass().removeFollower(HostelohaUtils.getAuthenticationToken(), sellerID, followerID).enqueue(new CallbackWithRetry<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                HostelohaLog.debugOut("[REQ] removeUserFollower  isSuccessful  :: " + response.isSuccessful());
+                HostelohaUtils.showSnackBarNotification(mActivity, " Remove follower : "+(response.isSuccessful()));
             }
         });
     }
@@ -157,6 +170,8 @@ public class AccountViewModel extends ViewModel implements ViewModelProvider.Fac
                     mUserFollowersLive.setValue(mUserFollowersList);
                 }else{
                     // TODO :: Error dialogue
+                    List<UserFollowers> mUserFollowersList = new ArrayList<>();
+                    mUserFollowersLive.setValue(mUserFollowersList);
                 }
             }
         });
@@ -168,6 +183,15 @@ public class AccountViewModel extends ViewModel implements ViewModelProvider.Fac
             @Override
             public void onResponse(Call<List<UserFollowings>> call, Response<List<UserFollowings>> response) {
                 HostelohaLog.debugOut("[REQ] getUserFollowings  isSuccessful  :: " + response.isSuccessful());
+                if(response.isSuccessful()){
+                    List<UserFollowings> mUserFollowingsList = (List<UserFollowings>) response.body();
+                    HostelohaLog.debugOut("[REQ] getUserFollowings followings  :: " + mUserFollowingsList.size());
+                    mUserFollowingLive.setValue(mUserFollowingsList);
+                }else{
+                    // TODO :: Error dialogue
+                    List<UserFollowings> mUserFollowingsList = new ArrayList<>();
+                    mUserFollowingLive.setValue(mUserFollowingsList);
+                }
             }
         });
     }

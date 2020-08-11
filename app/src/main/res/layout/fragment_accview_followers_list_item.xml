@@ -69,7 +69,7 @@
                         </LinearLayout>
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/editAccountDetails"
+                            android:id="@+id/startFollowButton"
                             style="@style/customMaterialButton_TextButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -77,11 +77,8 @@
                             android:layout_alignParentTop="true"
                             android:layout_below="@+id/seller_ratings"
                             android:layout_gravity="end|top"
-                            android:text="Follow Back"
-                            android:textAllCaps="false"
-                            android:textSize="12sp"
-                            app:cornerRadius="10dp"
-                            app:icon="@drawable/ic_add_black" />
+                            android:text="Follow"
+                            android:visibility="invisible"/>
 
                     </RelativeLayout>
                 </LinearLayout>

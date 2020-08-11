@@ -36,8 +36,8 @@ public class AccountViewFollowingsAdapter extends RecyclerView.Adapter<AccountVi
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).getsellerID());
-        holder.mContentView.setText(mValues.get(position).getFollower_id());
+        holder.mIdView.setText(mValues.get(position).getsellerID()+"");
+        holder.mContentView.setText(mValues.get(position).getFollower_id()+"");
     }
 
     @Override
