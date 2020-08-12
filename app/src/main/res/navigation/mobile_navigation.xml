@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_nav_home_to_nav_buyer"
             app:destination="@id/nav_buyer" />
+        <action
+            android:id="@+id/action_nav_home_to_hostoDevPageFragment"
+            app:destination="@id/hostoDevPageFragment" />
     </fragment>
 
     <fragment
@@ -317,4 +320,9 @@
             android:id="@+id/action_homeAllCategories_to_nav_buyer"
             app:destination="@id/nav_buyer" />
     </fragment>
+    <fragment
+        android:id="@+id/hostoDevPageFragment"
+        android:name="com.hosteloha.app.ui.main.HostoDevPageFragment"
+        android:label="Our Brewery"
+        tools:layout="@layout/fragment_hosto_devpage" />
 </navigation>

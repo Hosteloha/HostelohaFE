@@ -27,7 +27,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_margin="20dp"
+            android:gravity="center"
             android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Copyrights © 2020 Hosto, Inc" />
 
             <TextView
                 android:id="@+id/hosteloha_app_version"
@@ -35,6 +42,30 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/app_version" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="center">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/hosto_devpage_button"
+                    style="@style/customMaterialButton_TextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Hosto Brewers" />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:scaleType="fitXY"
+                    android:layout_gravity="top"
+                    android:tint="@color/colorPrimary"
+                    android:src="@drawable/ic_devpage_coffee3" />
+            </LinearLayout>
         </LinearLayout>
     </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>
