@@ -3,6 +3,7 @@ package com.hosteloha.app.retroapi;
 import com.hosteloha.app.beans.AddFollowerRequest;
 import com.hosteloha.app.beans.AuthenticationTokenJWT;
 import com.hosteloha.app.beans.ProductObject;
+import com.hosteloha.app.beans.ProductsInContents;
 import com.hosteloha.app.beans.SellerProductObject;
 import com.hosteloha.app.beans.UserAuthentication;
 import com.hosteloha.app.beans.UserFollowers;
@@ -28,6 +29,15 @@ public interface RetrofitInterface {
 
     @GET("/products")
     Call<List<ProductObject>> getAllProducts(@Header("Authorization") String auth);
+
+    @GET("/getAllProductsByPages/{pagenumber}/{pagesize}/{sortingtype}/{sortby}")
+    Call<ProductsInContents> getAllProductsByPages(@Header("Authorization") String auth, @Path("pagenumber") int pageNumber, @Path("pagesize") int pageSize,
+                                                   @Path("sortby") String sortBy, @Path("sortingtype") String sortingType);
+
+    @GET("/getAllProductsByCategoryPages/{categoryname}/{pagenumber}/{pagesize}/{sortingtype}/{sortby}")
+    Call<ProductsInContents> getAllProductsByCategoryPages(@Header("Authorization") String auth, @Path("categoryname") String categoryName, @Path("pagenumber") int pageNumber,
+                                                           @Path("pagesize") int pageSize, @Path("sortby") String sortBy, @Path("sortingtype") String sortingType);
+
 
     @POST("/add_product/")
     Call<ProductObject> uploadProduct(@Body SellerProductObject productObject, @Header("Authorization") String auth);

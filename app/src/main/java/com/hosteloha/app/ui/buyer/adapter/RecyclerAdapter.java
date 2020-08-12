@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.hosteloha.R;
 import com.hosteloha.app.beans.ProductObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -32,7 +33,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
 
     public void setArrayList(List<ProductObject> arrayList) {
         mAllProducts.clear();
-        mAllProducts = arrayList;
+        mAllProducts = new ArrayList<>(arrayList);
         mRecyclerView.post(new Runnable() {
             @Override
             public void run() {
