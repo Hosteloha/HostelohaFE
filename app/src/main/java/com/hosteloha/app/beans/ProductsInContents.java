@@ -7,16 +7,16 @@ public class ProductsInContents {
     @SerializedName("content")
     private ProductObject[] productObjects;
 
-    @SerializedName("empty_")
+    @SerializedName("empty")
     private boolean isEmpty = false;
 
-    @SerializedName("first_")
+    @SerializedName("first")
     private boolean isFirst = false;
 
-    @SerializedName("last_")
+    @SerializedName("last")
     private boolean isLast = false;
 
-    @SerializedName("totalPages_")
+    @SerializedName("totalPages")
     private int totalPages = 0;
 
     @SerializedName("totalElements")

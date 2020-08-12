@@ -3,7 +3,6 @@ package com.hosteloha.app.ui.account;
 import android.app.Activity;
 import android.content.Context;
 import android.location.Address;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.hosteloha.app.beans.AddFollowerRequest;
@@ -43,19 +42,21 @@ public class AccountViewModel extends ViewModel implements ViewModelProvider.Fac
 
     public static MutableLiveData<String> mText;
     public static MutableLiveData<List<Address>> mAddressList;
+    private static MutableLiveData<List<ProductObject>> mWishListLiveData = null;
     public static MutableLiveData<List<UserFollowers>> mUserFollowersLive = null;
     public static MutableLiveData<List<UserFollowings>> mUserFollowingLive = null;
 
     public AccountViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is user account fragment");
-        if(mUserFollowersLive == null){
+        if (mUserFollowersLive == null) {
             mUserFollowersLive = new MutableLiveData<>();
         }
-        if(mUserFollowingLive == null){
+        if (mUserFollowingLive == null) {
             mUserFollowingLive = new MutableLiveData<>();
         }
-        getUserWishList();
+        if (mWishListLiveData == null)
+            mWishListLiveData = new MutableLiveData<>();
     }
 
     public AccountViewModel(Context context, Activity activity) {
@@ -70,7 +71,6 @@ public class AccountViewModel extends ViewModel implements ViewModelProvider.Fac
         }
         mAddressList = new MutableLiveData<>();
         mText.setValue("//TODO Previous address");
-        getUserWishList();
     }
 
     @Override
@@ -80,6 +80,10 @@ public class AccountViewModel extends ViewModel implements ViewModelProvider.Fac
 
     public LiveData<String> getText() {
         return mText;
+    }
+
+    public static MutableLiveData<List<ProductObject>> getWishListLiveData() {
+        return mWishListLiveData;
     }
 
     public MutableLiveData<List<UserFollowers>> getUserFollowersLive() {
@@ -118,6 +122,7 @@ public class AccountViewModel extends ViewModel implements ViewModelProvider.Fac
                         JSONArray jsonArray = json.getJSONArray("products");
                         ProductObject[] productObjects = (new Gson()).fromJson(jsonArray.toString(), ProductObject[].class);
                         mWishListProducts = Arrays.asList(productObjects);
+                        mWishListLiveData.postValue(mWishListProducts);
                         mWishListProductIDs.clear();
                         for (ProductObject obj : mWishListProducts) {
                             mWishListProductIDs.add(obj.getProductId());
@@ -126,8 +131,6 @@ public class AccountViewModel extends ViewModel implements ViewModelProvider.Fac
                     } catch (IOException | JSONException e) {
                         e.printStackTrace();
                     }
-
-
                 } else
                     mWishListProductIDs.clear();
             }
@@ -165,7 +168,7 @@ public class AccountViewModel extends ViewModel implements ViewModelProvider.Fac
             public void onResponse(Call<List<UserFollowers>> call, Response<List<UserFollowers>> response) {
                 HostelohaLog.debugOut("[REQ] getUserFollowers  isSuccessful  :: " + response.isSuccessful());
                 if(response.isSuccessful()){
-                    List<UserFollowers> mUserFollowersList = (List<UserFollowers>) response.body();
+                    List<UserFollowers> mUserFollowersList = response.body();
                     HostelohaLog.debugOut("[REQ] getUserFollowers  followers  :: " + mUserFollowersList.size());
                     mUserFollowersLive.setValue(mUserFollowersList);
                 }else{
@@ -184,7 +187,7 @@ public class AccountViewModel extends ViewModel implements ViewModelProvider.Fac
             public void onResponse(Call<List<UserFollowings>> call, Response<List<UserFollowings>> response) {
                 HostelohaLog.debugOut("[REQ] getUserFollowings  isSuccessful  :: " + response.isSuccessful());
                 if(response.isSuccessful()){
-                    List<UserFollowings> mUserFollowingsList = (List<UserFollowings>) response.body();
+                    List<UserFollowings> mUserFollowingsList = response.body();
                     HostelohaLog.debugOut("[REQ] getUserFollowings followings  :: " + mUserFollowingsList.size());
                     mUserFollowingLive.setValue(mUserFollowingsList);
                 }else{

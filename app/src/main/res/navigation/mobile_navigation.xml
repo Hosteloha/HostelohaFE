@@ -206,7 +206,15 @@
         android:id="@+id/accountViewWatchList"
         android:name="com.hosteloha.app.ui.account.AccountViewWatchList"
         android:label="@string/fragment_watchlist"
-        tools:layout="@layout/fragment_accview_watchlist" />
+        tools:layout="@layout/fragment_accview_watchlist">
+        <action
+            android:id="@+id/action_accountViewWatchList_to_buyerProductFragment"
+            app:destination="@id/buyerProductFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
     <fragment
         android:id="@+id/nav_account"
         android:name="com.hosteloha.app.ui.account.AccountFragment"
