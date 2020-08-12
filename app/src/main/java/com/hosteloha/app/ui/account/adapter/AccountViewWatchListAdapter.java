@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.hosteloha.R;
-import com.hosteloha.app.beans.UserFollowers;
-import com.hosteloha.app.beans.UserFollowings;
 import com.hosteloha.app.ui.account.dummy.DummyContent.DummyItem;
 
 import java.util.List;
@@ -18,26 +16,26 @@ import java.util.List;
  * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class AccountViewFollowingsAdapter extends RecyclerView.Adapter<AccountViewFollowingsAdapter.ViewHolder> {
+public class AccountViewWatchListAdapter extends RecyclerView.Adapter<AccountViewWatchListAdapter.ViewHolder> {
 
-    private final List<UserFollowings> mValues;
+    private final List<DummyItem> mValues;
 
-    public AccountViewFollowingsAdapter(List<UserFollowings> items) {
+    public AccountViewWatchListAdapter(List<DummyItem> items) {
         mValues = items;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_accview_followings_list_item, parent, false);
+                .inflate(R.layout.fragment_accview_watchlist_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).getsellerID()+"");
-        holder.mContentView.setText(mValues.get(position).getFollower_id()+"");
+        holder.mIdView.setText(mValues.get(position).id);
+        holder.mContentView.setText(mValues.get(position).content);
     }
 
     @Override
@@ -49,7 +47,7 @@ public class AccountViewFollowingsAdapter extends RecyclerView.Adapter<AccountVi
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public UserFollowings mItem;
+        public DummyItem mItem;
 
         public ViewHolder(View view) {
             super(view);

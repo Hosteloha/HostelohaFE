@@ -158,11 +158,11 @@
     </style>
 
     <style name="customMaterialButton_TextButton" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="android:textColor">@color/btn_text</item>
+        <item name="android:textColor">@drawable/button_textcolor</item>
         <item name="theme">@style/Theme.MaterialComponents</item>
         <item name="rippleColor">@color/colorRippleColor</item>
         <item name="android:textSize">12sp</item>
-        <item name="textAllCaps">false</item>
+        <item name="textAllCaps">true</item>
         <item name="android:textStyle">bold</item>
         <item name="iconTint">@color/btn_text</item>
     </style>

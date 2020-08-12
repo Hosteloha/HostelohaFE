@@ -51,8 +51,10 @@
     <string name="product_sp_value">₹%1$d</string>
 
     <!-- My Account -->
-    <string name="account_followers">%1$d followers</string>
-    <string name="account_following">%1$d following</string>
+    <string name="account_followers">Followers</string>
+    <string name="account_following">Following</string>
+    <string name="btn_follow">FOLLOW</string>
+    <string name="btn_following">FOLLOWING</string>
 
     <!-- Product -->
     <string name="product_discount_value">%1$d%%</string>

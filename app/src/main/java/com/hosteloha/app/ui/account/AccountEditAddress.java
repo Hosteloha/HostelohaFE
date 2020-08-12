@@ -17,6 +17,7 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.hosteloha.R;
 import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.utils.AppLocation;
+import com.hosteloha.app.utils.AppProgressBar;
 import com.hosteloha.app.utils.Define;
 import com.hosteloha.databinding.FragmentAcceditAddressBinding;
 
@@ -60,6 +61,7 @@ public class AccountEditAddress extends Fragment {
 
         mFgmtBinding.btnUseLocation.setOnClickListener(mOnClickListener);
         initializePlacesFragment();
+        AppProgressBar.showCustomProgress(getActivity(), "Fetching location", null);
         return mFgmtBinding.getRoot();
     }
 
@@ -68,6 +70,7 @@ public class AccountEditAddress extends Fragment {
             @Override
             public void onChanged(@Nullable String s) {
                 mFgmtBinding.fetchedAddress.setText(s);
+                AppProgressBar.hide();
             }
         });
 
@@ -91,6 +94,7 @@ public class AccountEditAddress extends Fragment {
                             + " Feature :: " + fullAddressLine);
                     // Feature is 18
                 }
+                AppProgressBar.hide();
             }
         });
     }

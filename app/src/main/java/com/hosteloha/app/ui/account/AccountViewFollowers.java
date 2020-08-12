@@ -2,6 +2,17 @@ package com.hosteloha.app.ui.account;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.hosteloha.R;
+import com.hosteloha.app.beans.UserFollowers;
+import com.hosteloha.app.log.HostelohaLog;
+import com.hosteloha.app.ui.account.adapter.AccountViewFollowersAdapter;
+import com.hosteloha.app.utils.AppProgressBar;
+
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,18 +22,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.hosteloha.R;
-import com.hosteloha.app.beans.UserFollowers;
-import com.hosteloha.app.log.HostelohaLog;
-import com.hosteloha.app.ui.account.adapter.AccountViewFollowersAdapter;
-import com.hosteloha.app.ui.account.dummy.DummyContent;
-
-import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -70,15 +69,21 @@ public class AccountViewFollowers extends Fragment {
 
         accountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
         registerObservers();
+        AppProgressBar.showDefaultProgress(getActivity());
 
         return view;
     }
 
-    public void registerObservers(){
+    public void registerObservers() {
         accountViewModel.getUserFollowersLive().observe(getViewLifecycleOwner(), new Observer<List<UserFollowers>>() {
             @Override
             public void onChanged(List<UserFollowers> userFollowers) {
-                HostelohaLog.debugOut(" observer :: "+userFollowers.size());
+                HostelohaLog.debugOut(" observer :: " + userFollowers.size());
+                if(userFollowers.isEmpty()){
+                    AppProgressBar.hideWithSnackBarMessage(getActivity(),"No followers found");
+                }else{
+                    AppProgressBar.hide();
+                }
                 // Set the adapter
                 if (view instanceof RecyclerView) {
                     Context context = view.getContext();
@@ -88,15 +93,17 @@ public class AccountViewFollowers extends Fragment {
                     } else {
                         recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
                     }
-                    recyclerView.setAdapter(new AccountViewFollowersAdapter(userFollowers));
+                    recyclerView.setAdapter(new AccountViewFollowersAdapter(userFollowers, accountViewModel));
                 }
             }
         });
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if(accountViewModel!=null){
+        if (accountViewModel != null) {
+            accountViewModel.getUserFollowingsData();
             accountViewModel.getUserFollowersData();
         }
     }

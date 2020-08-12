@@ -39,6 +39,7 @@ import com.hosteloha.app.beans.UserAuthentication;
 import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.retroapi.ApiUtil;
 import com.hosteloha.app.service.HostelohaService;
+import com.hosteloha.app.utils.AppProgressBar;
 import com.hosteloha.app.utils.AppSharedPrefs;
 import com.hosteloha.app.utils.Define;
 import com.hosteloha.app.utils.HostelohaUtils;
@@ -66,7 +67,6 @@ public class MainLoginFragment extends Fragment {
     private HostelohaService mHostelohaService = null;
 
     FragmentLoginMainBinding mFLMBinding;
-    private ProgressDialog mProgressDialog;
     NavController navController;
     AlertDialog.Builder mBuilder;
 
@@ -113,13 +113,7 @@ public class MainLoginFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         mHostelohaService = HostelohaUtils.getHostelohaService(getContext());
-        mProgressDialog = new ProgressDialog(getActivity());
-        mProgressDialog.setTitle("Processing...");
-        mProgressDialog.setMessage("Please wait...");
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setCanceledOnTouchOutside(false);
-
+        AppProgressBar.showDefaultProgress(getActivity());
         mBuilder = new AlertDialog.Builder(getContext());
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
         mFLMBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_login_main, container, false);
@@ -160,21 +154,6 @@ public class MainLoginFragment extends Fragment {
         return mFLMBinding.getRoot();
     }
 
-
-    private void showProgressDialog(String title, String message) {
-        mProgressDialog.setTitle(title);
-        mProgressDialog.setMessage(message);
-        mProgressDialog.show();
-    }
-
-    private void dismissProgressDialog(String dismissMessage) {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            if (dismissMessage != null && dismissMessage.length() > 0) {
-                HostelohaUtils.showSnackBarNotification(getActivity(), dismissMessage);
-            }
-            mProgressDialog.dismiss();
-        }
-    }
 
     /**
      * To initialize the listener's such as {@link TextWatcher}, {@link android.view.View.OnKeyListener}
@@ -365,7 +344,7 @@ public class MainLoginFragment extends Fragment {
                 //Showing email authentication
                 mFLMBinding.verifyWebauthenticationView.setVisibility(View.VISIBLE);
             } else if (v.getId() == R.id.btn_submit_webauthentication) {
-                showProgressDialog("Verifying Credentials", "Please wait...");
+                AppProgressBar.showCustomProgress(getActivity(), "Verifying Credentials", null);
                 String userName = mFLMBinding.etWebauthUsername.getText().toString();
                 String userPass = mFLMBinding.etWebauthPassword.getText().toString();
                 UserAuthentication userAuthentication = new UserAuthentication(userName, userPass);
@@ -397,7 +376,7 @@ public class MainLoginFragment extends Fragment {
             @Override
             public void onResponse(Call<AuthenticationTokenJWT> call, Response<AuthenticationTokenJWT> response) {
                 if (response.isSuccessful()) {
-                    dismissProgressDialog("Verfied Successfully");
+                    AppProgressBar.hideWithSnackBarMessage(getActivity(), "Verfied Successfully");
                     AuthenticationTokenJWT mAuthenticationTokenJWT = response.body();
                     HostelohaUtils.setAuthenticationToken(mAuthenticationTokenJWT.getJwt());
                     HostelohaUtils.setUserId(mAuthenticationTokenJWT.getUserId());
@@ -413,7 +392,7 @@ public class MainLoginFragment extends Fragment {
                     }
 
                     Toast.makeText(getActivity(), mPopMessage, Toast.LENGTH_SHORT).show();
-                    dismissProgressDialog("Failed to login");
+                    AppProgressBar.hideWithSnackBarMessage(getActivity(),"Failed to login");
                     showOtherViews(View.GONE);
                     mFLMBinding.sendOtpView.setVisibility(View.VISIBLE);
                     mFLMBinding.webAuthenticationView.setVisibility(View.VISIBLE);
@@ -423,7 +402,7 @@ public class MainLoginFragment extends Fragment {
 
             @Override
             public void onFailure(Call<AuthenticationTokenJWT> call, Throwable t) {
-                dismissProgressDialog("Host unreachable");
+                AppProgressBar.hideWithSnackBarMessage(getActivity(),  "Host unreachable");
                 HostelohaLog.debugOut("Unable to submit post to API.");
             }
         });

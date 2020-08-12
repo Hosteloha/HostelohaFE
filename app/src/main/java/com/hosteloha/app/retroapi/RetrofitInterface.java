@@ -65,10 +65,13 @@ public interface RetrofitInterface {
     @POST("/addFollower")
     Call<ResponseBody> addFollower(@Header("Authorization") String auth, @Body AddFollowerRequest addFollowerRequest);
 
+    @DELETE("/removeFollwer/{sellerid}/{followerid}")
+    Call<ResponseBody> removeFollower(@Header("Authorization") String auth, @Path("sellerid") int userId, @Path("followerid") int followerId);
+
     @GET("/sellerFollowers/{userid}")
     Call<List<UserFollowers>> getUserFollowers(@Header("Authorization") String auth, @Path("userid") int userId);
 
-    @GET("/sellerFollowings/{userid}")
+    @GET("/followedsellers/{userid}")
     Call<List<UserFollowings>> getUserFollowings(@Header("Authorization") String auth, @Path("userid") int userId);
 
 }
