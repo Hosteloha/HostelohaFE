@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView style="@style/scrollViewBasedCardDesign">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/devpage_profile_pic"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:scaleType="fitXY"
+                android:layout_gravity="start"
+                android:layout_marginEnd="5dp"
+                android:alpha="1"
+                android:src="@drawable/ic_dev_srinivas1" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/modifiedEditText"
+                    android:singleLine="true"
+                    android:text="Srinivas Polimera"
+                    android:gravity="center_horizontal"
+                    android:textAllCaps="false"
+                    android:textSize="20sp"
+                    android:fontFamily="@font/josefinsans_regular"
+                    android:textStyle="bold" />
+
+                <TextView
+                    style="@style/modifiedEditText"
+                    android:gravity="center_horizontal"
+                    android:singleLine="true"
+                    android:text="\@groot"
+                    android:textAllCaps="false"
+                    android:textStyle="italic"
+                    android:textSize="12sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/devpage_btnGithubProfile1"
+                        style="@style/customMaterialButton_Outlined"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        app:iconGravity="textEnd"
+                        android:autoLink="web"
+                        app:icon="@drawable/ic_github_devpage"
+                        app:iconTint="@color/colorAccent" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/devpage_btnLinkedInProfile1"
+                        style="@style/customMaterialButton_Outlined"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        app:iconGravity="textEnd"
+                        android:autoLink="web"
+                        app:icon="@drawable/ic_linkedin_devpage"
+                        app:iconTint="@color/colorAccent" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

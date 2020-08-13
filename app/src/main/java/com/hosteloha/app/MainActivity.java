@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         // Set App version
         setAppVersion();
+        setDevPageListener();
         navController.addOnDestinationChangedListener(mOnDestinationChangedListener);
         // Initialising BuyerViewModel with Activity Context.
         ViewModelProviders.of(this).get(BuyerViewModel.class);
@@ -339,6 +341,15 @@ public class MainActivity extends AppCompatActivity {
         hostelohaAppVersionText.setText(formattedSP);
     }
 
+    private void setDevPageListener(){
+        Button hostoDevPageButton = findViewById(R.id.hosto_devpage_button);
+        hostoDevPageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.action_nav_home_to_hostoDevPageFragment);
+            }
+        });
+    }
     /**
      * To close the navigation drawer if it open, when back pressed and when navigation fragment.
      */

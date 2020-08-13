@@ -72,6 +72,19 @@
     <string name="menu_sort">Sorting Type</string>
     <string name="app_version">Version %1$s</string>
 
+    <!-- DEV Page URL's-->
+    <string name="dev_vinay_linkedin">https://www.linkedin.com/in/vinay-kumar-p-422b32123/</string>
+    <string name="dev_vinay_email">vinaykumarp987@gmail.com</string>
+    <string name="dev_vinay_github">https://github.com/Vinaypolimera</string>
+
+    <string name="dev_srinivas_linkedin">https://www.linkedin.com/in/srinivas-polimera-a9385b68/</string>
+    <string name="dev_srinivas_email">srinivasu1995@gmail.com</string>
+    <string name="dev_srinivas_github">https://github.com/srinivas013</string>
+
+    <string name="dev_suhaas_linkedin">https://www.linkedin.com/in/suhaassrinivas</string>
+    <string name="dev_suhaas_email">https://suhaas-livcd.github.io</string>
+    <string name="dev_suhaas_github">https://github.com/suhaas-livcd/</string>
+
     <!-- Home Categories -->
     <string name="category_beauty">Beauty</string>
     <string name="category_books">Books</string>

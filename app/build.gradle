@@ -7,8 +7,8 @@ android {
         applicationId "com.hosteloha"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 9
-        versionName "5.0.4"
+        versionCode 10
+        versionName "5.0.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures {
