@@ -7,6 +7,7 @@ import android.location.Address;
 import com.google.gson.Gson;
 import com.hosteloha.app.beans.AddFollowerRequest;
 import com.hosteloha.app.beans.ProductObject;
+import com.hosteloha.app.beans.UserDetails;
 import com.hosteloha.app.beans.UserFollowers;
 import com.hosteloha.app.beans.UserFollowings;
 import com.hosteloha.app.log.HostelohaLog;
@@ -45,6 +46,7 @@ public class AccountViewModel extends ViewModel implements ViewModelProvider.Fac
     private static MutableLiveData<List<ProductObject>> mWishListLiveData = null;
     public static MutableLiveData<List<UserFollowers>> mUserFollowersLive = null;
     public static MutableLiveData<List<UserFollowings>> mUserFollowingLive = null;
+    public static MutableLiveData<UserDetails> mUserDetails = null;
 
     public AccountViewModel() {
         mText = new MutableLiveData<>();
@@ -55,8 +57,12 @@ public class AccountViewModel extends ViewModel implements ViewModelProvider.Fac
         if (mUserFollowingLive == null) {
             mUserFollowingLive = new MutableLiveData<>();
         }
-        if (mWishListLiveData == null)
+        if (mWishListLiveData == null){
             mWishListLiveData = new MutableLiveData<>();
+        }
+        if (mUserDetails == null) {
+            mUserDetails = new MutableLiveData<>();
+        }
     }
 
     public AccountViewModel(Context context, Activity activity) {
@@ -96,6 +102,10 @@ public class AccountViewModel extends ViewModel implements ViewModelProvider.Fac
 
     public LiveData<List<Address>> getAddressList() {
         return mAddressList;
+    }
+
+    public MutableLiveData<UserDetails> getUserDetailsLive() {
+        return mUserDetails;
     }
 
     public static List<Integer> getWishListProductsIDs() {
@@ -194,6 +204,26 @@ public class AccountViewModel extends ViewModel implements ViewModelProvider.Fac
                     // TODO :: Error dialogue
                     List<UserFollowings> mUserFollowingsList = new ArrayList<>();
                     mUserFollowingLive.setValue(mUserFollowingsList);
+                }
+            }
+        });
+    }
+
+    public void getUserDetailsData(){
+        HostelohaLog.debugOut(" getUserDetailsData :: " + "  userID :: " + HostelohaUtils.getUserId());
+        ApiUtil.getServiceClass().getUserDetails(HostelohaUtils.getAuthenticationToken(), HostelohaUtils.getUserId()).enqueue(new CallbackWithRetry<UserDetails>() {
+            @Override
+            public void onResponse(Call<UserDetails> call, Response<UserDetails> response) {
+                HostelohaLog.debugOut("[REQ] getUserDetailsData  isSuccessful  :: " + response.isSuccessful());
+                HostelohaLog.debugOut("[REQ] getUserDetailsData  data  :: " + response.body());
+
+                if(response.isSuccessful()){
+
+                    UserDetails userDetails = (UserDetails) response.body();
+                    mUserDetails.setValue(userDetails);
+                }else{
+                    //TODO :: Error dialogue
+                    mUserDetails.setValue(null);
                 }
             }
         });

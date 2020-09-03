@@ -113,7 +113,7 @@ public class MainLoginFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         mHostelohaService = HostelohaUtils.getHostelohaService(getContext());
-        AppProgressBar.showDefaultProgress(getActivity());
+//        AppProgressBar.showDefaultProgress(getActivity());
         mBuilder = new AlertDialog.Builder(getContext());
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
         mFLMBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_login_main, container, false);

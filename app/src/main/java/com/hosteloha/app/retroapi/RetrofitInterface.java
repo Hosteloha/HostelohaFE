@@ -6,6 +6,7 @@ import com.hosteloha.app.beans.ProductObject;
 import com.hosteloha.app.beans.ProductsInContents;
 import com.hosteloha.app.beans.SellerProductObject;
 import com.hosteloha.app.beans.UserAuthentication;
+import com.hosteloha.app.beans.UserDetails;
 import com.hosteloha.app.beans.UserFollowers;
 import com.hosteloha.app.beans.UserFollowings;
 import com.hosteloha.app.beans.WishListRequest;
@@ -83,5 +84,9 @@ public interface RetrofitInterface {
 
     @GET("/followedsellers/{userid}")
     Call<List<UserFollowings>> getUserFollowings(@Header("Authorization") String auth, @Path("userid") int userId);
+
+    @GET("/users/{userid}")
+    Call<UserDetails> getUserDetails(@Header("Authorization") String auth, @Path("userid") int userId);
+
 
 }
