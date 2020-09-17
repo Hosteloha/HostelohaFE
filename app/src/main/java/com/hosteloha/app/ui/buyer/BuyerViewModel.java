@@ -1,7 +1,7 @@
 package com.hosteloha.app.ui.buyer;
 
+import com.hosteloha.app.beans.PagedCategoryListModel;
 import com.hosteloha.app.beans.ProductObject;
-import com.hosteloha.app.beans.ProductsInContents;
 import com.hosteloha.app.beans.WishListRequest;
 import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.retroapi.ApiUtil;
@@ -10,7 +10,6 @@ import com.hosteloha.app.utils.AppFireDataBase;
 import com.hosteloha.app.utils.HostelohaUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +27,7 @@ public class BuyerViewModel extends ViewModel {
     private MutableLiveData<List<ProductObject>> mAllProductsList;
     private MutableLiveData<List<ProductObject>> mCategoryProductsList;
     private Map<Integer, ProductObject> mProductMap = new HashMap<>();
+    private PagedCategoryListModel mPagedCategoryListModel;
     private String mCategory_ID = "NONE";
 
     public BuyerViewModel() {
@@ -61,12 +61,13 @@ public class BuyerViewModel extends ViewModel {
         if (category_id != mCategory_ID) {
             mCategory_ID = category_id;
             mCategoryProductsList.postValue(new ArrayList<ProductObject>());
+            mPagedCategoryListModel = null;
         }
         HostelohaLog.debugOut(" mCategory_ID " + mCategory_ID);
         if (mCategory_ID.equals("NONE"))
             req_getAllProducts();
         else
-            req_getCategoryProducts();
+            req_getCategoryProducts(0);
     }
 
     public void req_getAllProducts() {
@@ -105,24 +106,22 @@ public class BuyerViewModel extends ViewModel {
         });
     }
 
-    public void req_getCategoryProducts() {
+    public void req_getCategoryProducts(int pageNumber) {
+        if (mPagedCategoryListModel != null && pageNumber >= mPagedCategoryListModel.getTotalPages())
+            return;
 
-        ApiUtil.getServiceClass().getAllProductsByCategoryPages(HostelohaUtils.getAuthenticationToken(), mCategory_ID, 0,
-                50, "quantity", "ASC").enqueue(new CallbackWithRetry<ProductsInContents>() {
+        ApiUtil.getServiceClass().getAllProductsByCategoryPages(HostelohaUtils.getAuthenticationToken(), mCategory_ID, pageNumber,
+                10, "quantity", "ASC").enqueue(new CallbackWithRetry<PagedCategoryListModel>() {
             @Override
-            public void onResponse(Call<ProductsInContents> call, Response<ProductsInContents> response) {
-                HostelohaLog.debugOut("[REQ] getAllProducts  =====> isSuccessful  : " + response.isSuccessful());
+            public void onResponse(Call<PagedCategoryListModel> call, Response<PagedCategoryListModel> response) {
+                HostelohaLog.debugOut("[REQ] getAllProductsByCategoryPages  =====> isSuccessful  : " + response.isSuccessful());
                 if (response.isSuccessful()) {
-                    ProductsInContents productsInContents = response.body();
-                    HostelohaLog.debugOut("[REQ] products_list empty ::  " + productsInContents.isEmpty());
-                    HostelohaLog.debugOut("[REQ] products_list ---> " + productsInContents.getTotalProductsCount());
-                    List<ProductObject> productList = new ArrayList<>();
-                    if (!productsInContents.isEmpty() && productsInContents.getProductObjects() != null) {
-                        productList = Arrays.asList(productsInContents.getProductObjects());
-                    }
+                    PagedCategoryListModel pagedCategoryListModel = response.body();
+                    HostelohaLog.debugOut("[REQ] getAllProductsByCategoryPages CategoryList ===== >count ::  ---> " + pagedCategoryListModel.getProductObjects().size() + " page Number :: " + pagedCategoryListModel.getCurrentPageNumber());
+
                     // Getting from firebase - just temporary code to set image gallery
                     Map<String, ArrayList<String>> productImagesList = AppFireDataBase.getProductImagesMap();
-                    for (ProductObject product : productList) {
+                    for (ProductObject product : pagedCategoryListModel.getProductObjects()) {
                         String productID = String.valueOf(product.getProductId());
                         if (productImagesList.containsKey(productID)) {
                             ArrayList<String> productImages = productImagesList.get(productID);
@@ -132,7 +131,10 @@ public class BuyerViewModel extends ViewModel {
                             product.setProduct_images(new ArrayList<String>());
                         }
                     }
-                    mCategoryProductsList.postValue(productList);
+                    if (mPagedCategoryListModel == null || !mPagedCategoryListModel.appendData(pagedCategoryListModel))
+                        mPagedCategoryListModel = pagedCategoryListModel;
+
+                    mCategoryProductsList.postValue(mPagedCategoryListModel.getProductObjects());
                 }
             }
         });
