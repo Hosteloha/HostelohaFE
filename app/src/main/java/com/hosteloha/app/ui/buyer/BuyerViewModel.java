@@ -54,7 +54,7 @@ public class BuyerViewModel extends ViewModel {
         mRepository.req_nextPagedata();
     }
 
-    public ProductObject getProductObject(int productId) {
+    public LiveData<ProductObject> getProductObject(int productId) {
         return mRepository.getProductObject(productId);
     }
 

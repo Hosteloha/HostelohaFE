@@ -30,6 +30,9 @@ public interface RetrofitInterface {
     @GET("/products")
     Call<List<ProductObject>> getAllProducts(@Header("Authorization") String auth);
 
+    @GET("/products/{productid}")
+    Call<ProductObject> getProductById(@Header("Authorization") String auth, @Path("productid") int productId);
+
     @GET("/getAllProductsByPages/{pagenumber}/{pagesize}/{sortingtype}/{sortby}")
     Call<PagedCategoryListModel> getAllProductsByPages(@Header("Authorization") String auth, @Path("pagenumber") int pageNumber, @Path("pagesize") int pageSize,
                                                        @Path("sortby") String sortBy, @Path("sortingtype") String sortingType);

@@ -5,12 +5,8 @@ import android.content.Context;
 import com.hosteloha.app.datarepository.beans.ProductObject;
 import com.hosteloha.app.define.SortBy;
 import com.hosteloha.app.define.SortingOrder;
-import com.hosteloha.app.log.HostelohaLog;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Singleton;
 
@@ -32,8 +28,6 @@ public class Repository {
     private SortBy mSortByEnum = SortBy.DEFAULT;
     private SortingOrder mSortingOrderEnum = SortingOrder.DESCENDING;
 
-    private Map<Integer, ProductObject> mProductMap = new HashMap<>();
-
     public synchronized static Repository getInstance() {
         if (mRepository == null)
             mRepository = new Repository();
@@ -53,7 +47,6 @@ public class Repository {
             @Override
             public void onChanged(@Nullable List<ProductObject> productObjects) {
                 mAllProductsList.setValue(productObjects);
-                updateProductsMap((ArrayList<ProductObject>) productObjects);
             }
         });
     }
@@ -100,17 +93,7 @@ public class Repository {
         req_getCategoryProducts(0, mCategoryID);
     }
 
-    private void updateProductsMap(ArrayList<ProductObject> arrayList) {
-        if (arrayList != null) {
-            mProductMap.clear();
-            for (ProductObject obj : arrayList) {
-                mProductMap.put(obj.getProductId(), obj);
-            }
-        } else
-            HostelohaLog.debugOut("  arrayList is null ");
-    }
-
-    public ProductObject getProductObject(int productId) {
-        return mProductMap.get(productId);
+    public LiveData<ProductObject> getProductObject(int productId) {
+        return mRetroClientApi.req_ProductObjectByID(productId);
     }
 }

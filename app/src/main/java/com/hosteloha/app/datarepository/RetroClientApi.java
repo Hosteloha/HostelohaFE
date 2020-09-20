@@ -29,12 +29,15 @@ public class RetroClientApi {
     private int mPageNumber;
     private String mSortBy;
     private String mSortOrder;
-    private MutableLiveData<List<ProductObject>> mAllProductsList;
-    private MutableLiveData<List<ProductObject>> mCategoryProductsList;
+    private MutableLiveData<List<ProductObject>> mAllProductsListLiveData;
+    private MutableLiveData<List<ProductObject>> mCategoryProductsListLiveData;
+    private MutableLiveData<ProductObject> mProductObjectLiveData;
+    private int mProductId;
 
     private RetroClientApi() {
-        mAllProductsList = new MutableLiveData<>();
-        mCategoryProductsList = new MutableLiveData<>();
+        mAllProductsListLiveData = new MutableLiveData<>();
+        mCategoryProductsListLiveData = new MutableLiveData<>();
+        mProductObjectLiveData = new MutableLiveData<>();
         req_getAllProducts();
     }
 
@@ -43,11 +46,15 @@ public class RetroClientApi {
     }
 
     public LiveData<List<ProductObject>> getAllProductsLiveData() {
-        return mAllProductsList;
+        return mAllProductsListLiveData;
+    }
+
+    public LiveData<ProductObject> getProductLiveData() {
+        return mProductObjectLiveData;
     }
 
     public LiveData<List<ProductObject>> getCategoryProductsLiveData() {
-        return mCategoryProductsList;
+        return mCategoryProductsListLiveData;
     }
 
     public void req_getAllProducts() {
@@ -73,7 +80,7 @@ public class RetroClientApi {
                             product.setProduct_images(new ArrayList<String>());
                         }
                     }
-                    mAllProductsList.setValue(mArrayList);
+                    mAllProductsListLiveData.setValue(mArrayList);
                 } else {
                     try {
                         HostelohaLog.debugOut("[REQ] getAllProducts  =====> failed " + response.errorBody().string());
@@ -96,7 +103,7 @@ public class RetroClientApi {
         if (mPageNumber == pageNumber && mCategoryID == categoryId && mSortBy == sortBy && mSortOrder == sortingOrder)
             return;
         if (pageNumber == 0 && categoryId != mCategoryID)
-            mCategoryProductsList.postValue(new ArrayList<ProductObject>());
+            mCategoryProductsListLiveData.postValue(new ArrayList<ProductObject>());
         mPageNumber = pageNumber;
         mCategoryID = categoryId;
         mSortBy = sortBy;
@@ -125,14 +132,31 @@ public class RetroClientApi {
                     }
 
                     if (mPageNumber == 0)
-                        mCategoryProductsList.postValue(pagedCategoryListModel.getProductObjects());
+                        mCategoryProductsListLiveData.postValue(pagedCategoryListModel.getProductObjects());
                     else {
-                        List<ProductObject> currentList = mCategoryProductsList.getValue();
+                        List<ProductObject> currentList = mCategoryProductsListLiveData.getValue();
                         currentList.addAll(pagedCategoryListModel.getProductObjects());
-                        mCategoryProductsList.postValue(currentList);
+                        mCategoryProductsListLiveData.postValue(currentList);
                     }
                 }
             }
         });
+    }
+
+    public MutableLiveData<ProductObject> req_ProductObjectByID(int productId) {
+        if (mProductId == productId)
+            return mProductObjectLiveData;
+
+        ApiUtil.getServiceClass().getProductById(HostelohaUtils.getAuthenticationToken(), productId).enqueue(new CallbackWithRetry<ProductObject>() {
+            @Override
+            public void onResponse(Call<ProductObject> call, Response<ProductObject> response) {
+                if (response.isSuccessful()) {
+                    ProductObject productObject = response.body();
+                    if (productObject != null)
+                        mProductObjectLiveData.setValue(productObject);
+                }
+            }
+        });
+        return mProductObjectLiveData;
     }
 }

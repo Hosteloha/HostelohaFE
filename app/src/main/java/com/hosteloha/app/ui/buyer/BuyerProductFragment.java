@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 
@@ -31,6 +32,7 @@ public class BuyerProductFragment extends Fragment {
     HostelohaService mService;
     private BuyerViewModel buyerViewModel;
     private List<ProductObject> wishList;
+    private boolean mIsFragmentDestroyed = false;
 
 
     @Override
@@ -44,19 +46,32 @@ public class BuyerProductFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBuyerProductBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_buyer_product, container, false);
-
         buyerViewModel = ViewModelProviders.of(getActivity()).get(BuyerViewModel.class);
         ViewModelProviders.of(getActivity()).get(AccountViewModel.class).getUserWishList();
-        mProductObject = buyerViewModel.getProductObject(mProductID);
-        return mBuyerProductBinding.getRoot();
 
+        return mBuyerProductBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        buyerViewModel.getProductObject(mProductID).observe(getActivity(), new Observer<ProductObject>() {
+            @Override
+            public void onChanged(ProductObject productObject) {
+                mProductObject = productObject;
+                updateView();
+            }
+        });
+    }
 
-        if (mBuyerProductBinding == null || mProductObject == null)
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mIsFragmentDestroyed = true;
+    }
+
+    private void updateView() {
+        if (mBuyerProductBinding == null || mProductObject == null || mIsFragmentDestroyed)
             return;
 
         List<String> productImages = mProductObject.getProduct_images();
@@ -98,10 +113,7 @@ public class BuyerProductFragment extends Fragment {
         if (AccountViewModel.getWishListProductsIDs() != null)
             mBuyerProductBinding.include.favoriteBtn.setActivated(AccountViewModel.getWishListProductsIDs().contains(mProductID));
         mBuyerProductBinding.include.favoriteBtn.setOnClickListener(mOnClickListener);
-
     }
-
-
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
