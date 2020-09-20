@@ -22,7 +22,9 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.hosteloha.BuildConfig;
 import com.hosteloha.R;
-import com.hosteloha.app.define.SortingType;
+import com.hosteloha.app.datarepository.Repository;
+import com.hosteloha.app.define.SortBy;
+import com.hosteloha.app.define.SortingOrder;
 import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.service.HostelohaService;
 import com.hosteloha.app.ui.account.AccountEditAddress;
@@ -50,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private HostelohaService mHostelohaService = null;
+
+    private Repository mRepository;
 
     private boolean doubleBackToExitPressedOnce = false;
     private DrawerLayout drawer = null;
@@ -92,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
         navController.addOnDestinationChangedListener(mOnDestinationChangedListener);
         // Initialising BuyerViewModel with Activity Context.
         ViewModelProviders.of(this).get(BuyerViewModel.class);
+        mRepository = Repository.getInstance();
     }
 
 
@@ -272,21 +277,31 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.action_product_sort:
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Choose Sorting Type :");
+                builder.setTitle("Choose SortBy :");
 
-                final String[] sortingType = {SortingType.DEFAULT.toString(), SortingType.PRICE_ASCENDING.toString(), SortingType.PRICE_DESCENDING.toString()};
-                builder.setItems(sortingType, new DialogInterface.OnClickListener() {
+                final String[] sortBy = {SortBy.POPULARITY.toString(), SortBy.PRICE.toString(), SortBy.QUANTITY.toString()};
+                builder.setItems(sortBy, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (mHostelohaService == null)
-                            mHostelohaService = HostelohaUtils.getHostelohaService(MainActivity.this);
-
+                        mRepository.setSortByEnum(SortBy.valueOf(sortBy[which]));
                     }
                 });
                 AlertDialog dialog = builder.create();
                 dialog.show();
                 return true;
             case R.id.action_product_filter:
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
+                builder1.setTitle("Choose Sorting order :");
+
+                final String[] sortingType = {SortingOrder.ASCENDING.toString(), SortingOrder.DESCENDING.toString()};
+                builder1.setItems(sortingType, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mRepository.setSortingTypeEnum(SortingOrder.valueOf(sortingType[which]));
+                    }
+                });
+                AlertDialog dialog1 = builder1.create();
+                dialog1.show();
                 return true;
             case R.id.menu_search:
                 break;

@@ -27,6 +27,8 @@ public class RetroClientApi {
 
     private String mCategoryID;
     private int mPageNumber;
+    private String mSortBy;
+    private String mSortOrder;
     private MutableLiveData<List<ProductObject>> mAllProductsList;
     private MutableLiveData<List<ProductObject>> mCategoryProductsList;
 
@@ -90,16 +92,18 @@ public class RetroClientApi {
     }
 
 
-    public synchronized void req_getCategoryProducts(int pageNumber, String categoryId) {
-        if (mPageNumber == pageNumber && mCategoryID == categoryId)
+    public synchronized void req_getCategoryProducts(int pageNumber, String categoryId, String sortBy, String sortingOrder) {
+        if (mPageNumber == pageNumber && mCategoryID == categoryId && mSortBy == sortBy && mSortOrder == sortingOrder)
             return;
         if (pageNumber == 0 && categoryId != mCategoryID)
             mCategoryProductsList.postValue(new ArrayList<ProductObject>());
         mPageNumber = pageNumber;
         mCategoryID = categoryId;
+        mSortBy = sortBy;
+        mSortOrder = sortingOrder;
 
         ApiUtil.getServiceClass().getAllProductsByCategoryPages(HostelohaUtils.getAuthenticationToken(), categoryId, pageNumber,
-                20, "quantity", "ASC").enqueue(new CallbackWithRetry<PagedCategoryListModel>() {
+                20, sortBy, sortingOrder).enqueue(new CallbackWithRetry<PagedCategoryListModel>() {
             @Override
             public void onResponse(Call<PagedCategoryListModel> call, Response<PagedCategoryListModel> response) {
                 HostelohaLog.debugOut("[REQ] getAllProductsByCategoryPages  =====> isSuccessful  : " + response.isSuccessful());
@@ -131,5 +135,4 @@ public class RetroClientApi {
             }
         });
     }
-
 }
