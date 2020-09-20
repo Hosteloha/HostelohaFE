@@ -2,6 +2,17 @@ package com.hosteloha.app.ui.account;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.hosteloha.R;
+import com.hosteloha.app.datarepository.beans.UserFollowings;
+import com.hosteloha.app.log.HostelohaLog;
+import com.hosteloha.app.ui.account.adapter.AccountViewFollowingsAdapter;
+import com.hosteloha.app.utils.AppProgressBar;
+
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,20 +22,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.hosteloha.R;
-import com.hosteloha.app.beans.UserFollowers;
-import com.hosteloha.app.beans.UserFollowings;
-import com.hosteloha.app.log.HostelohaLog;
-import com.hosteloha.app.ui.account.adapter.AccountViewFollowingsAdapter;
-import com.hosteloha.app.ui.account.dummy.DummyContent;
-import com.hosteloha.app.utils.AppProgressBar;
-
-import java.util.List;
 
 /**
  * A fragment representing a list of Items.

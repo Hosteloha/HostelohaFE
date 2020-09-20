@@ -8,7 +8,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.hosteloha.R;
-import com.hosteloha.app.beans.ProductObject;
+import com.hosteloha.app.datarepository.beans.ProductObject;
 import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.service.HostelohaService;
 import com.hosteloha.app.ui.account.AccountViewModel;

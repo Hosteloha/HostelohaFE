@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.hosteloha.R;
-import com.hosteloha.app.beans.UserFollowers;
+import com.hosteloha.app.datarepository.beans.UserFollowers;
 import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.ui.account.adapter.AccountViewFollowersAdapter;
 import com.hosteloha.app.utils.AppProgressBar;

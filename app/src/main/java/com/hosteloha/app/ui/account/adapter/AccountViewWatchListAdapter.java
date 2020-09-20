@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.hosteloha.R;
-import com.hosteloha.app.beans.ProductObject;
+import com.hosteloha.app.datarepository.beans.ProductObject;
 import com.hosteloha.app.ui.account.dummy.DummyContent.DummyItem;
 
 import java.util.ArrayList;

@@ -1,8 +1,8 @@
-package com.hosteloha.app.beans;
-
-import androidx.annotation.NonNull;
+package com.hosteloha.app.datarepository.beans;
 
 import com.google.gson.annotations.SerializedName;
+
+import androidx.annotation.NonNull;
 
 public class ImageUrl {
 

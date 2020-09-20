@@ -5,13 +5,13 @@ import android.content.Context;
 import android.location.Address;
 
 import com.google.gson.Gson;
-import com.hosteloha.app.beans.AddFollowerRequest;
-import com.hosteloha.app.beans.ProductObject;
-import com.hosteloha.app.beans.UserFollowers;
-import com.hosteloha.app.beans.UserFollowings;
+import com.hosteloha.app.datarepository.beans.AddFollowerRequest;
+import com.hosteloha.app.datarepository.beans.ProductObject;
+import com.hosteloha.app.datarepository.beans.UserFollowers;
+import com.hosteloha.app.datarepository.beans.UserFollowings;
+import com.hosteloha.app.datarepository.retroapi.ApiUtil;
+import com.hosteloha.app.datarepository.retroapi.CallbackWithRetry;
 import com.hosteloha.app.log.HostelohaLog;
-import com.hosteloha.app.retroapi.ApiUtil;
-import com.hosteloha.app.retroapi.CallbackWithRetry;
 import com.hosteloha.app.utils.AppLocation;
 import com.hosteloha.app.utils.HostelohaUtils;
 

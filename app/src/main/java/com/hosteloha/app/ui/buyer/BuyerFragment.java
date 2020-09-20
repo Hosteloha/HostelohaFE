@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.hosteloha.R;
-import com.hosteloha.app.beans.ProductObject;
+import com.hosteloha.app.datarepository.beans.ProductObject;
 import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.ui.buyer.adapter.EndlessRecyclerViewScrollListener;
 import com.hosteloha.app.ui.buyer.adapter.RecyclerAdapter;
@@ -70,18 +70,12 @@ public class BuyerFragment extends Fragment {
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 HostelohaLog.debugOut(" NextPage :: " + page + "  totalItems in Adapter ::  " + totalItemsCount);
                 if (buyerViewModel != null && (mCategory_ID != null || mCategory_ID != "NONE"))
-                    buyerViewModel.req_getCategoryProducts(page);
+                    buyerViewModel.requestNextPageData();
             }
         });
 
         mBuyerBinding.buyerRecyclerView.setLayoutManager(layoutManager);
 
-        buyerViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                mBuyerBinding.textBuyer.setText(s);
-            }
-        });
         buyerViewModel.getProductsLiveData().observe(getViewLifecycleOwner(), new Observer<List<ProductObject>>() {
             @Override
             public void onChanged(List<ProductObject> productObjects) {

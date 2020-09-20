@@ -17,9 +17,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.hosteloha.R;
-import com.hosteloha.app.MainActivity;
 import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.service.HostelohaService;
+import com.hosteloha.app.ui.MainActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
