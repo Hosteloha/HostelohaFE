@@ -1,18 +1,17 @@
 package com.hosteloha.app.ui.account.adapter;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.hosteloha.R;
-import com.hosteloha.app.beans.UserFollowers;
-import com.hosteloha.app.beans.UserFollowings;
+import com.hosteloha.app.datarepository.beans.UserFollowings;
 import com.hosteloha.app.ui.account.dummy.DummyContent.DummyItem;
 
 import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.

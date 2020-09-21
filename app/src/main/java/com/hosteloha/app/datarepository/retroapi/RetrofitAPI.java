@@ -1,4 +1,4 @@
-package com.hosteloha.app.retroapi;
+package com.hosteloha.app.datarepository.retroapi;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

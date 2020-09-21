@@ -12,9 +12,9 @@ public class AppProgressBar {
     public static void createProgressBar(Activity mActivity) {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(mActivity);
-            mProgressDialog.setCancelable(false);
+            mProgressDialog.setCancelable(true);
             mProgressDialog.setIndeterminate(true);
-            mProgressDialog.setCanceledOnTouchOutside(false);
+            mProgressDialog.setCanceledOnTouchOutside(true);
         }
     }
 

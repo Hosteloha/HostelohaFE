@@ -1,4 +1,4 @@
-package com.hosteloha.app.beans;
+package com.hosteloha.app.datarepository.beans;
 
 import com.google.gson.annotations.SerializedName;
 

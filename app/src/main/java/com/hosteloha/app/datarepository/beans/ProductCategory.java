@@ -1,6 +1,4 @@
-package com.hosteloha.app.beans;
-
-import java.util.List;
+package com.hosteloha.app.datarepository.beans;
 
 public class ProductCategory {
     String[] categories;

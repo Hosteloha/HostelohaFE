@@ -1,4 +1,4 @@
-package com.hosteloha.app.retroapi;
+package com.hosteloha.app.datarepository.retroapi;
 
 public class ApiUtil {
     /**

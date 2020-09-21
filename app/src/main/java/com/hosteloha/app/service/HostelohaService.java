@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.IBinder;
 
-import com.hosteloha.app.beans.AuthenticationTokenJWT;
-import com.hosteloha.app.beans.UserAuthentication;
+import com.hosteloha.app.datarepository.beans.AuthenticationTokenJWT;
+import com.hosteloha.app.datarepository.beans.UserAuthentication;
+import com.hosteloha.app.datarepository.retroapi.ApiUtil;
+import com.hosteloha.app.datarepository.retroapi.CallbackWithRetry;
 import com.hosteloha.app.log.HostelohaLog;
-import com.hosteloha.app.retroapi.ApiUtil;
-import com.hosteloha.app.retroapi.CallbackWithRetry;
 import com.hosteloha.app.utils.AppFireStorage;
 import com.hosteloha.app.utils.HostelohaUtils;
 

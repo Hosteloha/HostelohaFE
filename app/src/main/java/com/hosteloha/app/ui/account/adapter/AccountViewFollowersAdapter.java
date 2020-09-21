@@ -7,8 +7,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.hosteloha.R;
-import com.hosteloha.app.beans.UserFollowers;
-import com.hosteloha.app.beans.UserFollowings;
+import com.hosteloha.app.datarepository.beans.UserFollowers;
+import com.hosteloha.app.datarepository.beans.UserFollowings;
 import com.hosteloha.app.ui.account.AccountViewModel;
 import com.hosteloha.app.ui.account.dummy.DummyContent.DummyItem;
 
