@@ -23,6 +23,7 @@ public class Repository {
     private RetroClientApi mRetroClientApi;
     private String mCategoryID;
     private int mPageNumber;
+    private int mAllProductsPageNumber;
 
     private MediatorLiveData<List<ProductObject>> mAllProductsList;
     private SortBy mSortByEnum = SortBy.DEFAULT;
@@ -52,9 +53,9 @@ public class Repository {
     }
 
     public LiveData<List<ProductObject>> getAllProductsLiveData() {
-        if (mAllProductsList == null || mAllProductsList.getValue() == null || mAllProductsList.getValue().isEmpty())
-            mRetroClientApi.req_getAllProducts();
-        return mAllProductsList;
+        if (mRetroClientApi.getAllProductsLiveData().getValue() == null || mRetroClientApi.getAllProductsLiveData().getValue().isEmpty())
+            req_allProductsFirstPageData();
+        return mRetroClientApi.getAllProductsLiveData();
     }
 
     public LiveData<List<ProductObject>> getCategoryProductsLiveData() {
@@ -67,7 +68,7 @@ public class Repository {
 
     public void setSortByEnum(SortBy sortByEnum) {
         this.mSortByEnum = sortByEnum;
-        req_firstPagedata();
+        req_CategoryProductsFirstPageData();
     }
 
     public SortingOrder getSortingTypeEnum() {
@@ -76,7 +77,8 @@ public class Repository {
 
     public void setSortingTypeEnum(SortingOrder sortingTypeEnum) {
         this.mSortingOrderEnum = sortingTypeEnum;
-        req_firstPagedata();
+        req_CategoryProductsFirstPageData();
+        req_allProductsFirstPageData();
     }
 
     public void req_getCategoryProducts(int pageNumber, String categoryId) {
@@ -85,15 +87,36 @@ public class Repository {
         mRetroClientApi.req_getCategoryProducts(pageNumber, categoryId, mSortByEnum.getValue(), mSortingOrderEnum.getValue());
     }
 
-    public void req_nextPagedata() {
+    public void req_CategoryProductsNextPageData() {
         req_getCategoryProducts(mPageNumber + 1, mCategoryID);
     }
 
-    public void req_firstPagedata() {
+    public void req_CategoryProductsFirstPageData() {
         req_getCategoryProducts(0, mCategoryID);
+    }
+
+    public void req_getAllProducts(int pageNumber) {
+        mAllProductsPageNumber = pageNumber;
+        mRetroClientApi.req_getAllProductsByPages(mAllProductsPageNumber, mSortByEnum.getValue(), mSortingOrderEnum.getValue());
+    }
+
+    public void req_allProductsNextPageData() {
+        req_getAllProducts(mAllProductsPageNumber + 1);
+    }
+
+    public void req_allProductsFirstPageData() {
+        req_getAllProducts(0);
     }
 
     public LiveData<ProductObject> getProductObject(int productId) {
         return mRetroClientApi.req_ProductObjectByID(productId);
+    }
+
+    public void addWishList(int productId) {
+        mRetroClientApi.addWishList(productId);
+    }
+
+    public void removeWishList(int productId) {
+        mRetroClientApi.removeWishList(productId);
     }
 }
