@@ -26,7 +26,7 @@ public class Repository {
     private int mAllProductsPageNumber;
 
     private MediatorLiveData<List<ProductObject>> mAllProductsList;
-    private SortBy mSortByEnum = SortBy.DEFAULT;
+    private SortBy mSortByEnum = SortBy.QUANTITY;
     private SortingOrder mSortingOrderEnum = SortingOrder.DESCENDING;
 
     public synchronized static Repository getInstance() {
