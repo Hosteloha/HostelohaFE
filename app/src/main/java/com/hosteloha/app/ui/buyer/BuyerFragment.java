@@ -68,9 +68,11 @@ public class BuyerFragment extends Fragment {
         mBuyerBinding.buyerRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener((GridLayoutManager) layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                HostelohaLog.debugOut(" NextPage :: " + page + "  totalItems in Adapter ::  " + totalItemsCount);
-                if (buyerViewModel != null && (mCategory_ID != null || mCategory_ID != "NONE"))
+                HostelohaLog.debugOut(" NextPage :: " + page + "  totalItems in Adapter ::  " + totalItemsCount + "  ::  " + mRecyclerAdapter.isLoading());
+                if (buyerViewModel != null) {
+                    mRecyclerAdapter.showLoading();
                     buyerViewModel.requestNextPageData();
+                }
             }
         });
 
@@ -80,6 +82,11 @@ public class BuyerFragment extends Fragment {
             @Override
             public void onChanged(List<ProductObject> productObjects) {
                 mRecyclerAdapter.setArrayList(productObjects);
+                if (productObjects == null)
+                    mRecyclerAdapter.showLoading();
+                else {
+                    mRecyclerAdapter.hideLoading();
+                }
             }
         });
 

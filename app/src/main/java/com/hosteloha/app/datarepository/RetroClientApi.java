@@ -2,13 +2,15 @@ package com.hosteloha.app.datarepository;
 
 import com.hosteloha.app.datarepository.beans.PagedCategoryListModel;
 import com.hosteloha.app.datarepository.beans.ProductObject;
+import com.hosteloha.app.datarepository.beans.WishListRequest;
 import com.hosteloha.app.datarepository.retroapi.ApiUtil;
 import com.hosteloha.app.datarepository.retroapi.CallbackWithRetry;
+import com.hosteloha.app.define.SortBy;
+import com.hosteloha.app.define.SortingOrder;
 import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.utils.AppFireDataBase;
 import com.hosteloha.app.utils.HostelohaUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +19,7 @@ import javax.inject.Singleton;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -26,23 +29,29 @@ public class RetroClientApi {
     private static RetroClientApi mRetroClientApi = new RetroClientApi();
 
     private String mCategoryID;
+    private int mAllProductsPageNumber;
     private int mPageNumber;
-    private String mSortBy;
-    private String mSortOrder;
+    private String mSortBy = SortBy.QUANTITY.getValue();
+    private String mSortOrder = SortingOrder.DESCENDING.getValue();
     private MutableLiveData<List<ProductObject>> mAllProductsListLiveData;
     private MutableLiveData<List<ProductObject>> mCategoryProductsListLiveData;
     private MutableLiveData<ProductObject> mProductObjectLiveData;
+    private MutableLiveData<Boolean> mIsRequestInProgress;
     private int mProductId;
 
     private RetroClientApi() {
         mAllProductsListLiveData = new MutableLiveData<>();
         mCategoryProductsListLiveData = new MutableLiveData<>();
         mProductObjectLiveData = new MutableLiveData<>();
-        req_getAllProducts();
+        mIsRequestInProgress = new MutableLiveData<>();
     }
 
     public static RetroClientApi getInstance() {
         return mRetroClientApi;
+    }
+
+    public MutableLiveData<Boolean> getIsRequestInProgressLiveData() {
+        return mIsRequestInProgress;
     }
 
     public LiveData<List<ProductObject>> getAllProductsLiveData() {
@@ -57,20 +66,25 @@ public class RetroClientApi {
         return mCategoryProductsListLiveData;
     }
 
-    public void req_getAllProducts() {
-
-        ApiUtil.getServiceClass().getAllProducts(HostelohaUtils.getAuthenticationToken()).enqueue(new CallbackWithRetry<List<ProductObject>>() {
+    public synchronized void req_getAllProductsByPages(int pageNumber, String sortBy, String sortingOrder) {
+        if (mAllProductsPageNumber == pageNumber && mSortBy == sortBy && mSortOrder == sortingOrder && mAllProductsListLiveData.getValue() != null && !mAllProductsListLiveData.getValue().isEmpty())
+            return;
+        if (pageNumber == 0)
+            mAllProductsListLiveData.postValue(null);
+        mAllProductsPageNumber = pageNumber;
+        mSortBy = sortBy;
+        mSortOrder = sortingOrder;
+        ApiUtil.getServiceClass().getAllProductsByPages(HostelohaUtils.getAuthenticationToken(), pageNumber, 20, mSortBy, mSortOrder).enqueue(new CallbackWithRetry<PagedCategoryListModel>() {
             @Override
-            public void onResponse(Call<List<ProductObject>> call, Response<List<ProductObject>> response) {
-                HostelohaLog.debugOut("[REQ] getAllProducts  =====> isSuccessful  : " + response.isSuccessful());
+            public void onResponse(Call<PagedCategoryListModel> call, Response<PagedCategoryListModel> response) {
+                HostelohaLog.debugOut("[REQ] getAllProductsByPages  =====> isSuccessful  : " + response.isSuccessful());
                 if (response.isSuccessful()) {
-                    ArrayList<ProductObject> mArrayList = (ArrayList<ProductObject>) response.body();
-                    HostelohaLog.debugOut("[REQ] products_list size ::  " + mArrayList.size());
-                    HostelohaLog.debugOut("[REQ] products_list ---> " + mArrayList.get(0).toString());
+                    PagedCategoryListModel pagedCategoryListModel = response.body();
+                    HostelohaLog.debugOut("[REQ] getAllProductsByPages ===== >count ::  ---> " + pagedCategoryListModel.getProductObjects().size() + " page Number :: " + pagedCategoryListModel.getCurrentPageNumber());
 
                     // Getting from firebase - just temporary code to set image gallery
                     Map<String, ArrayList<String>> productImagesList = AppFireDataBase.getProductImagesMap();
-                    for (ProductObject product : mArrayList) {
+                    for (ProductObject product : pagedCategoryListModel.getProductObjects()) {
                         String productID = String.valueOf(product.getProductId());
                         if (productImagesList.containsKey(productID)) {
                             ArrayList<String> productImages = productImagesList.get(productID);
@@ -80,20 +94,16 @@ public class RetroClientApi {
                             product.setProduct_images(new ArrayList<String>());
                         }
                     }
-                    mAllProductsListLiveData.setValue(mArrayList);
-                } else {
-                    try {
-                        HostelohaLog.debugOut("[REQ] getAllProducts  =====> failed " + response.errorBody().string());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
 
-            @Override
-            public void onFailure(Call<List<ProductObject>> call, Throwable throwable) {
-                HostelohaLog.debugOut("[REQ] getAllProducts ===>  onFailure" + throwable.getLocalizedMessage());
-                super.onFailure(call, throwable);
+                    if (mAllProductsPageNumber == 0)
+                        mAllProductsListLiveData.postValue(pagedCategoryListModel.getProductObjects());
+                    else {
+                        List<ProductObject> currentList = mAllProductsListLiveData.getValue();
+                        currentList.addAll(pagedCategoryListModel.getProductObjects());
+                        mAllProductsListLiveData.postValue(currentList);
+                    }
+                    mIsRequestInProgress.postValue(false);
+                }
             }
         });
     }
@@ -103,7 +113,9 @@ public class RetroClientApi {
         if (mPageNumber == pageNumber && mCategoryID == categoryId && mSortBy == sortBy && mSortOrder == sortingOrder)
             return;
         if (pageNumber == 0 && categoryId != mCategoryID)
-            mCategoryProductsListLiveData.postValue(new ArrayList<ProductObject>());
+            mCategoryProductsListLiveData.postValue(null);
+
+        mIsRequestInProgress.postValue(true);
         mPageNumber = pageNumber;
         mCategoryID = categoryId;
         mSortBy = sortBy;
@@ -138,6 +150,7 @@ public class RetroClientApi {
                         currentList.addAll(pagedCategoryListModel.getProductObjects());
                         mCategoryProductsListLiveData.postValue(currentList);
                     }
+                    mIsRequestInProgress.postValue(false);
                 }
             }
         });
@@ -146,6 +159,7 @@ public class RetroClientApi {
     public MutableLiveData<ProductObject> req_ProductObjectByID(int productId) {
         if (mProductId == productId)
             return mProductObjectLiveData;
+        mProductId = productId;
 
         ApiUtil.getServiceClass().getProductById(HostelohaUtils.getAuthenticationToken(), productId).enqueue(new CallbackWithRetry<ProductObject>() {
             @Override
@@ -158,5 +172,26 @@ public class RetroClientApi {
             }
         });
         return mProductObjectLiveData;
+    }
+
+    public void addWishList(int productId) {
+        HostelohaLog.debugOut(" productId :: " + productId + "  userID :: " + HostelohaUtils.getUserId());
+        WishListRequest wishListRequest = new WishListRequest(HostelohaUtils.getUserId(), productId);
+        ApiUtil.getServiceClass().addToWishList(HostelohaUtils.getAuthenticationToken(), wishListRequest).enqueue(new CallbackWithRetry<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                HostelohaLog.debugOut("[REQ] addWishList  isSuccessful  :: " + response.isSuccessful());
+            }
+        });
+    }
+
+    public void removeWishList(int productId) {
+        HostelohaLog.debugOut(" productId :: " + productId + "  userID :: " + HostelohaUtils.getUserId());
+        ApiUtil.getServiceClass().removeFromWishlist(HostelohaUtils.getAuthenticationToken(), HostelohaUtils.getUserId(), productId).enqueue(new CallbackWithRetry<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                HostelohaLog.debugOut("[REQ] removeWishList  isSuccessful  :: " + response.isSuccessful());
+            }
+        });
     }
 }

@@ -2,19 +2,12 @@ package com.hosteloha.app.ui.buyer;
 
 import com.hosteloha.app.datarepository.Repository;
 import com.hosteloha.app.datarepository.beans.ProductObject;
-import com.hosteloha.app.datarepository.beans.WishListRequest;
-import com.hosteloha.app.datarepository.retroapi.ApiUtil;
-import com.hosteloha.app.datarepository.retroapi.CallbackWithRetry;
 import com.hosteloha.app.log.HostelohaLog;
-import com.hosteloha.app.utils.HostelohaUtils;
 
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Response;
 
 public class BuyerViewModel extends ViewModel {
 
@@ -51,7 +44,10 @@ public class BuyerViewModel extends ViewModel {
     }
 
     public void requestNextPageData() {
-        mRepository.req_nextPagedata();
+        if (mCategory_ID == null || mCategory_ID.equals("NONE"))
+            mRepository.req_allProductsNextPageData();
+        else
+            mRepository.req_CategoryProductsNextPageData();
     }
 
     public LiveData<ProductObject> getProductObject(int productId) {
@@ -59,23 +55,10 @@ public class BuyerViewModel extends ViewModel {
     }
 
     public void addWishList(int productId) {
-        HostelohaLog.debugOut(" productId :: " + productId + "  userID :: " + HostelohaUtils.getUserId() + "  --- " + HostelohaUtils.getAuthenticationToken());
-        WishListRequest wishListRequest = new WishListRequest(HostelohaUtils.getUserId(), productId);
-        ApiUtil.getServiceClass().addToWishList(HostelohaUtils.getAuthenticationToken(), wishListRequest).enqueue(new CallbackWithRetry<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                HostelohaLog.debugOut("[REQ] addWishList  isSuccessful  :: " + response.isSuccessful());
-            }
-        });
+        mRepository.addWishList(productId);
     }
 
     public void removeWishList(int productId) {
-        HostelohaLog.debugOut(" productId :: " + productId + "  userID :: " + HostelohaUtils.getUserId());
-        ApiUtil.getServiceClass().removeFromWishlist(HostelohaUtils.getAuthenticationToken(), HostelohaUtils.getUserId(), productId).enqueue(new CallbackWithRetry<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                HostelohaLog.debugOut("[REQ] removeWishList  isSuccessful  :: " + response.isSuccessful());
-            }
-        });
+        mRepository.removeWishList(productId);
     }
 }
