@@ -7,6 +7,7 @@ import android.location.Address;
 import com.google.gson.Gson;
 import com.hosteloha.app.datarepository.beans.AddFollowerRequest;
 import com.hosteloha.app.datarepository.beans.ProductObject;
+import com.hosteloha.app.datarepository.beans.UserDetails;
 import com.hosteloha.app.datarepository.beans.UserFollowers;
 import com.hosteloha.app.datarepository.beans.UserFollowings;
 import com.hosteloha.app.datarepository.retroapi.ApiUtil;
@@ -28,6 +29,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -45,6 +47,7 @@ public class AccountViewModel extends ViewModel implements ViewModelProvider.Fac
     private static MutableLiveData<List<ProductObject>> mWishListLiveData = null;
     public static MutableLiveData<List<UserFollowers>> mUserFollowersLive = null;
     public static MutableLiveData<List<UserFollowings>> mUserFollowingLive = null;
+    public static MutableLiveData<UserDetails> mUserDetails = null;
 
     public AccountViewModel() {
         mText = new MutableLiveData<>();
@@ -57,16 +60,21 @@ public class AccountViewModel extends ViewModel implements ViewModelProvider.Fac
         }
         if (mWishListLiveData == null)
             mWishListLiveData = new MutableLiveData<>();
+
+        if (mUserDetails == null) {
+            mUserDetails = new MutableLiveData<>();
+        }
+
     }
 
     public AccountViewModel(Context context, Activity activity) {
         mContext = context;
         mActivity = activity;
         mText = new MutableLiveData<>();
-        if(mUserFollowersLive == null){
+        if (mUserFollowersLive == null) {
             mUserFollowersLive = new MutableLiveData<>();
         }
-        if(mUserFollowingLive == null){
+        if (mUserFollowingLive == null) {
             mUserFollowingLive = new MutableLiveData<>();
         }
         mAddressList = new MutableLiveData<>();
@@ -96,6 +104,10 @@ public class AccountViewModel extends ViewModel implements ViewModelProvider.Fac
 
     public LiveData<List<Address>> getAddressList() {
         return mAddressList;
+    }
+
+    public MutableLiveData<UserDetails> getUserDetailsLive() {
+        return mUserDetails;
     }
 
     public static List<Integer> getWishListProductsIDs() {
@@ -138,25 +150,25 @@ public class AccountViewModel extends ViewModel implements ViewModelProvider.Fac
     }
 
     public void addUserFollowers(int sellerID) {
-        HostelohaLog.debugOut(" addUserFollowers :: sellerToBeFollowed " + sellerID + "  userID :: " + HostelohaUtils.getUserId() );
-        AddFollowerRequest addFollowerRequest = new AddFollowerRequest(HostelohaUtils.getUserId(), sellerID );
+        HostelohaLog.debugOut(" addUserFollowers :: sellerToBeFollowed " + sellerID + "  userID :: " + HostelohaUtils.getUserId());
+        AddFollowerRequest addFollowerRequest = new AddFollowerRequest(HostelohaUtils.getUserId(), sellerID);
         ApiUtil.getServiceClass().addFollower(HostelohaUtils.getAuthenticationToken(), addFollowerRequest).enqueue(new CallbackWithRetry<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 HostelohaLog.debugOut("[REQ] addUserFollowers  isSuccessful  :: " + response.isSuccessful());
-                HostelohaUtils.showSnackBarNotification(mActivity, " Add follower : "+(response.isSuccessful()));
+                HostelohaUtils.showSnackBarNotification(mActivity, " Add follower : " + (response.isSuccessful()));
 
             }
         });
     }
 
-    public void removeUserFollower(int sellerID, int followerID){
+    public void removeUserFollower(int sellerID, int followerID) {
         HostelohaLog.debugOut(" removeUserFollower :: sellerID :: " + sellerID + "  followerID :: " + followerID);
         ApiUtil.getServiceClass().removeFollower(HostelohaUtils.getAuthenticationToken(), sellerID, followerID).enqueue(new CallbackWithRetry<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 HostelohaLog.debugOut("[REQ] removeUserFollower  isSuccessful  :: " + response.isSuccessful());
-                HostelohaUtils.showSnackBarNotification(mActivity, " Remove follower : "+(response.isSuccessful()));
+                HostelohaUtils.showSnackBarNotification(mActivity, " Remove follower : " + (response.isSuccessful()));
             }
         });
     }
@@ -167,11 +179,11 @@ public class AccountViewModel extends ViewModel implements ViewModelProvider.Fac
             @Override
             public void onResponse(Call<List<UserFollowers>> call, Response<List<UserFollowers>> response) {
                 HostelohaLog.debugOut("[REQ] getUserFollowers  isSuccessful  :: " + response.isSuccessful());
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     List<UserFollowers> mUserFollowersList = response.body();
                     HostelohaLog.debugOut("[REQ] getUserFollowers  followers  :: " + mUserFollowersList.size());
                     mUserFollowersLive.setValue(mUserFollowersList);
-                }else{
+                } else {
                     // TODO :: Error dialogue
                     List<UserFollowers> mUserFollowersList = new ArrayList<>();
                     mUserFollowersLive.setValue(mUserFollowersList);
@@ -186,14 +198,34 @@ public class AccountViewModel extends ViewModel implements ViewModelProvider.Fac
             @Override
             public void onResponse(Call<List<UserFollowings>> call, Response<List<UserFollowings>> response) {
                 HostelohaLog.debugOut("[REQ] getUserFollowings  isSuccessful  :: " + response.isSuccessful());
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     List<UserFollowings> mUserFollowingsList = response.body();
                     HostelohaLog.debugOut("[REQ] getUserFollowings followings  :: " + mUserFollowingsList.size());
                     mUserFollowingLive.setValue(mUserFollowingsList);
-                }else{
+                } else {
                     // TODO :: Error dialogue
                     List<UserFollowings> mUserFollowingsList = new ArrayList<>();
                     mUserFollowingLive.setValue(mUserFollowingsList);
+                }
+            }
+        });
+    }
+
+    public void getUserDetailsData() {
+        HostelohaLog.debugOut(" getUserDetailsData :: " + "  userID :: " + HostelohaUtils.getUserId());
+        ApiUtil.getServiceClass().getUserDetails(HostelohaUtils.getAuthenticationToken(), HostelohaUtils.getUserId()).enqueue(new CallbackWithRetry<UserDetails>() {
+            @Override
+            public void onResponse(Call<UserDetails> call, Response<UserDetails> response) {
+                HostelohaLog.debugOut("[REQ] getUserDetailsData  isSuccessful  :: " + response.isSuccessful());
+                HostelohaLog.debugOut("[REQ] getUserDetailsData  data  :: " + response.body());
+
+                if (response.isSuccessful()) {
+
+                    UserDetails userDetails = (UserDetails) response.body();
+                    mUserDetails.setValue(userDetails);
+                } else {
+                    //TODO :: Error dialogue
+                    mUserDetails.setValue(null);
                 }
             }
         });
