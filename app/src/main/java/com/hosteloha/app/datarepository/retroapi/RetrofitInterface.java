@@ -6,6 +6,7 @@ import com.hosteloha.app.datarepository.beans.PagedCategoryListModel;
 import com.hosteloha.app.datarepository.beans.ProductObject;
 import com.hosteloha.app.datarepository.beans.SellerProductObject;
 import com.hosteloha.app.datarepository.beans.UserAuthentication;
+import com.hosteloha.app.datarepository.beans.UserDetails;
 import com.hosteloha.app.datarepository.beans.UserFollowers;
 import com.hosteloha.app.datarepository.beans.UserFollowings;
 import com.hosteloha.app.datarepository.beans.WishListRequest;
@@ -86,5 +87,9 @@ public interface RetrofitInterface {
 
     @GET("/followedsellers/{userid}")
     Call<List<UserFollowings>> getUserFollowings(@Header("Authorization") String auth, @Path("userid") int userId);
+
+    @GET("/users/{userid}")
+    Call<UserDetails> getUserDetails(@Header("Authorization") String auth, @Path("userid") int userId);
+
 
 }
