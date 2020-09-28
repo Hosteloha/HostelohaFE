@@ -1,15 +1,14 @@
-package com.hosteloha.app.retroapi;
+package com.hosteloha.app.datarepository.retroapi;
 
-import com.hosteloha.app.beans.AddFollowerRequest;
-import com.hosteloha.app.beans.AuthenticationTokenJWT;
-import com.hosteloha.app.beans.ProductObject;
-import com.hosteloha.app.beans.ProductsInContents;
-import com.hosteloha.app.beans.SellerProductObject;
-import com.hosteloha.app.beans.UserAuthentication;
-import com.hosteloha.app.beans.UserDetails;
-import com.hosteloha.app.beans.UserFollowers;
-import com.hosteloha.app.beans.UserFollowings;
-import com.hosteloha.app.beans.WishListRequest;
+import com.hosteloha.app.datarepository.beans.AddFollowerRequest;
+import com.hosteloha.app.datarepository.beans.AuthenticationTokenJWT;
+import com.hosteloha.app.datarepository.beans.PagedCategoryListModel;
+import com.hosteloha.app.datarepository.beans.ProductObject;
+import com.hosteloha.app.datarepository.beans.SellerProductObject;
+import com.hosteloha.app.datarepository.beans.UserAuthentication;
+import com.hosteloha.app.datarepository.beans.UserFollowers;
+import com.hosteloha.app.datarepository.beans.UserFollowings;
+import com.hosteloha.app.datarepository.beans.WishListRequest;
 
 import java.util.List;
 import java.util.Map;
@@ -31,13 +30,16 @@ public interface RetrofitInterface {
     @GET("/products")
     Call<List<ProductObject>> getAllProducts(@Header("Authorization") String auth);
 
+    @GET("/products/{productid}")
+    Call<ProductObject> getProductById(@Header("Authorization") String auth, @Path("productid") int productId);
+
     @GET("/getAllProductsByPages/{pagenumber}/{pagesize}/{sortingtype}/{sortby}")
-    Call<ProductsInContents> getAllProductsByPages(@Header("Authorization") String auth, @Path("pagenumber") int pageNumber, @Path("pagesize") int pageSize,
-                                                   @Path("sortby") String sortBy, @Path("sortingtype") String sortingType);
+    Call<PagedCategoryListModel> getAllProductsByPages(@Header("Authorization") String auth, @Path("pagenumber") int pageNumber, @Path("pagesize") int pageSize,
+                                                       @Path("sortby") String sortBy, @Path("sortingtype") String sortingType);
 
     @GET("/getAllProductsByCategoryPages/{categoryname}/{pagenumber}/{pagesize}/{sortingtype}/{sortby}")
-    Call<ProductsInContents> getAllProductsByCategoryPages(@Header("Authorization") String auth, @Path("categoryname") String categoryName, @Path("pagenumber") int pageNumber,
-                                                           @Path("pagesize") int pageSize, @Path("sortby") String sortBy, @Path("sortingtype") String sortingType);
+    Call<PagedCategoryListModel> getAllProductsByCategoryPages(@Header("Authorization") String auth, @Path("categoryname") String categoryName, @Path("pagenumber") int pageNumber,
+                                                               @Path("pagesize") int pageSize, @Path("sortby") String sortBy, @Path("sortingtype") String sortingType);
 
 
     @POST("/add_product/")
@@ -84,9 +86,5 @@ public interface RetrofitInterface {
 
     @GET("/followedsellers/{userid}")
     Call<List<UserFollowings>> getUserFollowings(@Header("Authorization") String auth, @Path("userid") int userId);
-
-    @GET("/users/{userid}")
-    Call<UserDetails> getUserDetails(@Header("Authorization") String auth, @Path("userid") int userId);
-
 
 }

@@ -1,9 +1,9 @@
 package com.hosteloha.app.ui.seller;
 
-import com.hosteloha.app.beans.ProductObject;
+import com.hosteloha.app.datarepository.beans.ProductObject;
+import com.hosteloha.app.datarepository.retroapi.ApiUtil;
+import com.hosteloha.app.datarepository.retroapi.CallbackWithRetry;
 import com.hosteloha.app.log.HostelohaLog;
-import com.hosteloha.app.retroapi.ApiUtil;
-import com.hosteloha.app.retroapi.CallbackWithRetry;
 import com.hosteloha.app.utils.HostelohaUtils;
 
 import java.util.Map;

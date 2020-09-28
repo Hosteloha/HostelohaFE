@@ -1,8 +1,8 @@
-package com.hosteloha.app.beans;
+package com.hosteloha.app.datarepository.beans;
 
 import java.sql.Timestamp;
 
-public class UserFollowings {
+public class UserFollowers {
     private int id;
     private int sellerID;
     private int follower_id;
@@ -10,11 +10,11 @@ public class UserFollowings {
     private Timestamp inserted_at;
     private Timestamp updated_at;
 
-    public UserFollowings() {
+    public UserFollowers() {
         super();
     }
 
-    public UserFollowings(int id, int sellerID, int follower_id, int is_notify, Timestamp inserted_at) {
+    public UserFollowers(int id, int sellerID, int follower_id, int is_notify, Timestamp inserted_at) {
         super();
         this.id = id;
         this.sellerID = sellerID;

@@ -1,4 +1,4 @@
-package com.hosteloha.app.retroapi;
+package com.hosteloha.app.datarepository.retroapi;
 
 import com.hosteloha.app.log.HostelohaLog;
 import com.hosteloha.app.utils.HostelohaUtils;

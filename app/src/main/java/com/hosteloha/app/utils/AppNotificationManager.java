@@ -9,8 +9,8 @@ import android.content.Intent;
 import android.graphics.Color;
 
 import com.hosteloha.R;
-import com.hosteloha.app.MainActivity;
 import com.hosteloha.app.log.HostelohaLog;
+import com.hosteloha.app.ui.MainActivity;
 
 import androidx.core.app.NotificationCompat;
 

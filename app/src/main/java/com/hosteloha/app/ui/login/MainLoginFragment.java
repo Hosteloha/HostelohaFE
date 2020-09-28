@@ -1,6 +1,5 @@
 package com.hosteloha.app.ui.login;
 
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -34,10 +33,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.hosteloha.R;
-import com.hosteloha.app.beans.AuthenticationTokenJWT;
-import com.hosteloha.app.beans.UserAuthentication;
+import com.hosteloha.app.datarepository.beans.AuthenticationTokenJWT;
+import com.hosteloha.app.datarepository.beans.UserAuthentication;
+import com.hosteloha.app.datarepository.retroapi.ApiUtil;
 import com.hosteloha.app.log.HostelohaLog;
-import com.hosteloha.app.retroapi.ApiUtil;
 import com.hosteloha.app.service.HostelohaService;
 import com.hosteloha.app.utils.AppProgressBar;
 import com.hosteloha.app.utils.AppSharedPrefs;
