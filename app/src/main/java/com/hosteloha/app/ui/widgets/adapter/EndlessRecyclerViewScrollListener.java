@@ -1,4 +1,4 @@
-package com.hosteloha.app.ui.buyer.adapter;
+package com.hosteloha.app.ui.widgets.adapter;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;

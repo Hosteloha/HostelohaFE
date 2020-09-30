@@ -144,19 +144,19 @@ public class AccountViewModel extends ViewModel implements ViewModelProvider.Fac
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 HostelohaLog.debugOut("[REQ] addUserFollowers  isSuccessful  :: " + response.isSuccessful());
-                HostelohaUtils.showSnackBarNotification(mActivity, " Add follower : "+(response.isSuccessful()));
+                HostelohaUtils.showSnackBarNotification(mActivity, " Add follower : " + (response.isSuccessful()));
 
             }
         });
     }
 
-    public void removeUserFollower(int sellerID, int followerID){
-        HostelohaLog.debugOut(" removeUserFollower :: sellerID :: " + sellerID + "  followerID :: " + followerID);
-        ApiUtil.getServiceClass().removeFollower(HostelohaUtils.getAuthenticationToken(), sellerID, followerID).enqueue(new CallbackWithRetry<ResponseBody>() {
+    public void removeUserFollower(int sellerID) {
+        HostelohaLog.debugOut(" removeUserFollower :: sellerToBeUnFollowed :: " + sellerID + "  userID :: " + HostelohaUtils.getUserId());
+        ApiUtil.getServiceClass().removeFollower(HostelohaUtils.getAuthenticationToken(), HostelohaUtils.getUserId(), sellerID).enqueue(new CallbackWithRetry<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 HostelohaLog.debugOut("[REQ] removeUserFollower  isSuccessful  :: " + response.isSuccessful());
-                HostelohaUtils.showSnackBarNotification(mActivity, " Remove follower : "+(response.isSuccessful()));
+                HostelohaUtils.showSnackBarNotification(mActivity, " Remove follower : " + (response.isSuccessful()));
             }
         });
     }

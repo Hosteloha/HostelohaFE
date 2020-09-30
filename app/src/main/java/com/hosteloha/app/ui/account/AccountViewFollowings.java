@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import com.hosteloha.R;
 import com.hosteloha.app.datarepository.beans.UserFollowings;
 import com.hosteloha.app.log.HostelohaLog;
-import com.hosteloha.app.ui.account.adapter.AccountViewFollowingsAdapter;
+import com.hosteloha.app.ui.widgets.adapter.RecyclerAdapter;
 import com.hosteloha.app.utils.AppProgressBar;
 
 import java.util.List;
@@ -90,7 +90,9 @@ public class AccountViewFollowings extends Fragment {
                     } else {
                         recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
                     }
-                    recyclerView.setAdapter(new AccountViewFollowingsAdapter(userFollowings));
+                    RecyclerAdapter recyclerAdapter = new RecyclerAdapter<UserFollowings>(getContext(), RecyclerAdapter.ItemType.FOLLOWING, null);
+                    recyclerAdapter.setArrayList(userFollowings);
+                    recyclerView.setAdapter(recyclerAdapter);
                 }
             }
         });

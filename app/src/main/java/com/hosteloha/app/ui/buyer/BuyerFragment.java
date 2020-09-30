@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import com.hosteloha.R;
 import com.hosteloha.app.datarepository.beans.ProductObject;
 import com.hosteloha.app.log.HostelohaLog;
-import com.hosteloha.app.ui.buyer.adapter.EndlessRecyclerViewScrollListener;
-import com.hosteloha.app.ui.buyer.adapter.RecyclerAdapter;
+import com.hosteloha.app.ui.widgets.adapter.EndlessRecyclerViewScrollListener;
+import com.hosteloha.app.ui.widgets.adapter.RecyclerAdapter;
 import com.hosteloha.app.utils.AppSharedPrefs;
 import com.hosteloha.app.utils.Define;
 import com.hosteloha.databinding.FragmentBuyerBinding;
@@ -61,8 +61,7 @@ public class BuyerFragment extends Fragment {
 
         super.onViewCreated(view, savedInstanceState);
         mNavController = Navigation.findNavController(view);
-        mRecyclerAdapter = new RecyclerAdapter(getContext(), productList, mBuyerBinding.buyerRecyclerView);
-        mRecyclerAdapter.setOnItemClickListener(mOnItemClickListener);
+        mRecyclerAdapter = new RecyclerAdapter<ProductObject>(getContext(), RecyclerAdapter.ItemType.PRODUCT, mOnItemClickListener);
         mBuyerBinding.buyerRecyclerView.setAdapter(mRecyclerAdapter);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
         mBuyerBinding.buyerRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener((GridLayoutManager) layoutManager) {
