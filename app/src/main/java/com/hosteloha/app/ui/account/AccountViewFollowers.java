@@ -5,11 +5,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.hosteloha.R;
 import com.hosteloha.app.datarepository.beans.UserFollowers;
 import com.hosteloha.app.log.HostelohaLog;
-import com.hosteloha.app.ui.account.adapter.AccountViewFollowersAdapter;
+import com.hosteloha.app.ui.widgets.adapter.RecyclerAdapter;
 import com.hosteloha.app.utils.AppProgressBar;
 
 import java.util.List;
@@ -93,7 +94,9 @@ public class AccountViewFollowers extends Fragment {
                     } else {
                         recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
                     }
-                    recyclerView.setAdapter(new AccountViewFollowersAdapter(userFollowers, accountViewModel));
+                    RecyclerAdapter recyclerAdapter = new RecyclerAdapter<UserFollowers>(getContext(), RecyclerAdapter.ItemType.FOLLOWERS, onItemClickListener);
+                    recyclerAdapter.setArrayList(userFollowers);
+                    recyclerView.setAdapter(recyclerAdapter);
                 }
             }
         });
@@ -107,4 +110,20 @@ public class AccountViewFollowers extends Fragment {
             accountViewModel.getUserFollowersData();
         }
     }
+
+    RecyclerAdapter.OnItemClickListener onItemClickListener = new RecyclerAdapter.OnItemClickListener() {
+        @Override
+        public void onItemClick(View view, int followerId) {
+            HostelohaLog.debugOut("  followerId  ::  " + followerId);
+            if (view != null) {
+                boolean isFollowing = view.isActivated();
+                ((Button) view).setText(isFollowing ? R.string.btn_follow : R.string.btn_following);
+                view.setActivated(!isFollowing);
+                if (isFollowing)
+                    accountViewModel.removeUserFollower(followerId);
+                else
+                    accountViewModel.addUserFollowers(followerId);
+            }
+        }
+    };
 }

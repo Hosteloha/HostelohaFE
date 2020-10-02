@@ -9,14 +9,17 @@ import android.view.ViewGroup;
 import com.hosteloha.R;
 import com.hosteloha.app.datarepository.beans.ProductObject;
 import com.hosteloha.app.log.HostelohaLog;
-import com.hosteloha.app.ui.account.adapter.AccountViewWatchListAdapter;
+import com.hosteloha.app.ui.widgets.adapter.RecyclerAdapter;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,7 +36,7 @@ public class AccountViewWatchList extends Fragment {
 
     AccountViewModel mAccountViewModel;
 
-    AccountViewWatchListAdapter mWatchListAdapter;
+    RecyclerAdapter mWatchListAdapter;
     private NavController mNavController;
 
     /**
@@ -76,21 +79,26 @@ public class AccountViewWatchList extends Fragment {
         } else {
             recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
-        mWatchListAdapter = new AccountViewWatchListAdapter(getActivity());
-        mWatchListAdapter.setOnItemClickListener(mOnItemClickListener);
+        mWatchListAdapter = new RecyclerAdapter<ProductObject>(getActivity(), RecyclerAdapter.ItemType.WISHLIST, mOnItemClickListener);
         recyclerView.setAdapter(mWatchListAdapter);
 
         AccountViewModel.getWishListLiveData().observe(getActivity(), new Observer<List<ProductObject>>() {
             @Override
             public void onChanged(List<ProductObject> productObjects) {
-                mWatchListAdapter.setWishListData(productObjects);
+                mWatchListAdapter.setArrayList(productObjects);
             }
         });
 
         return view;
     }
 
-    private AccountViewWatchListAdapter.OnItemClickListener mOnItemClickListener = new AccountViewWatchListAdapter.OnItemClickListener() {
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mNavController = Navigation.findNavController(view);
+    }
+
+    private RecyclerAdapter.OnItemClickListener mOnItemClickListener = new RecyclerAdapter.OnItemClickListener() {
         @Override
         public void onItemClick(View itemView, int productId) {
             HostelohaLog.debugOut(" main product view onItemClick  " + productId);
